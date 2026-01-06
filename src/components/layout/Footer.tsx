@@ -23,11 +23,6 @@ const handleWhatsAppClick = () => {
   window.open(`https://wa.me/919025398147?text=${message}`, '_blank');
 };
 
-};
-
-    }
-  };
-
   return (
     <footer className="bg-light-pink mt-24">
       <div className="max-w-[120rem] mx-auto px-6 py-16">
