@@ -27,7 +27,7 @@ export default function Header() {
               src="https://static.wixstatic.com/media/b9ec8c_7e7a21888fd54a54af3e7fdf97447ad1~mv2.png"
               alt="Sudha Novelties Logo"
               width={200}
-              className="h-12 w-auto"
+              className="h-19 w-auto"
             />
           </Link>
 
