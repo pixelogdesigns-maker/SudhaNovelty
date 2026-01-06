@@ -165,7 +165,6 @@ export default function HomePage() {
     <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
       <Header />
       <WhatsAppFloatingButton />
-
       {/* --- Hero Section --- */}
       <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-light-pink/50 to-white pt-20 lg:pt-0">
         {/* Decorative Background Blobs */}
@@ -293,7 +292,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* --- Marquee Section --- */}
       <div className="w-full bg-primary py-4 overflow-hidden">
         <div className="flex whitespace-nowrap animate-marquee">
@@ -316,15 +314,14 @@ export default function HomePage() {
           }
         `}</style>
       </div>
-
       {/* --- Categories Section (Staggered Grid) --- */}
       <section className="py-24 lg:py-32 bg-white relative">
         <div className="max-w-[120rem] mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <AnimatedReveal>
-              <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground">
+              <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground [text-shadow:none] text-center uppercase indent-0 [writing-mode:horizontal-tb] m-0.5 my-0.5 mx-[25px]">
                 Explore Our <br />
-                <span className="text-primary">Magical World</span>
+                <span className="text-primary font-heading">Magical World</span>
               </h2>
             </AnimatedReveal>
             <AnimatedReveal delay={200}>
@@ -371,7 +368,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* --- Sticky Trust Section --- */}
       <section className="relative bg-light-pink/30 py-24 lg:py-32 overflow-hidden">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -425,7 +421,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* --- Visit Us / Offline Store Section --- */}
       <section className="py-24 lg:py-32 bg-white">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -486,7 +481,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
       {/* --- Final CTA Section --- */}
       <section className="py-24 bg-gradient-to-b from-white to-light-pink/30 text-center">
         <div className="max-w-4xl mx-auto px-6">
@@ -513,7 +507,6 @@ export default function HomePage() {
           </AnimatedReveal>
         </div>
       </section>
-
       <Footer />
     </div>
   );
