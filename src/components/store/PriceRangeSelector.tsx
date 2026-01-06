@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
 interface PriceRangeSelectorProps {
-  min: number;
-  max: number;
+  min: 500;
+  max: 5000;
   selectedMin: number;
   selectedMax: number;
   setSelectedMin: (price: number) => void;
@@ -20,94 +20,77 @@ export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
   setSelectedMin,
   setSelectedMax,
 }) => {
-  // Local state for immediate UI updates while dragging
-  const [localSelectedMin, setLocalSelectedMin] = useState(selectedMin);
-  const [localSelectedMax, setLocalSelectedMax] = useState(selectedMax);
-  const onRangeChange = (value: number[]) => {
-    setLocalSelectedMin(value[0]);
-    setLocalSelectedMax(value[1]);
-  };
+  // Local state for smooth slider + input sync
+  const [localMin, setLocalMin] = useState(selectedMin);
+  const [localMax, setLocalMax] = useState(selectedMax);
 
-  const onRangeCommit = (value: number[]) => {
-    setSelectedMin(value[0]);
-    setSelectedMax(value[1]);
-  };
+  useEffect(() => {
+    setLocalMin(selectedMin);
+    setLocalMax(selectedMax);
+  }, [selectedMin, selectedMax]);
 
   const roundedMin = Math.floor(min);
   const roundedMax = Math.ceil(max);
 
   return (
-    <div>
-      <div className="space-y-4">
-        <div className="mb-4">
-          <Label
-            htmlFor="price-range"
-            className="text-content-primary font-medium text-md"
-          >
-            Price Range
-          </Label>
-        </div>
-        {/* Price Range Display */}
-        <div className="flex items-center justify-between text-sm text-content-light mb-6">
-          <span>${String(roundedMin)}</span>
-          <span>${String(roundedMax)}</span>
+    <div className="space-y-6">
+      {/* Title */}
+      <Label className="text-content-primary font-semibold text-md">
+        Price Range (₹)
+      </Label>
+
+      {/* Min / Max Labels */}
+      <div className="flex justify-between text-sm text-content-light">
+        <span>₹{roundedMin}</span>
+        <span>₹{roundedMax}</span>
+      </div>
+
+      {/* Slider */}
+      <Slider
+        min={roundedMin}
+        max={roundedMax}
+        step={100}
+        value={[localMin, localMax]}
+        onValueChange={([minVal, maxVal]) => {
+          setLocalMin(minVal);
+          setLocalMax(maxVal);
+        }}
+        onValueCommit={([minVal, maxVal]) => {
+          setSelectedMin(minVal);
+          setSelectedMax(maxVal);
+        }}
+      />
+
+      {/* Manual Inputs */}
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <Label className="text-xs text-content-muted">Min Price</Label>
+          <Input
+            type="number"
+            value={localMin}
+            min={roundedMin}
+            max={localMax}
+            onChange={e => {
+              const value = Number(e.target.value);
+              setLocalMin(value);
+              setSelectedMin(value);
+            }}
+          />
         </div>
 
-        {/* Dual Range Slider */}
-        <Slider
-          id="price-range"
-          min={roundedMin}
-          max={roundedMax}
-          step={1}
-          value={[localSelectedMin, localSelectedMax]}
-          onValueChange={onRangeChange}
-          onValueCommit={onRangeCommit}
-        />
-
-        {/* Manual Price Input */}
-        <div className="flex items-center gap-4 mt-4">
-          <div className="flex-1">
-            <Label
-              htmlFor="min-price"
-              className="block text-xs text-content-muted"
-            >
-              Min
-            </Label>
-            <Input
-              id="min-price"
-              type="number"
-              value={localSelectedMin}
-              onChange={e => {
-                const value = Number(e.target.value) || roundedMin;
-                setLocalSelectedMin(value);
-                setSelectedMin(value);
-              }}
-              min={roundedMin}
-              max={roundedMax}
-              className="bg-surface-primary mt-1 text-content-primary"
-            />
-          </div>
-          <div className="flex-1">
-            <Label
-              htmlFor="max-price"
-              className="block text-xs text-content-muted mb-1"
-            >
-              Max
-            </Label>
-            <Input
-              id="max-price"
-              type="number"
-              value={localSelectedMax}
-              onChange={e => {
-                const value = Number(e.target.value) || roundedMax;
-                setLocalSelectedMax(value);
-                setSelectedMax(value);
-              }}
-              min={roundedMin}
-              max={roundedMax}
-              className="bg-surface-primary mt-1 text-content-primary"
-            />
-          </div>
+        <div className="flex-1">
+          <Label className="text-xs text-content-muted">Max Price</Label>
+          <Input
+            type="number"
+            value={localMax}
+            min={localMin}
+            max={roundedMax}
+            onChange={e => {
+              const value = Number(e.target.value);
+              setLocalMax(value);
+              setSelectedMax(value);
+            }}
+          />
         </div>
       </div>
     </div>
@@ -115,3 +98,4 @@ export const PriceRangeSelector: React.FC<PriceRangeSelectorProps> = ({
 };
 
 export default PriceRangeSelector;
+
