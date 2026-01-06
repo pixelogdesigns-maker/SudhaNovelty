@@ -109,6 +109,7 @@ const handleWhatsAppClick = () => {
             </div>
           </div>
         </div>
+        
         {/* Bottom Section */}
 <div className="mt-12 pt-8 border-t border-primary/20">
   <p className="font-paragraph text-base text-center text-foreground">
