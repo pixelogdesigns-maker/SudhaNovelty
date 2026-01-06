@@ -24,11 +24,11 @@ export default function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_7e7a21888fd54a54af3e7fdf97447ad1~mv2.png"
-              alt="Sudha Novelties Logo"
-              width={500}
+              src="https://static.wixstatic.com/media/b9ec8c_56673b00d24740d896ae8ca0c386e3cd~mv2.png"
+              width={5003332131}
               className="h-12 w-auto"
-            />
+              originWidth={533}
+              originHeight={196} />
           </Link>
 
           {/* Desktop Navigation */}
