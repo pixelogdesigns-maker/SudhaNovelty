@@ -54,7 +54,7 @@ export default function ToysPage() {
         ? `Hi! I'm interested in ${toy.name}. Can you provide more details?`
         : 'Hi! I would like to inquire about your toys.';
       const encodedMessage = encodeURIComponent(message);
-      window.open(`https://wa.me/${storeInfo.whatsAppNumber}?text=${encodedMessage}`, '_blank');
+      window.open(`https://wa.me/919025398147?text=${encodedMessage}`, '_blank');
     }
   };
 
