@@ -62,7 +62,6 @@ export default function ToysPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <WhatsAppFloatingButton />
-
       {/* Hero Section */}
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-16">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -81,7 +80,6 @@ export default function ToysPage() {
           </motion.div>
         </div>
       </section>
-
       {/* Filter Section */}
       <section className="py-8 bg-white border-b border-light-pink">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -116,7 +114,6 @@ export default function ToysPage() {
           </div>
         </div>
       </section>
-
       {/* Products Grid */}
       <section className="py-16 bg-white">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -140,25 +137,25 @@ export default function ToysPage() {
                   {/* Product Image */}
                   <div className="aspect-square overflow-hidden bg-light-pink">
                     <Image
-                      src={toy.image || 'https://static.wixstatic.com/media/b9ec8c_780226a0d96b4091b6be8f6e8eeac993~mv2.png?originWidth=384&originHeight=384'}
+                      src={toy.image || 'https://www.ebabykart.com/buy/kids-4X4-heavy-electric-jeep-12V-battery-operated-ride-on-jeep-for-kids-wn-1166-grey?srsltid=AfmBOorLFdoGZxOWlKEjajOJVqbjl7XV0ol_pj_-cx8yh5Ghuq6RK_6z'}
                       alt={toy.name || 'Toy product'}
                       width={400}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 shadow-[12px_12px_4px_0px_#d9d9d9]"
                     />
                   </div>
 
                   {/* Product Info */}
                   <div className="p-6">
-                    <h3 className="font-heading text-xl text-primary mb-2 line-clamp-2">
-                      {toy.name}
-                    </h3>
-                    
                     {toy.shortDescription && (
                       <p className="font-paragraph text-base text-foreground mb-3 line-clamp-2">
                         {toy.shortDescription}
                       </p>
                     )}
 
+                    <h3 className="font-heading text-xl text-primary mb-2 line-clamp-2">
+                      {toy.name}
+                    </h3>
+                    
                     {toy.ageGroup && (
                       <div className="mb-4">
                         <span className="inline-block bg-secondary text-secondary-foreground font-paragraph text-sm px-3 py-1 rounded-lg">
@@ -190,7 +187,6 @@ export default function ToysPage() {
           )}
         </div>
       </section>
-
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-light-pink to-white">
         <div className="max-w-[120rem] mx-auto px-6">
@@ -217,7 +213,6 @@ export default function ToysPage() {
           </motion.div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
