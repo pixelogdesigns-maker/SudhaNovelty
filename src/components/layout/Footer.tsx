@@ -116,7 +116,7 @@ const handleWhatsAppClick = () => {
             Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
           </p>
           <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
-            © {new Date().getFullYear()} {storeInfo?.storeName || 'Sudha Novelties'}. All rights reserved.
+            © {2026 ().getFullYear()} {storeInfo?.sudha novelties || 'Sudha Novelties'}. All rights reserved.
           </p>
         </div>
       </div>
