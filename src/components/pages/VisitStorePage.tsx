@@ -124,7 +124,7 @@ export default function VisitStorePage() {
                     <div>
                       <h3 className="font-heading text-lg text-primary mb-2">Phone</h3>
                       <a
-                        href={`tel:${storeInfo.phoneNumber}`}
+                        href={`tel:919025398147`}
                         className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
                       >
                         {storeInfo.phoneNumber}
