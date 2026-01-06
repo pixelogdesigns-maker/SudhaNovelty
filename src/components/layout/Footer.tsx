@@ -110,16 +110,13 @@ const handleWhatsAppClick = () => {
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="mt-12 pt-8 border-t border-primary/20">
-          <p className="font-paragraph text-base text-center text-foreground">
-            Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
-          </p>
-          <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
-            © {2026().getFullYear()} {storeInfo?.sudhanovelties || 'Sudha Novelties'}. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-}
+{/* Bottom Section */}
+<div className="mt-12 pt-8 border-t border-primary/20">
+  <p className="font-paragraph text-base text-center text-foreground">
+    Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
+  </p>
+
+  <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
+    © {new Date().getFullYear()} {storeInfo?.sudhanovelties || 'Sudha Novelties'}. All rights reserved.
+  </p>
+</div>
