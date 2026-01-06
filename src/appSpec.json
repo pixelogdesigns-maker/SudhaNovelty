@@ -1,0 +1,1101 @@
+{
+  "id": "d65dff7d-eb5b-42ed-9e27-c25d52d64416",
+  "siteName": "Toy Hub Now",
+  "domainUrl": "toyhubnow.com",
+  "brandingPresets": [
+    {
+      "presetId": "00000000-0865-447d-9aba-c93d64db05c2",
+      "brandIdentity": {
+        "designSummary": "**Playful Minimalism: A Blend of Joyful Aesthetics and Clean Functionality**\n\nThe Vision: To create a digital space that mirrors the warmth and trustworthiness of a beloved toy store. The design emphasizes a playful, kid-friendly aesthetic without sacrificing modern minimalism. The goal is to build a website that feels both inviting to children and reassuring to parents, fostering a sense of joy and confidence.\n\n**Execution Blueprint:**\n1. Soft Color Palette: Light pink and white are the dominant colors, creating a gentle and cheerful atmosphere. Accent colors will be slightly brighter shades of pink and yellow to add pops of excitement.\n2. Rounded Elements: All corners (buttons, containers, images) will have a consistent rounded radius (8px-12px) to enhance the soft, approachable feel.\n3. Smooth Typography: Use a friendly, legible font with rounded terminals for both headings and body text. Font sizes will be carefully scaled to ensure readability on all devices.\n4. WhatsApp Integration: Prominent 'Chat on WhatsApp' buttons will be strategically placed throughout the site, facilitating easy communication and order inquiries.\n5. Product Grid: A clean, e-commerce-inspired product grid will showcase toys with clear images, names, descriptions, and age group information. The focus is on browsing and discovery, not direct purchasing.",
+        "toneOfVoice": "Friendly, cheerful, trustworthy, and informative.",
+        "tones": [
+          "Joyful",
+          "Reassuring",
+          "Playful",
+          "Helpful"
+        ],
+        "designStyle": {
+          "primaryStyle": [
+            "Modern Minimalism",
+            "Kid-Friendly Design"
+          ],
+          "supportingStyles": [
+            "Soft Aesthetics",
+            "E-commerce Inspired"
+          ]
+        },
+        "palette": {
+          "colors": {
+            "primary": "#F48FB1",
+            "primaryForeground": "#FFFFFF",
+            "secondary": "#FFD54F",
+            "secondaryForeground": "#212121",
+            "background": "#FFFFFF",
+            "foreground": "#212121",
+            "customColors": [
+              {
+                "name": "lightPink",
+                "value": "#FCE4EC"
+              },
+              {
+                "name": "whatsappGreen",
+                "value": "#25D366"
+              },
+              {
+                "name": "destructive",
+                "value": "#F44336"
+              },
+              {
+                "name": "destructive-foreground",
+                "value": "#FFFFFF"
+              }
+            ]
+          },
+          "paletteUsageGuide": "Light pink and white are the dominant colors, creating a gentle and cheerful atmosphere. Accent colors will be slightly brighter shades of pink and yellow to add pops of excitement.",
+          "paletteAccessibilityNotes": "Ensure sufficient contrast between text and background colors for readability. Use a color contrast checker to verify WCAG compliance."
+        },
+        "typography": {
+          "headings": {
+            "font": {
+              "role": "headings",
+              "fontFamily": "poppins-v2",
+              "fontJustification": ""
+            },
+            "headingsSimilarFonts": [],
+            "headingsUsageGuide": "Use for all main headings, subheadings, and titles. Maintain a clear hierarchy with consistent font weights and sizes.",
+            "headingsAccessibilityNotes": "Ensure headings are properly nested (H1, H2, H3, etc.) for semantic structure and screen reader compatibility."
+          },
+          "paragraphs": {
+            "font": {
+              "role": "paragraphs",
+              "fontFamily": "nunito sans",
+              "fontJustification": ""
+            },
+            "paragraphsSimilarFonts": [],
+            "paragraphsUsageGuide": "Use for all body text, descriptions, and general content. Prioritize readability with appropriate line height and letter spacing.",
+            "paragraphsAccessibilityNotes": "Ensure sufficient contrast between text and background colors. Use a legible font size for comfortable reading."
+          },
+          "welcomeSectionTypography": {
+            "placement": "",
+            "implementation": ""
+          },
+          "fontSizes": [
+            {
+              "name": "xs",
+              "size": "0.75rem",
+              "lineHeight": "1",
+              "letterSpacing": "0.05em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "sm",
+              "size": "0.875rem",
+              "lineHeight": "1.25",
+              "letterSpacing": "0.025em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "base",
+              "size": "1rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "lg",
+              "size": "1.125rem",
+              "lineHeight": "1.75",
+              "letterSpacing": "-0.025em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "xl",
+              "size": "1.25rem",
+              "lineHeight": "1.75",
+              "letterSpacing": "-0.025em",
+              "fontWeight": "500"
+            },
+            {
+              "name": "2xl",
+              "size": "1.5rem",
+              "lineHeight": "2",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "500"
+            },
+            {
+              "name": "3xl",
+              "size": "1.875rem",
+              "lineHeight": "2.25",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "4xl",
+              "size": "2.25rem",
+              "lineHeight": "2.5",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "5xl",
+              "size": "3rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "6xl",
+              "size": "3.75rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "7xl",
+              "size": "4.5rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "8xl",
+              "size": "6rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "9xl",
+              "size": "8rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "700"
+            }
+          ]
+        },
+        "layout": {
+          "layoutDna": {
+            "densitySpectrum": "Sparse",
+            "contrastSpectrum": "Low",
+            "gridAlignmentSpectrum": "Balanced",
+            "negativeSpaceUsage": "Generous",
+            "textVsImageEmphasis": "Balanced",
+            "complexitySpectrum": "Simple"
+          },
+          "grid": {
+            "compositionApproach": "Card-Based Grid with Rounded Elements",
+            "spacing": {
+              "columns": "12",
+              "rows": "Auto",
+              "gaps": "Base unit: 8px. All grid gaps are 16px (2x base unit)."
+            },
+            "margins": "Base unit: 8px. All margins are 24px (3x base unit).",
+            "padding": "Base unit: 8px. All padding is 16px (2x base unit)."
+          },
+          "heroSectionLayout": "**The Animated Toy Carousel**\nComposition (Tailwind Spec): Full-screen container (h-screen flex items-center justify-center bg-lightPink). Headline '10+ Years of Bringing Smiles with Quality Toys' (text-5xl font-bold text-primary mb-4). A carousel of toy images with rounded corners (w-full max-w-4xl rounded-2xl overflow-hidden).\nSignature Hook (Framer Motion Spec): Use Framer Motion's `useTransform` and `useAnimation` to create a smooth, infinite carousel animation. Each image in the carousel has `initial={{ x: '100%' }}` and `animate={{ x: '-100%' }}` with `transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}`."
+        },
+        "components": {
+          "containers": "Method: Whitespace, Style: 40px vertical margin",
+          "images": "Layout Role: None. | Gallery Type: Standard E-commerce Grid: A clean, responsive grid displaying product images, names, descriptions, and age groups. Each card includes a 'Chat on WhatsApp' button.",
+          "buttons": "Primary: background-color: #F48FB1, color: #FFFFFF, border-radius: 12px, padding: 12px 24px. Secondary: background-color: transparent, color: #F48FB1, border: 1px solid #F48FB1, border-radius: 12px."
+        },
+        "graphicElements": {
+          "icons": "",
+          "illustrations": "",
+          "stickers": ""
+        }
+      },
+      "originImagesUrls": [
+        "https://static.wixstatic.com/media/b9ec8c_7e7a21888fd54a54af3e7fdf97447ad1~mv2.png"
+      ]
+    },
+    {
+      "presetId": "8a52c980-7afb-4833-be0f-bd9fab2646c7",
+      "brandIdentity": {
+        "designSummary": "This brand design features a vibrant and playful aesthetic anchored by a soft pastel pink background and a vivid red primary color that dominates text, borders, and interactive elements. The typography combines a modern serif with high contrast strokes for headings, delivering elegance with a contemporary edge, while navigation and body text use clean serif or sans-serif fonts for readability. The layout employs a modular grid with varied image shapes and sizes, balanced by generous negative space to offset the bold colors and large typography. Graphic elements include a distinctive pale yellow-green scalloped badge and thin red dividing lines, adding personality without clutter. Overall, the design conveys youthful confidence and stylish sophistication, suitable for creative, fashion, or lifestyle brands. The color palette and typography choices work harmoniously to create a memorable, energetic, and approachable brand presence.",
+        "toneOfVoice": "Confident, playful, stylish, modern, and approachable with a touch of elegance.",
+        "tones": [
+          "vibrant",
+          "youthful",
+          "elegant",
+          "playful",
+          "bold",
+          "inviting",
+          "stylish",
+          "modern",
+          "clean",
+          "energetic"
+        ],
+        "designStyle": {
+          "primaryStyle": [
+            "Modern Serif",
+            "Minimalism"
+          ],
+          "supportingStyles": [
+            "Playful",
+            "Editorial",
+            "Modular Grid"
+          ]
+        },
+        "palette": {
+          "colors": {
+            "primary": "#D32F2F",
+            "primaryForeground": "#FFFFFF",
+            "secondary": "#FDF2F7",
+            "secondaryForeground": "#D32F2F",
+            "background": "#FDF2F7",
+            "customColors": [
+              {
+                "name": "badgebackground",
+                "value": "#E6F0B3"
+              },
+              {
+                "name": "accentgreen",
+                "value": "#6B7A4F"
+              },
+              {
+                "name": "foreground",
+                "value": "#D32F2F"
+              },
+              {
+                "name": "destructive",
+                "value": "#DF3131"
+              },
+              {
+                "name": "destructiveforeground",
+                "value": "#FFFFFF"
+              }
+            ]
+          },
+          "paletteUsageGuide": "Use the 'primary' color predominantly for headings, interactive elements such as links and buttons, and borders to create strong visual emphasis and brand recognition. The 'secondary' and 'background' colors provide a soft, pastel canvas that balances the intensity of the 'primary' red, ensuring readability and a warm, inviting atmosphere. The 'primaryForeground' color is white, used on red backgrounds for text and icons to maintain high contrast and accessibility. The 'secondaryForeground' is the 'primary' red, used on the pastel background for body text and navigation links to maintain brand consistency. The 'badgeBackground' custom color is reserved for special graphic elements like badges or callouts, adding a quirky and friendly accent without overwhelming the design. The 'accentGreen' is used sparingly in imagery or subtle UI details to introduce natural, muted contrast and depth. Together, these colors create a vibrant yet balanced palette that supports a youthful, stylish, and approachable brand identity.",
+          "paletteAccessibilityNotes": "The combination of 'primary' (#D32F2F) on 'secondary' (#F9D9E3) and 'background' (#F9D9E3) provides sufficient contrast to meet WCAG AA standards for large and normal text, ensuring readability. Text in 'primaryForeground' (#FFFFFF) on 'primary' (#D32F2F) backgrounds also meets WCAG AA contrast requirements. The 'badgeBackground' (#E6F0B3) with 'primary' (#D32F2F) text maintains adequate contrast for callout elements. Overall, the palette is designed to balance vibrancy with accessibility, supporting clear visual hierarchy and user-friendly interaction."
+        },
+        "typography": {
+          "headings": {
+            "font": {
+              "role": "Primary Heading Font",
+              "fontFamily": "fraunces",
+              "fontJustification": ""
+            },
+            "headingsSimilarFonts": [
+              "playfair display",
+              "bitter",
+              "cormorantgaramond"
+            ],
+            "headingsUsageGuide": "Use the heading font for all major titles and section headers to convey elegance and style. Pair with simpler paragraph fonts to maintain readability and balance. Large font sizes and generous letter spacing enhance the bold, confident tone. Use 'primary' color for headings to ensure brand consistency and visual impact. Italic or bold variations can be used for emphasis or navigation links, maintaining the playful yet sophisticated voice.",
+            "headingsAccessibilityNotes": "Headings in 'primary' color on 'secondary' or 'background' colors meet WCAG AA contrast standards, ensuring clear readability for all users."
+          },
+          "paragraphs": {
+            "font": {
+              "role": "Main Body Text Font",
+              "fontFamily": "open sans",
+              "fontJustification": ""
+            },
+            "paragraphsSimilarFonts": [
+              "nunito sans",
+              "work-sans-v2",
+              "raleway"
+            ],
+            "paragraphsUsageGuide": "Use the paragraph font for body text, navigation, and smaller UI text to maintain clarity and legibility. The clean sans-serif style balances the decorative heading font, creating a harmonious typographic hierarchy. Text should be set in 'secondaryForeground' color on 'secondary' or 'background' for comfortable reading. Maintain consistent line height and spacing to support accessibility and user experience.",
+            "paragraphsAccessibilityNotes": "Paragraph text in 'secondaryForeground' on 'secondary' or 'background' colors meets WCAG AA contrast requirements for normal and large text."
+          },
+          "welcomeSectionTypography": {
+            "placement": "Top-Third Anchor",
+            "implementation": "The welcome section features a dominant, oversized heading placed in the top third of the viewport, creating immediate visual impact. The large serif font spans horizontally across the screen, partially overlapping with images below, integrating text and visuals dynamically. This placement anchors the user's attention at the top while allowing the modular image grid to flow beneath. The use of generous negative space around the heading enhances readability and elegance, while the pastel background ensures the red heading color stands out vividly."
+          },
+          "fontSizes": [
+            {
+              "name": "xs",
+              "size": "0.75rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "sm",
+              "size": "0.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "base",
+              "size": "1rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "lg",
+              "size": "1.125rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "500"
+            },
+            {
+              "name": "xl",
+              "size": "1.25rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.03em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "2xl",
+              "size": "1.5rem",
+              "lineHeight": "1.4",
+              "letterSpacing": "0.03em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "3xl",
+              "size": "1.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0.035em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "4xl",
+              "size": "2.25rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "0.04em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "5xl",
+              "size": "3rem",
+              "lineHeight": "1.1",
+              "letterSpacing": "0.045em",
+              "fontWeight": "800"
+            },
+            {
+              "name": "6xl",
+              "size": "3.75rem",
+              "lineHeight": "1.1",
+              "letterSpacing": "0.05em",
+              "fontWeight": "800"
+            },
+            {
+              "name": "7xl",
+              "size": "4.5rem",
+              "lineHeight": "1",
+              "letterSpacing": "0.05em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "8xl",
+              "size": "6rem",
+              "lineHeight": "1",
+              "letterSpacing": "0.06em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "9xl",
+              "size": "8rem",
+              "lineHeight": "1",
+              "letterSpacing": "0.07em",
+              "fontWeight": "900"
+            }
+          ]
+        },
+        "layout": {
+          "layoutDna": {
+            "densitySpectrum": "Balanced",
+            "contrastSpectrum": "High-Contrast",
+            "gridAlignmentSpectrum": "Modular",
+            "negativeSpaceUsage": "Generous",
+            "textVsImageEmphasis": "Balanced",
+            "complexitySpectrum": "Moderately Complex"
+          },
+          "grid": {
+            "compositionApproach": "Modular",
+            "spacing": {
+              "columns": "Flexible 12-column grid",
+              "rows": "Defined content rows",
+              "gaps": "Consistent medium gaps"
+            },
+            "margins": "Generous page margins",
+            "padding": "Consistent padding within containers"
+          }
+        },
+        "components": {
+          "containers": "Containers use the 'secondary' pastel pink background with generous padding and margins to separate content blocks. Borders and dividers are thin lines in 'primary' red, providing subtle structure without overwhelming the design.",
+          "images": "Images are presented in a modular grid with varied shapes including rectangles and hexagons. They are framed by solid color backgrounds or geometric shapes in 'primary' red or 'badgeBackground' to create visual interest and cohesion with the color palette.",
+          "buttons": "Buttons are primarily text-based with 'primary' red color for text and borders. They have minimal styling, often outlined or filled with 'primary' red and white text for clear call-to-action emphasis. Hover states likely invert colors or add subtle shading to maintain interactivity."
+        },
+        "graphicElements": {
+          "icons": "Icons are minimal or absent, with emphasis placed on typography and photography. If used, icons would likely be line-based in 'primary' red to maintain consistency.",
+          "illustrations": "No prominent illustrations are present; the design relies on photography and geometric shapes for visual interest.",
+          "stickers": "The design includes a distinctive scalloped circular badge in 'badgeBackground' pale yellow-green with 'primary' red text, used for highlighting special offers or features, adding a playful and friendly graphic element."
+        }
+      },
+      "originImagesUrls": [
+        "https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/uploads/1752423363358-Screenshot%202025-07-13%20at%2019.15.31.png"
+      ]
+    },
+    {
+      "presetId": "630090f6-69f3-4d49-bd65-6a3306173a38",
+      "brandIdentity": {
+        "designSummary": "This brand design features a modern, clean, and approachable aesthetic with a focus on clarity and friendliness. The color palette uses soft pastel yellow and pastel blue as primary UI background colors, contrasted with a strong dark navy for text and interactive elements. The layout is spacious and modular, with generous padding and rounded corners on cards and buttons, creating a soft and welcoming feel. Typography is a geometric sans-serif with rounded edges, combining large, bold headings with clean, legible body text to convey professionalism and warmth. Circular images and rounded rectangular backgrounds behind text add visual interest and a human touch. Overall, the design balances trustworthiness and innovation with a calm, friendly tone, making it suitable for service-oriented industries seeking a confident yet approachable brand presence.",
+        "toneOfVoice": "Trustworthy, approachable, calm, professional, and friendly.",
+        "tones": [
+          "Trustworthy",
+          "Calm",
+          "Friendly",
+          "Professional",
+          "Approachable",
+          "Modern",
+          "Clean",
+          "Warm",
+          "Inviting",
+          "Confident"
+        ],
+        "designStyle": {
+          "primaryStyle": [
+            "Minimalism",
+            "Modern",
+            "Friendly"
+          ],
+          "supportingStyles": [
+            "Geometric",
+            "Soft UI",
+            "Modular"
+          ]
+        },
+        "palette": {
+          "colors": {
+            "primary": "#0E2A35",
+            "primaryForeground": "#FFFFFF",
+            "secondary": "#FFF8D1",
+            "secondaryForeground": "#0E2A35",
+            "background": "#D0FBF9",
+            "customColors": [
+              {
+                "name": "foreground",
+                "value": "#0E2A35"
+              },
+              {
+                "name": "destructive",
+                "value": "#DF3131"
+              },
+              {
+                "name": "destructiveforeground",
+                "value": "#ffffff"
+              },
+              {
+                "name": "accentcyan",
+                "value": "#D0FBF9"
+              },
+              {
+                "name": "accentyellow",
+                "value": "#FFF8D1"
+              }
+            ]
+          },
+          "paletteUsageGuide": "The color system relies on a high-contrast 'Ink on Pastel' approach. The 'primary' color (Deep Navy) is the workhorse of the brand, used for all typography, icons, and primary action buttons to ensure maximum legibility and visual weight. The 'background' (Pastel Mint) and 'secondary' (Pastel Cream) colors serve as the environmental canvas, used for page backgrounds, content cards, and layout blocks. Never use the pastel colors for text; they are strictly for containers and backgrounds. Use 'primaryForeground' (White) exclusively for text placed on top of solid 'primary' buttons. The 'foreground' custom color is identical to 'primary' and should be used for all standard body text on 'background' or 'secondary' surfaces.",
+          "paletteAccessibilityNotes": "The palette is designed for exceptional accessibility. The combination of the dark 'primary' text against the light 'background' and 'secondary' surfaces yields a contrast ratio exceeding 14:1, passing WCAG AAA standards. Similarly, the 'primary' buttons with 'primaryForeground' text pass AAA standards. The design ensures that content is readable for all users by avoiding low-contrast combinations entirely."
+        },
+        "typography": {
+          "headings": {
+            "font": {
+              "role": "Primary Heading Font",
+              "fontFamily": "poppins-v2",
+              "fontJustification": ""
+            },
+            "headingsSimilarFonts": [
+              "rubik-v2",
+              "nunito sans",
+              "work-sans-v2"
+            ],
+            "headingsUsageGuide": "Use the heading font for all major titles and section headers. The large, bold style with generous spacing ensures clarity and emphasis. Pair headings with the paragraph font to create a harmonious typographic hierarchy. Maintain sufficient contrast by using 'primaryForeground' or 'secondaryForeground' colors for headings on pastel backgrounds. Avoid overcrowding headings to preserve readability and visual balance.",
+            "headingsAccessibilityNotes": "Headings in 'primaryForeground' or 'secondaryForeground' colors on 'primary' or 'secondary' backgrounds meet WCAG AA contrast standards, ensuring accessibility for users with visual impairments."
+          },
+          "paragraphs": {
+            "font": {
+              "role": "Main Body Text Font",
+              "fontFamily": "poppins-v2",
+              "fontJustification": ""
+            },
+            "paragraphsSimilarFonts": [
+              "rubik-v2",
+              "nunito sans",
+              "work-sans-v2"
+            ],
+            "paragraphsUsageGuide": "Use the paragraph font for all body text, descriptions, and smaller UI text. Maintain good line spacing and letter spacing for readability. Text should primarily appear in 'primaryForeground' or 'secondaryForeground' colors on white or pastel backgrounds to ensure contrast. Combine with heading fonts to create a clear typographic hierarchy and consistent user experience.",
+            "paragraphsAccessibilityNotes": "Paragraph text in 'primaryForeground' or 'secondaryForeground' colors on 'background' white or pastel backgrounds meets WCAG AA contrast requirements for body text, supporting accessibility."
+          },
+          "welcomeSectionTypography": {
+            "placement": "Centered",
+            "implementation": "The welcome section uses a large, centered heading with generous line spacing and letter spacing to create a calm and focused introduction. The text is placed centrally on a soft pastel gradient background, emphasizing clarity and approachability. Supporting text is smaller and aligned below the heading, maintaining balance and readability. The call-to-action buttons are placed in the bottom right corner, visually anchored but not overpowering the main message."
+          },
+          "fontSizes": [
+            {
+              "name": "xs",
+              "size": "0.75rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "sm",
+              "size": "0.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "base",
+              "size": "1rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "lg",
+              "size": "1.125rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "500"
+            },
+            {
+              "name": "xl",
+              "size": "1.25rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "2xl",
+              "size": "1.5rem",
+              "lineHeight": "1.4",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "3xl",
+              "size": "1.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0",
+              "fontWeight": "700"
+            },
+            {
+              "name": "4xl",
+              "size": "2.25rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "5xl",
+              "size": "3rem",
+              "lineHeight": "1.1",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "800"
+            },
+            {
+              "name": "6xl",
+              "size": "3.75rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.03em",
+              "fontWeight": "800"
+            },
+            {
+              "name": "7xl",
+              "size": "4.5rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.04em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "8xl",
+              "size": "6rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.05em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "9xl",
+              "size": "8rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.06em",
+              "fontWeight": "900"
+            }
+          ]
+        },
+        "layout": {
+          "layoutDna": {
+            "densitySpectrum": "Balanced",
+            "contrastSpectrum": "Moderate Contrast",
+            "gridAlignmentSpectrum": "Modular",
+            "negativeSpaceUsage": "Generous",
+            "textVsImageEmphasis": "Text-Focused",
+            "complexitySpectrum": "Simple & Clean"
+          },
+          "grid": {
+            "compositionApproach": "Modular",
+            "spacing": {
+              "columns": "12-column grid",
+              "rows": "Defined content rows",
+              "gaps": "Consistent medium gaps"
+            },
+            "margins": "Generous page margins",
+            "padding": "Consistent padding within containers"
+          }
+        },
+        "components": {
+          "containers": "Containers use pastel background colors with rounded corners and subtle shadows to create separation and softness. Padding is generous to ensure content breathes. The container backgrounds alternate between 'primary' pastel yellow and 'secondary' pastel blue for visual interest and section differentiation.",
+          "images": "Images are presented in circular frames, adding a friendly and approachable feel. They are used sparingly to complement text and break the grid's rectangular structure. Images do not influence the core color palette.",
+          "buttons": "Buttons have rounded corners and use the 'secondary' pastel blue background with 'secondaryForeground' dark navy text for primary actions. Secondary buttons use a dark navy background with white text for strong contrast. Buttons include subtle arrow icons consistent in style and color."
+        },
+        "graphicElements": {
+          "icons": "Icons are minimal, line-based, and use the 'primaryForeground' dark navy color to maintain clarity and consistency. They are used in buttons and to indicate actions like 'Learn More'.",
+          "illustrations": "No illustrations are present; the design relies on photography and UI elements for visual interest.",
+          "stickers": "No stickers or badges are used in the design."
+        }
+      },
+      "originImagesUrls": [
+        "https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/uploads/1751184957805-Screenshot%202025-06-03%20at%2020.01.37.jpg"
+      ]
+    },
+    {
+      "presetId": "f6c78afd-5ce4-447c-9acd-7aaa8c34d882",
+      "brandIdentity": {
+        "designSummary": "This design features a clean, modern aesthetic with a strong emphasis on usability and visual clarity. The layout is grid-based and modular, using generous spacing and rounded corners to create a friendly and approachable feel. Typography is bold and geometric, with large, heavy-weight sans-serif headings paired with clean, readable body text. The color palette centers on a vibrant 'primary' orange and a soft 'brandAccent' pink, contrasted against a light 'background' off-white and strong black text for maximum legibility. UI components like buttons and containers use these accent colors to draw attention to calls to action and important content blocks. Minimalistic black icons and geometric shapes add a dynamic, tech-savvy vibe without cluttering the interface. Overall, the design balances professionalism with warmth and energy, making it suitable for a wide range of modern business and tech-oriented websites.",
+        "toneOfVoice": "Professional, energetic, approachable, and modern with a focus on clarity and user engagement.",
+        "tones": [
+          "Energetic",
+          "Professional",
+          "Approachable",
+          "Modern",
+          "Clean",
+          "Vibrant",
+          "Friendly",
+          "Clear",
+          "Engaging",
+          "Minimalistic"
+        ],
+        "designStyle": {
+          "primaryStyle": [
+            "Modern",
+            "Minimalism",
+            "Geometric"
+          ],
+          "supportingStyles": [
+            "Tech-Savvy",
+            "Modular",
+            "Friendly"
+          ]
+        },
+        "palette": {
+          "colors": {
+            "primary": "#FF6F3C",
+            "primaryForeground": "#000000",
+            "secondary": "#000000",
+            "secondaryForeground": "#FFFFFF",
+            "background": "#FAF8F8",
+            "customColors": [
+              {
+                "name": "brandaccent",
+                "value": "#F7C9D4"
+              },
+              {
+                "name": "foreground",
+                "value": "#000000"
+              },
+              {
+                "name": "destructiveforeground",
+                "value": "#FFFFFF"
+              },
+              {
+                "name": "destructive",
+                "value": "#DF3131"
+              }
+            ]
+          },
+          "paletteUsageGuide": "Use the 'primary' color for key interactive elements such as primary buttons and highlights to draw user attention. The 'brandAccent' color serves as a secondary accent for call-to-action buttons and highlighted content blocks, providing a softer contrast to the 'primary' orange. The 'background' color is a light off-white that ensures content stands out clearly and maintains a clean, spacious feel. Text and icons on 'primary' and 'brandAccent' backgrounds should use the 'primaryForeground' color for maximum readability. Black ('secondary') is used for primary text and navigation elements, ensuring strong legibility against the 'background'. White text ('secondaryForeground') is reserved for use on black backgrounds or dark UI elements. The palette balances vibrancy with neutrality, allowing for clear visual hierarchy and accessible contrast across all UI components.",
+          "paletteAccessibilityNotes": "The 'primaryForeground' black text on 'primary' orange background meets WCAG AA contrast standards for normal text, ensuring readability. The 'primaryForeground' black text on 'brandAccent' pink background also meets WCAG AA contrast for larger text and UI elements. Black text on the 'background' off-white provides excellent contrast and accessibility. White text on black backgrounds meets WCAG AAA standards. Overall, the palette is designed to maintain strong contrast ratios for accessibility compliance across headings, body text, buttons, and interactive elements."
+        },
+        "typography": {
+          "headings": {
+            "font": {
+              "role": "Primary Heading Font",
+              "fontFamily": "space grotesk",
+              "fontJustification": ""
+            },
+            "headingsSimilarFonts": [
+              "poppins-v2",
+              "work-sans-v2",
+              "open sans"
+            ],
+            "headingsUsageGuide": "Use the heading font in large sizes with tight letter spacing to create strong visual impact and clear hierarchy. Pair with the paragraph font for contrast and readability. Headings should be used sparingly to maintain emphasis and should always appear in 'secondary' black color for maximum legibility against the 'background'. Maintain consistent vertical spacing to ensure clean separation from body text and other elements.",
+            "headingsAccessibilityNotes": "Headings in 'secondary' black on 'background' off-white meet WCAG AAA contrast standards, ensuring clear readability for all users."
+          },
+          "paragraphs": {
+            "font": {
+              "role": "Main Body Text Font",
+              "fontFamily": "space grotesk",
+              "fontJustification": ""
+            },
+            "paragraphsSimilarFonts": [
+              "open sans",
+              "work-sans-v2",
+              "poppins-v2"
+            ],
+            "paragraphsUsageGuide": "Use the paragraph font for all body text and descriptive content. Maintain sufficient line height and letter spacing for readability. Text color should be 'secondary' black on the 'background' off-white for optimal contrast. Avoid using paragraph font in accent colors except for highlighted blocks where 'primaryForeground' black text is used on 'primary' or 'brandAccent' backgrounds. Ensure consistent spacing between paragraphs and other UI elements to maintain a clean, uncluttered layout.",
+            "paragraphsAccessibilityNotes": "Body text in 'secondary' black on 'background' off-white meets WCAG AAA contrast standards, supporting accessibility for users with visual impairments."
+          },
+          "welcomeSectionTypography": {
+            "placement": "Top-Third Anchor",
+            "implementation": "The welcome section uses a large, bold heading anchored in the top third of the viewport, creating immediate visual impact. The heading is left-aligned with generous whitespace around it, emphasizing clarity and focus. Supporting text and call-to-action buttons are placed below the heading with consistent spacing, maintaining a clean vertical flow. This placement strategy draws the user's eye naturally from the heading to interactive elements, enhancing engagement and usability."
+          },
+          "fontSizes": [
+            {
+              "name": "xs",
+              "size": "0.75rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "sm",
+              "size": "0.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0.02em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "base",
+              "size": "1rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "400"
+            },
+            {
+              "name": "lg",
+              "size": "1.125rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "500"
+            },
+            {
+              "name": "xl",
+              "size": "1.25rem",
+              "lineHeight": "1.5",
+              "letterSpacing": "0.025em",
+              "fontWeight": "600"
+            },
+            {
+              "name": "2xl",
+              "size": "1.5rem",
+              "lineHeight": "1.4",
+              "letterSpacing": "0.02em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "3xl",
+              "size": "1.875rem",
+              "lineHeight": "1.3",
+              "letterSpacing": "0.015em",
+              "fontWeight": "700"
+            },
+            {
+              "name": "4xl",
+              "size": "2.25rem",
+              "lineHeight": "1.2",
+              "letterSpacing": "0.01em",
+              "fontWeight": "800"
+            },
+            {
+              "name": "5xl",
+              "size": "3rem",
+              "lineHeight": "1.1",
+              "letterSpacing": "0em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "6xl",
+              "size": "3.75rem",
+              "lineHeight": "1.1",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "7xl",
+              "size": "4.5rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "8xl",
+              "size": "6rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "900"
+            },
+            {
+              "name": "9xl",
+              "size": "8rem",
+              "lineHeight": "1",
+              "letterSpacing": "-0.025em",
+              "fontWeight": "900"
+            }
+          ]
+        },
+        "layout": {
+          "layoutDna": {
+            "densitySpectrum": "Balanced",
+            "contrastSpectrum": "High-Contrast",
+            "gridAlignmentSpectrum": "Strict Grid",
+            "negativeSpaceUsage": "Generous",
+            "textVsImageEmphasis": "Balanced",
+            "complexitySpectrum": "Simple & Clean"
+          },
+          "grid": {
+            "compositionApproach": "Modular",
+            "spacing": {
+              "columns": "12-column grid",
+              "rows": "Defined content rows",
+              "gaps": "Consistent medium gaps"
+            },
+            "margins": "Generous page margins",
+            "padding": "Consistent padding within containers"
+          }
+        },
+        "components": {
+          "containers": "Containers feature rounded corners with subtle borders or solid background fills in 'primary', 'brandAccent', or 'background' colors. They are spaced generously to separate content blocks clearly and maintain a clean, modular layout. Text inside containers uses 'primaryForeground' black for readability on colored backgrounds and 'secondary' black on light backgrounds.",
+          "images": "Images are presented with rounded corners and integrated into the grid layout, balanced with text content. They maintain natural proportions and are used to complement textual information without overwhelming the design. Image colors are not part of the brand palette and are treated as content-specific.",
+          "buttons": "Buttons are rounded rectangles with solid fills in 'primary' orange or 'brandAccent' pink, featuring black text and minimalistic black icons. They have clear hover states and are sized for easy interaction. Primary actions use the 'primary' color, while secondary or alternative calls to action use 'brandAccent'."
+        },
+        "graphicElements": {
+          "icons": "Icons are minimalistic, geometric, and black, consistent with the typography and overall modern style. They are used sparingly to support navigation and interactive elements without cluttering the interface.",
+          "illustrations": "No specific illustrations are present; the design relies on photography and geometric shapes for visual interest.",
+          "stickers": "Stickers or badges appear as black pill-shaped labels with white text, used to highlight service numbers or statuses. They add a dynamic and structured feel to the layout."
+        }
+      },
+      "originImagesUrls": [
+        "https://wixmp-fe53c9ff592a4da924211f23.wixmp.com/uploads/1750175175032-Screenshot%202025-05-14%20at%2014.13.50%201.png"
+      ]
+    }
+  ],
+  "brandBook": {
+    "tones": [
+      "Joyful",
+      "Reassuring",
+      "Playful",
+      "Helpful"
+    ],
+    "designStyle": {
+      "primaryStyle": [
+        "Modern Minimalism",
+        "Kid-Friendly Design"
+      ],
+      "supportingStyles": [
+        "Soft Aesthetics",
+        "E-commerce Inspired"
+      ]
+    },
+    "toneOfVoice": "Friendly, cheerful, trustworthy, and informative.",
+    "components": {
+      "images": "Layout Role: None. | Gallery Type: Standard E-commerce Grid: A clean, responsive grid displaying product images, names, descriptions, and age groups. Each card includes a 'Chat on WhatsApp' button.",
+      "buttons": "Primary: background-color: #F48FB1, color: #FFFFFF, border-radius: 12px, padding: 12px 24px. Secondary: background-color: transparent, color: #F48FB1, border: 1px solid #F48FB1, border-radius: 12px.",
+      "containers": "Method: Whitespace, Style: 40px vertical margin"
+    },
+    "typography": {
+      "headings": {
+        "font": {
+          "role": "headings",
+          "fontFamily": "poppins-v2",
+          "fontJustification": ""
+        },
+        "headingsUsageGuide": "Use for all main headings, subheadings, and titles. Maintain a clear hierarchy with consistent font weights and sizes.",
+        "headingsSimilarFonts": [],
+        "headingsAccessibilityNotes": "Ensure headings are properly nested (H1, H2, H3, etc.) for semantic structure and screen reader compatibility."
+      },
+      "fontSizes": [
+        {
+          "name": "xs",
+          "size": "0.75rem",
+          "letterSpacing": "0.05em",
+          "lineHeight": "1",
+          "fontWeight": "400"
+        },
+        {
+          "name": "sm",
+          "size": "0.875rem",
+          "letterSpacing": "0.025em",
+          "lineHeight": "1.25",
+          "fontWeight": "400"
+        },
+        {
+          "name": "base",
+          "size": "1rem",
+          "letterSpacing": "0em",
+          "lineHeight": "1.5",
+          "fontWeight": "400"
+        },
+        {
+          "name": "lg",
+          "size": "1.125rem",
+          "letterSpacing": "-0.025em",
+          "lineHeight": "1.75",
+          "fontWeight": "400"
+        },
+        {
+          "name": "xl",
+          "size": "1.25rem",
+          "letterSpacing": "-0.025em",
+          "lineHeight": "1.75",
+          "fontWeight": "500"
+        },
+        {
+          "name": "2xl",
+          "size": "1.5rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "2",
+          "fontWeight": "500"
+        },
+        {
+          "name": "3xl",
+          "size": "1.875rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "2.25",
+          "fontWeight": "600"
+        },
+        {
+          "name": "4xl",
+          "size": "2.25rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "2.5",
+          "fontWeight": "600"
+        },
+        {
+          "name": "5xl",
+          "size": "3rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "1",
+          "fontWeight": "700"
+        },
+        {
+          "name": "6xl",
+          "size": "3.75rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "1",
+          "fontWeight": "700"
+        },
+        {
+          "name": "7xl",
+          "size": "4.5rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "1",
+          "fontWeight": "700"
+        },
+        {
+          "name": "8xl",
+          "size": "6rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "1",
+          "fontWeight": "700"
+        },
+        {
+          "name": "9xl",
+          "size": "8rem",
+          "letterSpacing": "-0.05em",
+          "lineHeight": "1",
+          "fontWeight": "700"
+        }
+      ],
+      "paragraphs": {
+        "font": {
+          "role": "paragraphs",
+          "fontFamily": "nunito sans",
+          "fontJustification": ""
+        },
+        "paragraphsUsageGuide": "Use for all body text, descriptions, and general content. Prioritize readability with appropriate line height and letter spacing.",
+        "paragraphsSimilarFonts": [],
+        "paragraphsAccessibilityNotes": "Ensure sufficient contrast between text and background colors. Use a legible font size for comfortable reading."
+      },
+      "welcomeSectionTypography": {
+        "placement": "",
+        "implementation": ""
+      }
+    },
+    "originImagesUrls": [
+      "https://static.wixstatic.com/media/b9ec8c_7e7a21888fd54a54af3e7fdf97447ad1~mv2.png"
+    ],
+    "layout": {
+      "grid": {
+        "margins": "Base unit: 8px. All margins are 24px (3x base unit).",
+        "padding": "Base unit: 8px. All padding is 16px (2x base unit).",
+        "spacing": {
+          "gaps": "Base unit: 8px. All grid gaps are 16px (2x base unit).",
+          "rows": "Auto",
+          "columns": "12"
+        },
+        "compositionApproach": "Card-Based Grid with Rounded Elements"
+      },
+      "layoutDna": {
+        "contrastSpectrum": "Low",
+        "densitySpectrum": "Sparse",
+        "textVsImageEmphasis": "Balanced",
+        "complexitySpectrum": "Simple",
+        "gridAlignmentSpectrum": "Balanced",
+        "negativeSpaceUsage": "Generous"
+      },
+      "heroSectionLayout": "**The Animated Toy Carousel**\nComposition (Tailwind Spec): Full-screen container (h-screen flex items-center justify-center bg-lightPink). Headline '10+ Years of Bringing Smiles with Quality Toys' (text-5xl font-bold text-primary mb-4). A carousel of toy images with rounded corners (w-full max-w-4xl rounded-2xl overflow-hidden).\nSignature Hook (Framer Motion Spec): Use Framer Motion's `useTransform` and `useAnimation` to create a smooth, infinite carousel animation. Each image in the carousel has `initial={{ x: '100%' }}` and `animate={{ x: '-100%' }}` with `transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}`."
+    },
+    "graphicElements": {
+      "icons": "",
+      "stickers": "",
+      "illustrations": ""
+    },
+    "designSummary": "**Playful Minimalism: A Blend of Joyful Aesthetics and Clean Functionality**\n\nThe Vision: To create a digital space that mirrors the warmth and trustworthiness of a beloved toy store. The design emphasizes a playful, kid-friendly aesthetic without sacrificing modern minimalism. The goal is to build a website that feels both inviting to children and reassuring to parents, fostering a sense of joy and confidence.\n\n**Execution Blueprint:**\n1. Soft Color Palette: Light pink and white are the dominant colors, creating a gentle and cheerful atmosphere. Accent colors will be slightly brighter shades of pink and yellow to add pops of excitement.\n2. Rounded Elements: All corners (buttons, containers, images) will have a consistent rounded radius (8px-12px) to enhance the soft, approachable feel.\n3. Smooth Typography: Use a friendly, legible font with rounded terminals for both headings and body text. Font sizes will be carefully scaled to ensure readability on all devices.\n4. WhatsApp Integration: Prominent 'Chat on WhatsApp' buttons will be strategically placed throughout the site, facilitating easy communication and order inquiries.\n5. Product Grid: A clean, e-commerce-inspired product grid will showcase toys with clear images, names, descriptions, and age group information. The focus is on browsing and discovery, not direct purchasing.",
+    "palette": {
+      "colors": {
+        "background": "#FFFFFF",
+        "secondary": "#FFD54F",
+        "customColors": [
+          {
+            "name": "lightPink",
+            "value": "#FCE4EC"
+          },
+          {
+            "name": "whatsappGreen",
+            "value": "#25D366"
+          },
+          {
+            "name": "destructive",
+            "value": "#F44336"
+          },
+          {
+            "name": "destructive-foreground",
+            "value": "#FFFFFF"
+          }
+        ],
+        "foreground": "#212121",
+        "secondaryForeground": "#212121",
+        "primaryForeground": "#FFFFFF",
+        "primary": "#F48FB1"
+      },
+      "paletteUsageGuide": "Light pink and white are the dominant colors, creating a gentle and cheerful atmosphere. Accent colors will be slightly brighter shades of pink and yellow to add pops of excitement.",
+      "paletteAccessibilityNotes": "Ensure sufficient contrast between text and background colors for readability. Use a color contrast checker to verify WCAG compliance."
+    }
+  },
+  "initialPrompt": "Create a professional kids toy shop website for a toy store with 10+ years of experience, suitable for both online showcase and offline sales.\n\nDesign & Colors:\nUse a soft, cheerful light pink and white mixed color palette across the entire website including header, sections, buttons, and footer. The design should feel playful, friendly, clean, and trustworthy for parents and children.\n\nWebsite Style:\nModern, minimal, kid-friendly, and mobile-first. Rounded elements, soft shadows, smooth fonts, and joyful visuals suitable for a children’s toy brand.\n\nPages to Include:\n\nHome\n\nAbout Us\n\nToys / Products\n\nVisit Our Store\n\nContact Us\n\nHome Page Sections:\n\nHero section with a welcoming headline like “10+ Years of Bringing Smiles with Quality Toys”\n\nToy categories (Educational Toys, Action Figures, Board Games, Plush Toys, Baby Toys)\n\nTrust section highlighting 10+ years experience and offline store presence\n\nClear call-to-action buttons that say “Chat on WhatsApp”\n\nProduct Display (IMPORTANT):\n\nDisplay toys in a clean product grid like an e-commerce website\n\nEach product should show image, name, short description, and age group\n\nDO NOT include Buy Now, Add to Cart, Checkout, or Payment buttons\n\nReplace all purchase actions with a “Chat on WhatsApp” button\n\nClicking the button should open WhatsApp chat for product enquiry and ordering\n\nWhatsApp Integration:\n\nUse WhatsApp as the main contact and order method\n\nAdd “Chat on WhatsApp” buttons on product cards, product pages, and contact sections\n\nInclude a floating WhatsApp chat button visible on all pages\n\nAbout Us Page:\nHighlight the toy shop’s journey, 10+ years of trust, quality toys, safety, and happiness for children, with both offline store and online presence.\n\nFooter:\nLight pink and white footer including store address, phone number, WhatsApp contact, working hours, and a friendly closing message for parents.\n\nThe overall website should feel warm, joyful, and trustworthy, encouraging customers to browse toys and continue the order conversation through WhatsApp.",
+  "status": "READY",
+  "revision": "11",
+  "createdDate": "2026-01-06T16:05:26.215Z",
+  "updatedDate": "2026-01-06T16:06:34.978Z",
+  "attachments": {
+    "contentImagesUrls": [
+      "https://static.wixstatic.com/media/b9ec8c_7e7a21888fd54a54af3e7fdf97447ad1~mv2.png"
+    ],
+    "inspirationImagesUrls": []
+  },
+  "selectedBrandingPresetId": "00000000-0865-447d-9aba-c93d64db05c2",
+  "plan": "\n\n```json\n{\n  \"sections\": [\n    {\n      \"id\": \"overview\",\n      \"title\": \"## Overview\",\n      \"content\": \"This plan creates a professional, kid-friendly toy shop website that showcases products in a clean grid format and uses WhatsApp as the primary contact and ordering method. The site will feature product browsing, store information, and trust-building content, with all purchase interactions redirected to WhatsApp conversations.\"\n    },\n    {\n      \"id\": \"key-features\",\n      \"title\": \"## Key features\",\n      \"content\": \"- **View Product Listing**: Displays all toys in a clean grid with images, names, descriptions, and age groups.\\n- **Filter Products**: Allows customers to filter toys by category (Educational Toys, Action Figures, Board Games, Plush Toys, Baby Toys).\\n- **View Product Details**: Shows detailed information for a single toy product.\\n- **Initiate WhatsApp Chat from Product**: Opens WhatsApp chat for product inquiries and ordering directly from product cards or detail pages.\\n- **View Store Information**: Displays store address, phone number, working hours, and offline store presence.\\n- **View About Us Content**: Highlights the toy shop's 10+ years of experience, quality commitment, and trust.\\n- **Submit Contact Form**: Allows visitors to send inquiries through a contact form.\\n- **Access Floating WhatsApp Button**: Provides a persistent WhatsApp chat button visible on all pages.\",\n      \"metadata\": [\n        { \"id\": \"view-product-listing\", \"name\": \"View Product Listing\" },\n        { \"id\": \"filter-products\", \"name\": \"Filter Products\" },\n        { \"id\": \"view-product-details\", \"name\": \"View Product Details\" },\n        { \"id\": \"initiate-whatsapp-chat-product\", \"name\": \"Initiate WhatsApp Chat from Product\" },\n        { \"id\": \"view-store-information\", \"name\": \"View Store Information\" },\n        { \"id\": \"view-about-us-content\", \"name\": \"View About Us Content\" },\n        { \"id\": \"submit-contact-form\", \"name\": \"Submit Contact Form\" },\n        { \"id\": \"access-floating-whatsapp-button\", \"name\": \"Access Floating WhatsApp Button\" }\n      ]\n    },\n    {\n      \"id\": \"structure\",\n      \"title\": \"## Structure\",\n      \"content\": \"- **Header (Reusable)**: Contains the toy shop logo, navigation links to Home, About Us, Toys, Visit Our Store, and Contact Us, with a soft pink and white color scheme.\\n- **Footer (Reusable)**: Displays store address, phone number, WhatsApp contact, working hours, and a friendly closing message for parents, styled in light pink and white.\\n- **Home Page**: Features a hero section with welcoming headline, toy category showcase, trust section highlighting 10+ years of experience, and clear WhatsApp call-to-action buttons.\\n- **About Us Page**: Highlights the toy shop's journey, 10+ years of trust, quality commitment, safety standards, and both offline store and online presence.\\n- **Toys / Products Page**: Displays toys in a clean product grid with filtering by category, product cards showing image, name, description, age group, and WhatsApp chat buttons.\\n- **Visit Our Store Page**: Provides store location, directions, working hours, and offline store information.\\n- **Contact Us Page**: Contains a contact form and WhatsApp contact options for customer inquiries.\"\n    }\n  ],\n  \"apps\": [\n    {\n      \"id\": \"wix-stores\",\n      \"keyFeatures\": [\n        { \"id\": \"view-product-listing\", \"name\": \"View Product Listing\" },\n        { \"id\": \"filter-products\", \"name\": \"Filter Products\" },\n        { \"id\": \"view-product-details\", \"name\": \"View Product Details\" }\n      ]\n    },\n    {\n      \"id\": \"wix-cms\",\n      \"keyFeatures\": [\n        { \"id\": \"initiate-whatsapp-chat-product\", \"name\": \"Initiate WhatsApp Chat from Product\" },\n        { \"id\": \"view-store-information\", \"name\": \"View Store Information\" },\n        { \"id\": \"view-about-us-content\", \"name\": \"View About Us Content\" },\n        { \"id\": \"submit-contact-form\", \"name\": \"Submit Contact Form\" },\n        { \"id\": \"access-floating-whatsapp-button\", \"name\": \"Access Floating WhatsApp Button\" }\n      ]\n    }\n  ],\n  \"version\": \"3.0.21\"\n}\n```",
+  "designerData": {
+    "designerId": "33506850-5fb4-4afb-8a24-82995beb7a53",
+    "designerName": "Pixie",
+    "selectionMethod": "UNSELECTED"
+  }
+}
