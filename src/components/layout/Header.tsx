@@ -19,13 +19,13 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="max-w-[120rem] mx-auto px-6 py-4">
+      <div className="max-w-[159rem] mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_56673b00d24740d896ae8ca0c386e3cd~mv2.png"
-              width={5003332131}
+              width={50}
               className="h-12 w-auto"
               originWidth={533}
               originHeight={196} />
