@@ -137,7 +137,7 @@ export default function ToysPage() {
                   {/* Product Image */}
                   <div className="aspect-square overflow-hidden bg-light-pink">
                     <Image
-                      src={toy.image || 'https://www.ebabykart.com/buy/kids-4X4-heavy-electric-jeep-12V-battery-operated-ride-on-jeep-for-kids-wn-1166-grey?srsltid=AfmBOorLFdoGZxOWlKEjajOJVqbjl7XV0ol_pj_-cx8yh5Ghuq6RK_6z'}
+                      src={toy.image || 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY'}
                       alt={toy.name || 'Toy product'}
                       width={400}
                       className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 shadow-[12px_12px_4px_0px_#d9d9d9]"
