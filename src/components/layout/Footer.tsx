@@ -16,12 +16,12 @@ export default function Footer() {
     fetchStoreInfo();
   }, []);
 
-const handleWhatsAppClick = () => {
-  const message = encodeURIComponent(
-    'Hi, I am interested in this toy. Please share more details.'
-  );
-  window.open(`https://wa.me/919025398147?text=${message}`, '_blank');
-};
+  const handleWhatsAppClick = () => {
+    const message = encodeURIComponent(
+      'Hi, I am interested in this toy. Please share more details.'
+    );
+    window.open(`https://wa.me/919025398147?text=${message}`, '_blank');
+  };
 
   return (
     <footer className="bg-light-pink mt-24">
@@ -110,13 +110,16 @@ const handleWhatsAppClick = () => {
           </div>
         </div>
 
-      {/* Bottom Section */}
-<div className="mt-12 pt-8 border-t border-primary/20">
-  <p className="font-paragraph text-base text-center text-foreground">
-    Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
-  </p>
-
-  <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
-    © {new Date().getFullYear()} {storeInfo?.sudhanovelties || 'Sudha Novelties'}. All rights reserved.
-  </p>
-</div>
+        {/* Bottom Section */}
+        <div className="mt-12 pt-8 border-t border-primary/20">
+          <p className="font-paragraph text-base text-center text-foreground">
+            Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
+          </p>
+          <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
+            © {new Date().getFullYear()} {storeInfo?.storeName || 'Sudha Novelties'}. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
