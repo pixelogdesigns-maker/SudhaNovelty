@@ -204,28 +204,7 @@ export default function HomePage() {
                 </p>
               </AnimatedReveal>
 
-              <AnimatedReveal delay={600}>
-  <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
-    <button
-      onClick={() => {
-        const message = encodeURIComponent(
-          'Hi, I am interested in this toy. Please share price & details.'
-        );
-        window.open(
-          `https://wa.me/919025398147?text=${message}`,
-          '_blank'
-        );
-      }}
-      className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
-    >
-      <span className="relative z-10 flex items-center gap-2">
-        <MessageCircle className="w-6 h-6" />
-        Chat to Order
-      </span>
-      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-    </button>
-  </div>
-</AnimatedReveal>
+              <AnimatedReveal delay={600}> <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"> <button onClick={handleWhatsAppClick} className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
 
                   >
                     <span className="relative z-10 flex items-center gap-2">
