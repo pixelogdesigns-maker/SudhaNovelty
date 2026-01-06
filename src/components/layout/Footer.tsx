@@ -16,9 +16,10 @@ export default function Footer() {
     fetchStoreInfo();
   }, []);
 
-  const handleWhatsAppClick = () => {
-    if (storeInfo?.whatsAppNumber) {
-      window.open(`https://wa.me/${storeInfo.whatsAppNumber}`, '_blank');
+const handleWhatsAppClick = () => {
+  window.open('https://wa.me/919025398147', '_blank');
+};
+
     }
   };
 
