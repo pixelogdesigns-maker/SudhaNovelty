@@ -17,7 +17,12 @@ export default function Footer() {
   }, []);
 
 const handleWhatsAppClick = () => {
-  window.open('https://wa.me/919025398147', '_blank');
+  const message = encodeURIComponent(
+    'Hi, I am interested in this toy. Please share more details.'
+  );
+  window.open(`https://wa.me/919025398147?text=${message}`, '_blank');
+};
+
 };
 
     }
