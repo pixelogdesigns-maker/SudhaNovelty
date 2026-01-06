@@ -207,7 +207,7 @@ export default function HomePage() {
               <AnimatedReveal delay={600}>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center">
                   <button
-                    onClick={919025398147}
+                    onClick=window.open(`https://wa.me/919025398147?text=${encodedMessage}`, '_blank');
                     className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3"
                   >
                     <span className="relative z-10 flex items-center gap-2">
