@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
@@ -9,6 +10,7 @@ import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 
 export default function ToysPage() {
+  const [searchParams] = useSearchParams();
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -36,9 +38,15 @@ export default function ToysPage() {
       if (storeItems && storeItems.length > 0) {
         setStoreInfo(storeItems[0]);
       }
+
+      // Check for category parameter in URL
+      const categoryParam = searchParams.get('category');
+      if (categoryParam) {
+        setSelectedCategory(categoryParam);
+      }
     };
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (selectedCategory === 'all') {

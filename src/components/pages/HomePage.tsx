@@ -332,7 +332,7 @@ export default function HomePage() {
                 delay={index * 100} 
                 className={`${index % 3 === 1 ? 'lg:mt-16' : ''}`} // Stagger effect
               >
-                <Link to="/toys" className="group block relative">
+                <Link to={`/toys?category=${encodeURIComponent(category.categoryName || '')}`} className="group block relative">
                   <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-gray-100 shadow-lg transition-transform duration-500 group-hover:-translate-y-2">
                     <Image
                       src={category.categoryImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768'}
