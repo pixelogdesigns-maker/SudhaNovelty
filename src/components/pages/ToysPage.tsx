@@ -171,10 +171,14 @@ export default function ToysPage() {
                         </span>
                       </div>
                     )}
-
-                    <div>
-                    ₹1500
-                    </div>
+                    
+                    {toy.price && (
+                      <div className="mb-4">
+                        <span className="inline-block bg-light-pink text-primary font-paragraph text-sm px-3 py-1 rounded-lg">
+                          {toy.price}
+                        </span>
+                      </div>
+                    )}
 
                     {/* WhatsApp Button */}
                     <button
