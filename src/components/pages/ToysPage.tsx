@@ -120,7 +120,7 @@ export default function ToysPage() {
           {filteredToys.length === 0 ? (
             <div className="text-center py-20">
               <p className="font-paragraph text-xl text-foreground">
-                We're loading toys just for you
+                We're loading toys for you.....
               </p>
             </div>
           ) : (
