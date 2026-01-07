@@ -129,7 +129,7 @@ export default function HomePage() {
 
   const handleWhatsAppClick = () => {
     if (storeInfo?.whatsAppNumber) {
-      window.open(`https://wa.me/${storeInfo.whatsAppNumber}`, '_blank');
+      window.open(`https://wa.me/+919025398147}`, '_blank');
     }
   };
 
