@@ -65,6 +65,12 @@ export interface ToyCategories {
   isActive?: boolean;
   /** @wixFieldType number */
   displayOrder?: number;
+  /** @wixFieldType legacy_color */
+  color?: any;
+  /** @wixFieldType number */
+  number?: number;
+  /** @wixFieldType number */
+  price?: number;
 }
 
 
