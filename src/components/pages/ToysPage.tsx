@@ -120,7 +120,7 @@ export default function ToysPage() {
           {filteredToys.length === 0 ? (
             <div className="text-center py-20">
               <p className="font-paragraph text-xl text-foreground">
-                No toys found in this category. Please try another filter.
+                We're loading toys just for you
               </p>
             </div>
           ) : (
