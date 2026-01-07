@@ -128,7 +128,7 @@ export default function HomePage() {
   }, []);
 
   const handleWhatsAppClick = () => {
-      window.open(`https://wa.me/9025398147}`, '_blank');
+      window.open(`https://wa.me/+919025398147}`, '_blank');
   };
 
   // --- 2. Static Content & Features ---
