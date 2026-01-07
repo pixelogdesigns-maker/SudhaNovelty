@@ -128,9 +128,7 @@ export default function HomePage() {
   }, []);
 
   const handleWhatsAppClick = () => {
-    if (storeInfo?.whatsAppNumber) {
       window.open(`https://wa.me/9025398147}`, '_blank');
-    }
   };
 
   // --- 2. Static Content & Features ---
