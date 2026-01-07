@@ -253,13 +253,12 @@ export default function VisitStorePage() {
               Have questions before you visit? Chat with us on WhatsApp for store hours, directions, or product availability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={handleGetDirections}
+              <a href="https://www.google.com/search?client=safari&hs=Iqm9&sca_esv=84a8ac606539b77f&hl=en-in&authuser=1&sxsrf=AE3TifMSGUOPXcjpV-FTaOaT98kNIeUXdQ%3A1767781129440&kgmid=%2Fg%2F11c6tlgtns&q=Sudha%20Novelties&shndl=30&shem=ptotplc&source=sh%2Fx%2Floc%2Fact%2Fm1%2F3&kgs=87ba9f3c3d8708e5"
                 className="inline-flex items-center justify-center gap-3 bg-white text-primary font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
               >
                 <Navigation size={24} />
                 Get Directions
-              </button>
+              </a>
               <button
                 onClick={handleWhatsAppClick}
                 className="inline-flex items-center justify-center gap-3 bg-whatsapp-green text-white font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
