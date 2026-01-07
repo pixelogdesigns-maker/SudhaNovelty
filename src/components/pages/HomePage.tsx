@@ -381,13 +381,12 @@ export default function HomePage() {
                   <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                     We don't just sell toys; we curate experiences that help your children grow, learn, and create memories that last a lifetime.
                   </p>
-                  <button 
-                    onClick={handleWhatsAppClick}
+                  <a href="https://wa.me/+919025398147"
                     className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors text-lg group"
                   >
                     Ask us anything
                     <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                  </button>
+                  </a>
                 </AnimatedReveal>
               </div>
             </div>
@@ -488,13 +487,12 @@ export default function HomePage() {
             <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
               Found something you like? Have questions about age suitability? Chat with us directly on WhatsApp for instant support and ordering.
             </p>
-            <button
-              onClick={handleWhatsAppClick}
+            <a href="https://wa.me/+919025398147"
               className="inline-flex items-center gap-3 bg-whatsapp-green text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
             >
               <MessageCircle size={28} />
               Start Chat on WhatsApp
-            </button>
+            </a>
             <p className="mt-6 text-sm text-gray-500">
               We typically reply within minutes during working hours!
             </p>
