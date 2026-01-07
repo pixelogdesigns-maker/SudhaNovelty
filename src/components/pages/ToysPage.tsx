@@ -172,6 +172,10 @@ export default function ToysPage() {
                       </div>
                     )}
 
+                    <div>
+                    ₹1500
+                    </div>
+
                     {/* WhatsApp Button */}
                     <button
                       onClick={() => handleWhatsAppClick(toy)}
