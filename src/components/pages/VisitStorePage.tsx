@@ -28,10 +28,8 @@ export default function VisitStorePage() {
   };
 
   const handleGetDirections = () => {
-    if (storeInfo?.address) {
-      const encodedAddress = encodeURIComponent(storeInfo.address);
-      window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, '_blank');
-    }
+    // Using the reliable Google Maps short link instead of the API endpoint
+    window.open('https://maps.app.goo.gl/T2LkaYruKfHbXm6d8', '_blank');
   };
 
   return (
