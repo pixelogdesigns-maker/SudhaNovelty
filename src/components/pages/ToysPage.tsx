@@ -4,12 +4,11 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ShoppingCart } from 'lucide-react';
+import { MessageCircle, Filter, ShoppingCart, ChevronDown, Check } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
-import { MessageCircle, Filter, ShoppingCart, ChevronDown, Check } from 'lucide-react';
 
 export default function ToysPage() {
   const [searchParams] = useSearchParams();
