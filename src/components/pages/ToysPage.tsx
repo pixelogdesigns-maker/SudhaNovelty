@@ -16,7 +16,17 @@ export default function ToysPage() {
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
+
+  // Define age groups for filtering
+  const ageGroups = [
+    { id: '0-2', label: '0-2 Years', minAge: 0, maxAge: 2 },
+    { id: '3-5', label: '3-5 Years', minAge: 3, maxAge: 5 },
+    { id: '6-8', label: '6-8 Years', minAge: 6, maxAge: 8 },
+    { id: '9-12', label: '9-12 Years', minAge: 9, maxAge: 12 },
+    { id: '13+', label: '13+ Years', minAge: 13, maxAge: 100 },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +67,56 @@ export default function ToysPage() {
     }
   }, [selectedCategory, toys]);
 
+  // Helper function to check if a toy matches the selected age group
+  const matchesAgeGroup = (toy: Toys): boolean => {
+    if (selectedAgeGroup === 'all') return true;
+    
+    const ageGroup = ageGroups.find(ag => ag.id === selectedAgeGroup);
+    if (!ageGroup || !toy.ageGroup) return true;
+
+    // Parse the age group string (e.g., "3-5 years", "2+", "3 years")
+    const ageText = toy.ageGroup.toLowerCase().trim();
+    
+    // Handle "X+" format (e.g., "3+")
+    if (ageText.includes('+')) {
+      const minAge = parseInt(ageText.split('+')[0]);
+      return !isNaN(minAge) && minAge <= ageGroup.maxAge;
+    }
+    
+    // Handle "X-Y" format (e.g., "3-5")
+    if (ageText.includes('-')) {
+      const parts = ageText.split('-').map(p => parseInt(p.trim()));
+      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+        const toyMinAge = parts[0];
+        const toyMaxAge = parts[1];
+        // Check if there's any overlap between toy age range and selected age group
+        return toyMinAge <= ageGroup.maxAge && toyMaxAge >= ageGroup.minAge;
+      }
+    }
+    
+    // Handle single number format (e.g., "3 years")
+    const singleAge = parseInt(ageText);
+    if (!isNaN(singleAge)) {
+      return singleAge >= ageGroup.minAge && singleAge <= ageGroup.maxAge;
+    }
+    
+    return true;
+  };
+
+  useEffect(() => {
+    let filtered = toys;
+
+    // Apply category filter
+    if (selectedCategory !== 'all') {
+      filtered = filtered.filter(toy => toy.category === selectedCategory);
+    }
+
+    // Apply age group filter
+    filtered = filtered.filter(matchesAgeGroup);
+
+    setFilteredToys(filtered);
+  }, [selectedCategory, selectedAgeGroup, toys]);
+
   const handleWhatsAppClick = (toy?: Toys) => {
     if (storeInfo?.whatsAppNumber) {
       const message = toy
@@ -92,34 +152,70 @@ export default function ToysPage() {
       {/* Filter Section */}
       <section className="py-8 bg-white border-b border-light-pink">
         <div className="max-w-[120rem] mx-auto px-6">
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2 text-foreground">
+          {/* Category Filter */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 text-foreground mb-4">
               <Filter size={20} className="text-primary" />
               <span className="font-paragraph text-base font-semibold">Filter by Category:</span>
             </div>
-            <button
-              onClick={() => setSelectedCategory('all')}
-              className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                selectedCategory === 'all'
-                  ? 'bg-primary text-primary-foreground shadow-md'
-                  : 'bg-light-pink text-foreground hover:bg-primary/20'
-              }`}
-            >
-              All Toys
-            </button>
-            {categories.map((category) => (
+            <div className="flex items-center gap-4 flex-wrap">
               <button
-                key={category._id}
-                onClick={() => setSelectedCategory(category.categoryName || '')}
+                onClick={() => setSelectedCategory('all')}
                 className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                  selectedCategory === category.categoryName
+                  selectedCategory === 'all'
                     ? 'bg-primary text-primary-foreground shadow-md'
                     : 'bg-light-pink text-foreground hover:bg-primary/20'
                 }`}
               >
-                {category.categoryName}
+                All Toys
               </button>
-            ))}
+              {categories.map((category) => (
+                <button
+                  key={category._id}
+                  onClick={() => setSelectedCategory(category.categoryName || '')}
+                  className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
+                    selectedCategory === category.categoryName
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'bg-light-pink text-foreground hover:bg-primary/20'
+                  }`}
+                >
+                  {category.categoryName}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Age Group Filter */}
+          <div>
+            <div className="flex items-center gap-2 text-foreground mb-4">
+              <Filter size={20} className="text-primary" />
+              <span className="font-paragraph text-base font-semibold">Filter by Age Group:</span>
+            </div>
+            <div className="flex items-center gap-4 flex-wrap">
+              <button
+                onClick={() => setSelectedAgeGroup('all')}
+                className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
+                  selectedAgeGroup === 'all'
+                    ? 'bg-primary text-primary-foreground shadow-md'
+                    : 'bg-light-pink text-foreground hover:bg-primary/20'
+                }`}
+              >
+                All Ages
+              </button>
+              {ageGroups.map((ageGroup) => (
+                <button
+                  key={ageGroup.id}
+                  onClick={() => setSelectedAgeGroup(ageGroup.id)}
+                  className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
+                    selectedAgeGroup === ageGroup.id
+                      ? 'bg-primary text-primary-foreground shadow-md'
+                      : 'bg-light-pink text-foreground hover:bg-primary/20'
+                  }`}
+                >
+                  {ageGroup.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </section>
