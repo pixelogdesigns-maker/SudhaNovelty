@@ -133,7 +133,7 @@ export default function ToysPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredToys.map((toy, index) => (
                 <motion.div
                   key={toy._id}
@@ -141,64 +141,58 @@ export default function ToysPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-light-pink"
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                 >
                   {/* Product Image */}
-                  <div className="aspect-square overflow-hidden bg-light-pink">
+                  <div className="aspect-square overflow-hidden bg-gray-50 relative group">
                     <Image
                       src={toy.image || 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY'}
                       alt={toy.name || 'Toy product'}
                       width={400}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500 shadow-[12px_12px_4px_0px_#d9d9d9]"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
 
-                  {/* Product Info */}
-                  <div className="p-6">
+                  {/* Product Info - Compact Layout */}
+                  <div className="p-4 flex flex-col flex-grow">
+                    
+                    {/* Title */}
+                    <h3 className="font-heading text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
+                      {toy.name}
+                    </h3>
+
+                    {/* Description */}
                     {toy.shortDescription && (
-                      <p className="font-paragraph text-base text-foreground mb-3 line-clamp-2">
+                      <p className="font-paragraph text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
                         {toy.shortDescription}
                       </p>
                     )}
 
-                    <h3 className="font-heading text-xl text-primary mb-2 line-clamp-2">
-                      {toy.name}
-                    </h3>
-                    
-                    {toy.ageGroup && (
-                      <div className="mb-4">
-                        <span className="inline-block bg-secondary text-secondary-foreground font-paragraph text-sm px-3 py-1 rounded-lg">
-                          Age: {toy.ageGroup}
-                        </span>
-                      </div>
-                    )}
-
-                    {toy.category && (
-                      <div className="mb-4">
-                        <span className="inline-block bg-light-pink text-primary font-paragraph text-sm px-3 py-1 rounded-lg">
-                          {toy.category}
-                        </span>
-                      </div>
-                    )}
-                    
-                    {toy.price && (
-                      <div className="mb-4">
-                        <span className="inline-block bg-secondary text-secondary-foreground font-paragraph font-bold text-lg px-4 py-2 rounded-lg">
+                    {/* Price & Age Row */}
+                    <div className="mt-auto mb-4">
+                      {toy.price && (
+                        <div className="text-primary font-bold text-xl mb-1">
                           Rs. {toy.price}
-                        </span>
-                      </div>
-                    )}
+                        </div>
+                      )}
+                      
+                      {toy.ageGroup && (
+                        <div className="text-gray-800 text-sm font-medium">
+                          {toy.ageGroup}
+                        </div>
+                      )}
+                    </div>
 
-                    {/* Action Buttons */}
+                    {/* Action Area */}
                     <div className="space-y-3">
+                      {/* Primary Buy Button */}
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <button
                               disabled
-                              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph font-bold text-base px-6 py-3 rounded-xl opacity-70 cursor-not-allowed shadow-md"
+                              className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100"
                             >
-                              <ShoppingCart size={18} />
                               Buy Now
                             </button>
                           </TooltipTrigger>
@@ -208,13 +202,19 @@ export default function ToysPage() {
                         </Tooltip>
                       </TooltipProvider>
 
-                      <button
-                        onClick={() => handleWhatsAppClick(toy)}
-                        className="w-full flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
-                      >
-                        <MessageCircle size={18} />
-                        Chat on WhatsApp
-                      </button>
+                      {/* Secondary Text Link for WhatsApp */}
+                      <div className="text-center">
+                        <button
+                          onClick={() => handleWhatsAppClick(toy)}
+                          className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
+                        >
+                          Need help? 
+                          <span className="text-whatsapp-green font-semibold flex items-center gap-1">
+                            <MessageCircle size={14} />
+                            Chat on WhatsApp
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
