@@ -69,6 +69,23 @@ export default function ToysPage() {
     }
   }, [selectedCategory, toys]);
 
+  // Helper to convert Wix internal images to public links
+const getPublicImageUrl = (wixUrl: string | undefined) => {
+  if (!wixUrl) return 'No Image Available';
+  
+  // If it's already a normal web link, use it
+  if (wixUrl.startsWith('http') || wixUrl.startsWith('https')) return wixUrl;
+
+  // If it's a Wix link, convert it
+  if (wixUrl.startsWith('wix:image://')) {
+    const matches = wixUrl.match(/wix:image:\/\/v1\/([^/]+)\//);
+    if (matches && matches[1]) {
+      return `https://static.wixstatic.com/media/${matches[1]}`;
+    }
+  }
+  return wixUrl;
+};
+
   // Helper function to check if a toy matches the selected age group
   const matchesAgeGroup = (toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
@@ -136,14 +153,18 @@ export default function ToysPage() {
     let message = '';
 
     if (toy) {
-      // Construct the specific product message
-      message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\nImage: ${toy.image || 'No Image Available'}\n\nPlease provide more details.`;
+      // 1. Convert the image using the helper we added above
+      const publicImage = getPublicImageUrl(toy.image);
+
+      // 2. Construct the message using the PUBLIC image link
+      message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\nImage: ${publicImage}\n\nPlease provide more details.`;
     } else {
       // Fallback message for the general "Chat with Us" button
       message = "Hello! I would like to inquire about your toys.";
     }
 
     // Generate the WhatsApp URL with normalized phone number
+    // We keep this exactly as Wix AI set it up to prevent crashes
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
   };
