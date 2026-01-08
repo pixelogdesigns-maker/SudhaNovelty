@@ -69,23 +69,6 @@ export default function ToysPage() {
     }
   }, [selectedCategory, toys]);
 
-  // Helper to convert Wix internal images to public links
-const getPublicImageUrl = (wixUrl: string | undefined) => {
-  if (!wixUrl) return 'No Image Available';
-  
-  // If it's already a normal web link, use it
-  if (wixUrl.startsWith('http') || wixUrl.startsWith('https')) return wixUrl;
-
-  // If it's a Wix link, convert it
-  if (wixUrl.startsWith('wix:image://')) {
-    const matches = wixUrl.match(/wix:image:\/\/v1\/([^/]+)\//);
-    if (matches && matches[1]) {
-      return `https://static.wixstatic.com/media/${matches[1]}`;
-    }
-  }
-  return wixUrl;
-};
-
   // Helper function to check if a toy matches the selected age group
   const matchesAgeGroup = (toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
