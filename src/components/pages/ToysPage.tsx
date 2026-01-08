@@ -150,72 +150,69 @@ export default function ToysPage() {
         </div>
       </section>
       {/* Filter Section */}
-      <section className="py-8 bg-white border-b border-light-pink">
+      {/* --- Unified Filter Section --- */}
+      <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm transition-all">
         <div className="max-w-[120rem] mx-auto px-6">
-          {/* Category Filter */}
-          <div className="mb-6">
-            <div className="flex items-center gap-2 text-foreground mb-4">
-              <Filter size={20} className="text-primary" />
-              <span className="font-paragraph text-base font-semibold">Filter by Category:</span>
-            </div>
-            <div className="flex items-center gap-4 flex-wrap">
-              <button
-                onClick={() => setSelectedCategory('all')}
-                className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                  selectedCategory === 'all'
-                    ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'bg-light-pink text-foreground hover:bg-primary/20'
-                }`}
-              >
-                All Toys
-              </button>
-              {categories.map((category) => (
+          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+            
+            {/* Left: Category Pills (Horizontal Scroll) */}
+            <div className="w-full md:w-auto overflow-hidden">
+              <div className="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mask-fade-right">
+                <span className="flex-shrink-0 text-gray-400 font-medium text-sm flex items-center gap-1 mr-2">
+                  <Filter size={16} /> Categories:
+                </span>
+                
                 <button
-                  key={category._id}
-                  onClick={() => setSelectedCategory(category.categoryName || '')}
-                  className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                    selectedCategory === category.categoryName
-                      ? 'bg-primary text-primary-foreground shadow-md'
-                      : 'bg-light-pink text-foreground hover:bg-primary/20'
+                  onClick={() => setSelectedCategory('all')}
+                  className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
+                    selectedCategory === 'all'
+                      ? 'bg-primary border-primary text-white shadow-md'
+                      : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
                   }`}
                 >
-                  {category.categoryName}
+                  All Toys
                 </button>
-              ))}
-            </div>
-          </div>
 
-          {/* Age Group Filter */}
-          <div>
-            <div className="flex items-center gap-2 text-foreground mb-4">
-              <Filter size={20} className="text-primary" />
-              <span className="font-paragraph text-base font-semibold">Filter by Age Group:</span>
+                {categories.map((category) => (
+                  <button
+                    key={category._id}
+                    onClick={() => setSelectedCategory(category.categoryName || '')}
+                    className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
+                      selectedCategory === category.categoryName
+                        ? 'bg-primary border-primary text-white shadow-md'
+                        : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
+                    }`}
+                  >
+                    {category.categoryName}
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="flex items-center gap-4 flex-wrap">
-              <button
-                onClick={() => setSelectedAgeGroup('all')}
-                className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                  selectedAgeGroup === 'all'
-                    ? 'bg-primary text-primary-foreground shadow-md'
-                    : 'bg-light-pink text-foreground hover:bg-primary/20'
-                }`}
-              >
-                All Ages
-              </button>
-              {ageGroups.map((ageGroup) => (
-                <button
-                  key={ageGroup.id}
-                  onClick={() => setSelectedAgeGroup(ageGroup.id)}
-                  className={`px-6 py-2 rounded-xl font-paragraph text-base transition-all duration-300 ${
-                    selectedAgeGroup === ageGroup.id
-                      ? 'bg-primary text-primary-foreground shadow-md'
-                      : 'bg-light-pink text-foreground hover:bg-primary/20'
-                  }`}
+
+            {/* Right: Age Filter (Dropdown) */}
+            <div className="w-full md:w-auto flex-shrink-0 relative group">
+              <div className="relative">
+                <select
+                  value={selectedAgeGroup}
+                  onChange={(e) => setSelectedAgeGroup(e.target.value)}
+                  className="w-full md:w-48 appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-2.5 pl-4 pr-10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium cursor-pointer transition-all hover:bg-white"
                 >
-                  {ageGroup.label}
-                </button>
-              ))}
+                  <option value="all">Any Age</option>
+                  {ageGroups.map((ageGroup) => (
+                    <option key={ageGroup.id} value={ageGroup.id}>
+                      {ageGroup.label}
+                    </option>
+                  ))}
+                </select>
+                {/* Custom Chevron Icon for Select */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-hover:text-primary transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="m6 9 6 6 6-6"/>
+                  </svg>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
