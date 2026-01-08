@@ -106,6 +106,7 @@ export default function HomePage() {
   // Canonical Data Sources
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -476,94 +477,88 @@ export default function HomePage() {
       </section>
       {/* --- Our Videos Section --- */}
       <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-      
-      {/* --- Internal CSS for the Marquee --- */}
-      {/* This ensures the animation works even if Tailwind config isn't edited */}
-      <style>{`
-        @keyframes scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-        .marquee-container {
-          width: fit-content;
-          animation: scroll 40s linear infinite;
-        }
-      `}</style>
+        {/* --- Internal CSS for the Marquee --- */}
+        <style>{`
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-container {
+            width: fit-content;
+            animation: scroll 40s linear infinite;
+          }
+        `}</style>
 
-      <div className="max-w-[120rem] mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
-            Our <span className="text-primary">Videos</span>
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Watch our latest toy reviews, unboxings, and playtime moments
-          </p>
-        </div>
+        <div className="max-w-[120rem] mx-auto px-6">
+          <AnimatedReveal className="text-center mb-16">
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
+              Our <span className="text-primary">Videos</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Watch our latest toy reviews, unboxings, and playtime moments
+            </p>
+          </AnimatedReveal>
 
-        {/* Videos Carousel/Marquee */}
-        <div className="relative">
-          <div className="overflow-hidden w-full">
-            {/* Changes made here:
-               1. Removed motion.div
-               2. Added onMouseEnter/Leave events
-               3. Applied inline style to control animation state
-            */}
-            <div 
-              className="flex gap-6 marquee-container"
-              onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => setIsPaused(false)}
-              style={{ 
-                animationPlayState: isPaused ? 'paused' : 'running',
-                // We use -50% because we duplicate the content once below. 
-                // This creates a perfect seamless loop regardless of screen size.
-              }}
-            >
-              {/* We render two batches to ensure the loop is seamless */}
-              {[...Array(2)].map((_, batch) => (
-                <div key={batch} className="flex gap-6 shrink-0">
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((video) => (
-                    <div
-                      key={`${batch}-${video}`}
-                      className="flex-shrink-0 w-80 h-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-gray-200 flex items-center justify-center group cursor-pointer relative"
-                    >
-                      {/* Placeholder Video */}
-                      <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-300" />
-                        <div className="relative z-10 text-center">
-                          <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                            <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M8 5v14l11-7z" />
-                            </svg>
+          {/* Videos Carousel/Marquee */}
+          <div className="relative">
+            <div className="overflow-hidden w-full">
+              <div 
+                className="flex gap-6 marquee-container"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+                style={{ 
+                  animationPlayState: isPaused ? 'paused' : 'running',
+                }}
+              >
+                {/* We render two batches to ensure the loop is seamless */}
+                {[...Array(2)].map((_, batch) => (
+                  <div key={batch} className="flex gap-6 shrink-0">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((video) => (
+                      <div
+                        key={`${batch}-${video}`}
+                        className="flex-shrink-0 w-80 h-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-gray-200 flex items-center justify-center group cursor-pointer relative"
+                      >
+                        {/* Placeholder Video */}
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
+                          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-300" />
+                          <div className="relative z-10 text-center">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                              <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                            <p className="text-white font-heading text-lg">Video {video}</p>
+                            <p className="text-white/80 text-sm mt-2">Tap to watch</p>
                           </div>
-                          <p className="text-white font-heading text-lg">Video {video}</p>
-                          <p className="text-white/80 text-sm mt-2">Tap to watch</p>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Gradient Overlays */}
+            <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/20 to-transparent pointer-events-none z-10" />
           </div>
 
-          {/* Gradient Overlays */}
-          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/20 to-transparent pointer-events-none z-10" />
+          {/* CTA */}
+          <AnimatedReveal delay={200} className="text-center mt-16">
+            <p className="text-gray-600 mb-6">
+              Follow us on social media for more videos and updates!
+            </p>
+            <a href="https://wa.me/+919025398147"
+              className="inline-flex items-center gap-3 bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              <MessageCircle size={24} />
+              Share Your Feedback
+            </a>
+          </AnimatedReveal>
         </div>
+      </section>
 
-        {/* CTA */}
-        <div className="text-center mt-16">
-          <p className="text-gray-600 mb-6">
-            Follow us on social media for more videos and updates!
-          </p>
-          <a href="https://wa.me/+919025398147"
-            className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-          >
-            <MessageCircle size={24} />
-            Share Your Feedback
-          </a>
-        </div>
-      </div>
-    </section>
+      <Footer />
+    </div>
   );
 }
