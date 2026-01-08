@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { MessageCircle, Filter, ShoppingCart, ChevronDown, Check } from 'lucide-react';
 
 export default function ToysPage() {
   const [searchParams] = useSearchParams();
@@ -18,6 +19,7 @@ export default function ToysPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
+  const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
 
   // Define age groups for filtering
   const ageGroups = [
