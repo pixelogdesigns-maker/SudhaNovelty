@@ -94,4 +94,6 @@ export interface Toys {
   category?: string;
   /** @wixFieldType url */
   whatsAppInquiryLink?: string;
+  /** @wixFieldType number */
+  price?: number;
 }

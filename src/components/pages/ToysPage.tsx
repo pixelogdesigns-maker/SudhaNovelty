@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter } from 'lucide-react';
+import { MessageCircle, Filter, ShoppingCart } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -182,20 +183,39 @@ export default function ToysPage() {
                     
                     {toy.price && (
                       <div className="mb-4">
-                        <span className="inline-block bg-light-pink text-primary font-paragraph text-sm px-3 py-1 rounded-lg">
-                          {toy.price}
+                        <span className="inline-block bg-secondary text-secondary-foreground font-paragraph font-bold text-lg px-4 py-2 rounded-lg">
+                          Rs. {toy.price}
                         </span>
                       </div>
                     )}
 
-                    {/* WhatsApp Button */}
-                    <button
-                      onClick={() => handleWhatsAppClick(toy)}
-                      className="w-full flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
-                    >
-                      <MessageCircle size={18} />
-                      Chat on WhatsApp
-                    </button>
+                    {/* Action Buttons */}
+                    <div className="space-y-3">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              disabled
+                              className="w-full flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph font-bold text-base px-6 py-3 rounded-xl opacity-70 cursor-not-allowed shadow-md"
+                            >
+                              <ShoppingCart size={18} />
+                              Buy Now
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-foreground text-white border-0">
+                            <p>Coming soon! Use WhatsApp to order now.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+
+                      <button
+                        onClick={() => handleWhatsAppClick(toy)}
+                        className="w-full flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                      >
+                        <MessageCircle size={18} />
+                        Chat on WhatsApp
+                      </button>
+                    </div>
                   </div>
                 </motion.div>
               ))}

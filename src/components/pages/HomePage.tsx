@@ -474,6 +474,72 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* --- Our Videos Section --- */}
+      <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+        <div className="max-w-[120rem] mx-auto px-6">
+          <AnimatedReveal className="text-center mb-16">
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
+              Our <span className="text-primary">Videos</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Watch our latest toy reviews, unboxings, and playtime moments
+            </p>
+          </AnimatedReveal>
+
+          {/* Videos Carousel/Marquee */}
+          <div className="relative">
+            <div className="overflow-hidden">
+              <motion.div
+                animate={{ x: [0, -1920] }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                className="flex gap-6 w-max"
+              >
+                {[...Array(2)].map((_, batch) => (
+                  <div key={batch} className="flex gap-6">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((video) => (
+                      <div
+                        key={`${batch}-${video}`}
+                        className="flex-shrink-0 w-80 h-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-gray-200 flex items-center justify-center group cursor-pointer relative"
+                      >
+                        {/* Placeholder Video */}
+                        <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
+                          <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-300" />
+                          <div className="relative z-10 text-center">
+                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                              <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                            <p className="text-white font-heading text-lg">Video {video}</p>
+                            <p className="text-white/80 text-sm mt-2">Tap to watch</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Gradient Overlays */}
+            <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/20 to-transparent pointer-events-none z-10" />
+          </div>
+
+          {/* CTA */}
+          <AnimatedReveal delay={200} className="text-center mt-16">
+            <p className="text-gray-600 mb-6">
+              Follow us on social media for more videos and updates!
+            </p>
+            <a href="https://wa.me/+919025398147"
+              className="inline-flex items-center gap-3 bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              <MessageCircle size={24} />
+              Share Your Feedback
+            </a>
+          </AnimatedReveal>
+        </div>
+      </section>
       {/* --- Final CTA Section --- */}
       <section className="py-24 bg-gradient-to-b from-white to-light-pink/30 text-center">
         <div className="max-w-4xl mx-auto px-6">
