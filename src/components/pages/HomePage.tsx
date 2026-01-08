@@ -518,7 +518,7 @@ export default function HomePage() {
                 */}
                 {[...Array(2)].map((_, batch) => {
                   const videos = [
-                    { id: 1, title: "New Arrivals", link: "https://www.instagram.com/sudha_novelties_/" },
+                    { id: 1, title: "New Arrivals", link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
                     { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/" },
