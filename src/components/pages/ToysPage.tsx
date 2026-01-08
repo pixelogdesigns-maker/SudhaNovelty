@@ -71,7 +71,7 @@ export default function ToysPage() {
   // Helper function to check if a toy matches the selected age group
   const matchesAgeGroup = (toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
-    
+
     const ageGroup = ageGroups.find(ag => ag.id === selectedAgeGroup);
     if (!ageGroup || !toy.ageGroup) return true;
 
@@ -81,7 +81,7 @@ export default function ToysPage() {
     const parseToYears = (str: string) => {
       const number = parseFloat(str);
       if (isNaN(number)) return null;
-      
+
       if (str.includes('month')) {
         return number / 12; // Convert months to years
       }
@@ -101,7 +101,7 @@ export default function ToysPage() {
         return minVal <= ageGroup.maxAge && maxVal >= ageGroup.minAge;
       }
     }
-    
+
     // Handle "X+" format (e.g., "3+")
     if (ageText.includes('+')) {
       const minVal = parseToYears(ageText.replace('+', ''));
@@ -109,13 +109,13 @@ export default function ToysPage() {
         return minVal <= ageGroup.maxAge;
       }
     }
-    
+
     // Handle single number format (e.g., "6 months")
     const val = parseToYears(ageText);
     if (val !== null) {
       return val >= ageGroup.minAge && val <= ageGroup.maxAge;
     }
-    
+
     return true;
   };
 
@@ -134,13 +134,34 @@ export default function ToysPage() {
   }, [selectedCategory, selectedAgeGroup, toys]);
 
   const handleWhatsAppClick = (toy?: Toys) => {
-    if (storeInfo?.whatsAppNumber) {
-      const message = toy
-        ? `Hi! I'm interested in ${toy.name}. Can you provide more details?`
-        : 'Hi! I would like to inquire about your toys.';
-      const encodedMessage = encodeURIComponent(message);
-      window.open(`https://wa.me/919025398147?text=${encodedMessage}`, '_blank');
+    // Check if we have a number to send to (checks storeInfo or defaults to your number)
+    // Note: ensure storeInfo.whatsAppNumber is formatted correctly (e.g., 919025398147) without '+' if using wa.me directly, 
+    // or use the hardcoded one if that's preferred.
+    const phoneNumber = storeInfo?.whatsAppNumber || '919025398147';
+
+    let message = '';
+
+    if (toy) {
+      // 1. Construct the specific product message
+      message = `Hello! I am interested in this product:
+--------------------------
+Name: ${toy.name}
+Price: Rs. ${toy.price || 'N/A'}
+Category: ${toy.category || 'General'}
+--------------------------
+Image: ${toy.image || 'No Image Available'}
+
+Please provide more details.`;
+    } else {
+      // 2. Fallback message for the general "Chat with Us" button
+      message = "Hello! I would like to inquire about your toys.";
     }
+
+    // 3. Encode the message to ensure new lines and spaces work in the URL
+    const encodedMessage = encodeURIComponent(message);
+
+    // 4. Open WhatsApp
+    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
   };
 
   return (
@@ -166,25 +187,24 @@ export default function ToysPage() {
         </div>
       </section>
       {/* Filter Section */}
-     {/* --- Unified Filter Section (Custom Dropdown Version) --- */}
+      {/* --- Unified Filter Section (Custom Dropdown Version) --- */}
       <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm transition-all">
         <div className="max-w-[120rem] mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-            
+
             {/* Left: Category Pills (Horizontal Scroll) */}
             <div className="w-full md:w-auto overflow-hidden">
               <div className="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mask-fade-right">
                 <span className="flex-shrink-0 text-gray-400 font-medium text-sm flex items-center gap-1 mr-2">
                   <Filter size={16} /> Categories:
                 </span>
-                
+
                 <button
                   onClick={() => setSelectedCategory('all')}
-                  className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
-                    selectedCategory === 'all'
+                  className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${selectedCategory === 'all'
                       ? 'bg-primary border-primary text-white shadow-md'
                       : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
-                  }`}
+                    }`}
                 >
                   All Toys
                 </button>
@@ -193,11 +213,10 @@ export default function ToysPage() {
                   <button
                     key={category._id}
                     onClick={() => setSelectedCategory(category.categoryName || '')}
-                    className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
-                      selectedCategory === category.categoryName
+                    className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${selectedCategory === category.categoryName
                         ? 'bg-primary border-primary text-white shadow-md'
                         : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
-                    }`}
+                      }`}
                   >
                     {category.categoryName}
                   </button>
@@ -207,35 +226,34 @@ export default function ToysPage() {
 
             {/* Right: Custom Age Dropdown */}
             <div className="w-full md:w-auto relative z-50">
-              
+
               {/* Click-Outside Handler: Invisible layer that closes dropdown if clicked elsewhere */}
               {isAgeDropdownOpen && (
-                <div 
-                  className="fixed inset-0 z-40" 
-                  onClick={() => setIsAgeDropdownOpen(false)} 
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setIsAgeDropdownOpen(false)}
                 />
               )}
 
               {/* The Trigger Button */}
               <button
                 onClick={() => setIsAgeDropdownOpen(!isAgeDropdownOpen)}
-                className={`w-full md:w-56 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${
-                  isAgeDropdownOpen 
-                    ? 'border-primary ring-2 ring-primary/10 shadow-lg' 
+                className={`w-full md:w-56 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${isAgeDropdownOpen
+                    ? 'border-primary ring-2 ring-primary/10 shadow-lg'
                     : 'border-gray-200 hover:border-primary/50 hover:shadow-md'
-                }`}
+                  }`}
               >
                 <div className="flex flex-col items-start text-left">
                   <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Age Group</span>
                   <span className="font-bold text-gray-800 text-sm">
-                    {selectedAgeGroup === 'all' 
-                      ? 'Any Age' 
+                    {selectedAgeGroup === 'all'
+                      ? 'Any Age'
                       : ageGroups.find(g => g.id === selectedAgeGroup)?.label}
                   </span>
                 </div>
-                <ChevronDown 
-                  size={18} 
-                  className={`text-gray-400 transition-transform duration-300 ${isAgeDropdownOpen ? 'rotate-180 text-primary' : ''}`} 
+                <ChevronDown
+                  size={18}
+                  className={`text-gray-400 transition-transform duration-300 ${isAgeDropdownOpen ? 'rotate-180 text-primary' : ''}`}
                 />
               </button>
 
@@ -311,7 +329,7 @@ export default function ToysPage() {
 
                   {/* Product Info - Compact Layout */}
                   <div className="p-4 flex flex-col flex-grow">
-                    
+
                     {/* Title */}
                     <h3 className="font-heading text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
                       {toy.name}
@@ -331,7 +349,7 @@ export default function ToysPage() {
                           Rs. {toy.price}
                         </div>
                       )}
-                      
+
                       {toy.ageGroup && (
                         <div className="text-gray-800 text-sm font-medium">
                           {toy.ageGroup}
@@ -364,7 +382,7 @@ export default function ToysPage() {
                           onClick={() => handleWhatsAppClick(toy)}
                           className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
                         >
-                          Need help? 
+                          Need help?
                           <span className="text-whatsapp-green font-semibold flex items-center gap-1">
                             <MessageCircle size={14} />
                             Chat on WhatsApp
