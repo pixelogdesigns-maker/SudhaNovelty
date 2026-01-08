@@ -132,42 +132,40 @@ export default function ToysPage() {
     setFilteredToys(filtered);
   }, [selectedCategory, selectedAgeGroup, toys]);
 
- // --- 1. Helper Function: Converts Wix link to Public Link AND fixes the Preview Bug ---
+ // --- 1. Smart Helper: Converts Wix link to a WhatsApp-friendly Thumbnail ---
   const getPublicImageUrl = (wixUrl: string | undefined) => {
     if (!wixUrl) return 'No Image Available';
     
-    // If it's already a normal web link (like unsplash), just return it
+    // If it's already a normal web link, use it
     if (wixUrl.startsWith('http') || wixUrl.startsWith('https')) return wixUrl;
 
-    // If it's a Wix internal URL, convert it
+    // If it's a Wix internal URL, convert it to a RESIZED version
     if (wixUrl.startsWith('wix:image://')) {
       const matches = wixUrl.match(/wix:image:\/\/v1\/([^/]+)\//);
       if (matches && matches[1]) {
-        // CRITICAL FIX: We replace '~' with '%7E'. 
-        // This makes WhatsApp recognize it as an IMAGE file for the preview card.
+        // 1. Get the ID (and encode any ~ symbols just in case)
         const cleanId = matches[1].replace('~', '%7E'); 
-        return `https://static.wixstatic.com/media/${cleanId}`;
+        
+        // 2. Construct a Dynamic URL that forces a 500x500 resized version
+        // This makes the file small enough for WhatsApp to preview instantly.
+        return `https://static.wixstatic.com/media/${cleanId}/v1/fit/w_500,h_500,q_90/file.jpg`;
       }
     }
     return wixUrl;
   };
 
-  // --- 2. The Updated Handler (Uses your preferred formatting) ---
+  // --- 2. The Handler (No changes needed here, just ensuring you have it) ---
   const handleWhatsAppClick = (toy?: Toys) => {
     let message = '';
 
     if (toy) {
-      // Convert the image URL using the helper above
       const publicImage = getPublicImageUrl(toy.image);
 
-      // Your formatted message
       message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\nImage: ${publicImage}\n\nPlease provide more details.`;
     } else {
-      // Fallback message
       message = "Hello! I would like to inquire about your toys.";
     }
 
-    // Use the Wix AI generator function to open the window safely
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
   };
