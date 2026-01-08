@@ -476,7 +476,6 @@ export default function HomePage() {
         </div>
       </section>
       {/* --- Our Videos Section --- */}
-      {/* --- Our Videos Section --- */}
       <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         {/* Internal CSS for the Marquee */}
@@ -512,56 +511,86 @@ export default function HomePage() {
                   animationPlayState: isPaused ? 'paused' : 'running',
                 }}
               >
-                {/* DEVELOPER NOTE: 
-                   Update the links below with the actual Reel URLs from:
-                   https://www.instagram.com/sudha_novelties_/
+                
+                {/* DEVELOPER NOTE:
+                   1. I have set up the first video with the REAL link you provided to show it working.
+                   2. For the others, you MUST replace 'https://www.instagram.com/sudha_novelties_/' 
+                      with the specific link to a post/reel (e.g., https://www.instagram.com/reel/C3...)
+                      otherwise they will show the fallback card.
                 */}
                 {[...Array(2)].map((_, batch) => {
                   const videos = [
+                    // This is the real link you provided - it will render as an embed
                     { id: 1, title: "New Arrivals", link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
+                    
+                    // These are placeholders. Replace links to see them transform into players!
                     { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 5, title: "Best Sellers", link: "https://www.instagram.com/sudha_novelties_/" },
                     { id: 6, title: "Educational Toys", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 7, title: "Remote Control Cars", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 8, title: "Special Offers", link: "https://www.instagram.com/sudha_novelties_/" },
                   ];
+
+                  // Helper to convert standard URL to Embed URL
+                  const getEmbedUrl = (url) => {
+                    // Removes query parameters and adds /embed
+                    const cleanUrl = url.split('?')[0].replace(/\/$/, "");
+                    return `${cleanUrl}/embed`;
+                  };
 
                   return (
                     <div key={batch} className="flex gap-6 shrink-0">
-                      {videos.map((video) => (
-                        <a
-                          key={`${batch}-${video.id}`}
-                          href={video.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-shrink-0 w-80 h-[500px] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-gray-200 flex items-center justify-center group cursor-pointer relative block"
-                        >
-                          {/* Placeholder Video Visual */}
-                          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center relative">
-                            <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all duration-300" />
-                            <div className="relative z-10 text-center">
-                              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
-                              <p className="text-white font-heading text-lg">{video.title}</p>
-                              <p className="text-white/80 text-sm mt-2">Tap to watch on Instagram</p>
-                            </div>
+                      {videos.map((video) => {
+                        // Check if it's a specific post/reel link
+                        const isEmbeddable = video.link.includes('/p/') || video.link.includes('/reel/');
+
+                        return (
+                          <div
+                            key={`${batch}-${video.id}`}
+                            className="flex-shrink-0 w-[350px] h-[550px] rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 relative"
+                          >
+                            {isEmbeddable ? (
+                              /* --- OPTION A: Live Instagram Embed --- */
+                              <iframe 
+                                className="w-full h-full"
+                                src={getEmbedUrl(video.link)}
+                                frameBorder="0" 
+                                scrolling="no" 
+                                allowTransparency="true"
+                                allow="encrypted-media"
+                                title={video.title}
+                              ></iframe>
+                            ) : (
+                              /* --- OPTION B: Fallback Card (If link is just profile) --- */
+                              <a 
+                                href={video.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors group cursor-pointer"
+                              >
+                                <div className="text-center p-6">
+                                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                                    <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                  </div>
+                                  <p className="text-gray-900 font-heading text-lg font-bold">Video Link Needed</p>
+                                  <p className="text-gray-500 text-sm mt-2">Add a specific Reel URL to play here</p>
+                                </div>
+                              </a>
+                            )}
                           </div>
-                        </a>
-                      ))}
+                        );
+                      })}
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Gradient Overlays */}
+            {/* Gradient Overlays - Adjusted for white background */}
             <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/20 to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/10 to-transparent pointer-events-none z-10" />
           </div>
 
           {/* CTA */}
