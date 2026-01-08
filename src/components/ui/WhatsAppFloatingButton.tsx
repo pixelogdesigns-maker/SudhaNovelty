@@ -2,6 +2,7 @@ import { MessageCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { StoreInformation } from '@/entities';
+import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function WhatsAppFloatingButton() {
   const [whatsAppNumber, setWhatsAppNumber] = useState<string>('');
@@ -18,7 +19,8 @@ export default function WhatsAppFloatingButton() {
 
   const handleClick = () => {
     if (whatsAppNumber) {
-      window.open(`https://wa.me/${whatsAppNumber}`, '_blank');
+      const whatsAppUrl = generateWhatsAppUrl(whatsAppNumber);
+      window.open(whatsAppUrl, '_blank');
     }
   };
 

@@ -9,6 +9,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ToysPage() {
   const [searchParams] = useSearchParams();
@@ -77,7 +78,7 @@ export default function ToysPage() {
 
     const ageText = toy.ageGroup.toLowerCase().trim();
 
-    // NEW: Helper to convert "6 months" -> 0.5 and "2 years" -> 2
+    // Helper to convert "6 months" -> 0.5 and "2 years" -> 2
     const parseToYears = (str: string) => {
       const number = parseFloat(str);
       if (isNaN(number)) return null;
@@ -95,9 +96,7 @@ export default function ToysPage() {
       const maxVal = parseToYears(parts[1]);
 
       if (minVal !== null && maxVal !== null) {
-        // Check for range overlap: 
-        // A toy range [0.5, 2] overlaps with filter [0, 2] if:
-        // ToyStarts (0.5) <= FilterEnds (2) AND ToyEnds (2) >= FilterStarts (0)
+        // Check for range overlap
         return minVal <= ageGroup.maxAge && maxVal >= ageGroup.minAge;
       }
     }
@@ -134,34 +133,19 @@ export default function ToysPage() {
   }, [selectedCategory, selectedAgeGroup, toys]);
 
   const handleWhatsAppClick = (toy?: Toys) => {
-    // Check if we have a number to send to (checks storeInfo or defaults to your number)
-    // Note: ensure storeInfo.whatsAppNumber is formatted correctly (e.g., 919025398147) without '+' if using wa.me directly, 
-    // or use the hardcoded one if that's preferred.
-    const phoneNumber = storeInfo?.whatsAppNumber || '919025398147';
-
     let message = '';
 
     if (toy) {
-      // 1. Construct the specific product message
-      message = `Hello! I am interested in this product:
---------------------------
-Name: ${toy.name}
-Price: Rs. ${toy.price || 'N/A'}
-Category: ${toy.category || 'General'}
---------------------------
-Image: ${toy.image || 'No Image Available'}
-
-Please provide more details.`;
+      // Construct the specific product message
+      message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\nImage: ${toy.image || 'No Image Available'}\n\nPlease provide more details.`;
     } else {
-      // 2. Fallback message for the general "Chat with Us" button
+      // Fallback message for the general "Chat with Us" button
       message = "Hello! I would like to inquire about your toys.";
     }
 
-    // 3. Encode the message to ensure new lines and spaces work in the URL
-    const encodedMessage = encodeURIComponent(message);
-
-    // 4. Open WhatsApp
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    // Generate the WhatsApp URL with normalized phone number
+    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
+    window.open(whatsAppUrl, '_blank');
   };
 
   return (
@@ -187,7 +171,6 @@ Please provide more details.`;
         </div>
       </section>
       {/* Filter Section */}
-      {/* --- Unified Filter Section (Custom Dropdown Version) --- */}
       <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm transition-all">
         <div className="max-w-[120rem] mx-auto px-6">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">

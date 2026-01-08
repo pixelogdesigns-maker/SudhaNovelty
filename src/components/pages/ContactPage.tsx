@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ContactPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -32,9 +33,8 @@ export default function ContactPage() {
   }, []);
 
   const handleWhatsAppClick = () => {
-    if (storeInfo?.whatsAppNumber) {
-      window.open(`https://wa.me/${storeInfo.whatsAppNumber}`, '_blank');
-    }
+    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber);
+    window.open(whatsAppUrl, '_blank');
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { StoreInformation } from '@/entities';
 import { MapPin, Phone, Clock, MessageCircle } from 'lucide-react';
+import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function Footer() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -17,10 +18,9 @@ export default function Footer() {
   }, []);
 
   const handleWhatsAppClick = () => {
-    const message = encodeURIComponent(
-      'Hi, I am interested in this toy. Please share more details.'
-    );
-    window.open(`https://wa.me/919025398147?text=${message}`, '_blank');
+    const message = 'Hi, I am interested in this toy. Please share more details.';
+    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
+    window.open(whatsAppUrl, '_blank');
   };
 
   return (

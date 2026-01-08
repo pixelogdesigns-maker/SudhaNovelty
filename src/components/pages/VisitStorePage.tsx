@@ -7,6 +7,7 @@ import { MapPin, Phone, Clock, MessageCircle, Mail, Navigation } from 'lucide-re
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function VisitStorePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -22,9 +23,8 @@ export default function VisitStorePage() {
   }, []);
 
   const handleWhatsAppClick = () => {
-    if (storeInfo?.whatsAppNumber) {
-      window.open(`https://wa.me/919025398147`, '_blank');
-    }
+    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber);
+    window.open(whatsAppUrl, '_blank');
   };
 
   const handleGetDirections = () => {
