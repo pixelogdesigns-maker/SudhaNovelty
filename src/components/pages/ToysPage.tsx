@@ -149,22 +149,42 @@ const getPublicImageUrl = (wixUrl: string | undefined) => {
     setFilteredToys(filtered);
   }, [selectedCategory, selectedAgeGroup, toys]);
 
+ // --- 1. Helper Function: Converts Wix link to Public Link AND fixes the Preview Bug ---
+  const getPublicImageUrl = (wixUrl: string | undefined) => {
+    if (!wixUrl) return 'No Image Available';
+    
+    // If it's already a normal web link (like unsplash), just return it
+    if (wixUrl.startsWith('http') || wixUrl.startsWith('https')) return wixUrl;
+
+    // If it's a Wix internal URL, convert it
+    if (wixUrl.startsWith('wix:image://')) {
+      const matches = wixUrl.match(/wix:image:\/\/v1\/([^/]+)\//);
+      if (matches && matches[1]) {
+        // CRITICAL FIX: We replace '~' with '%7E'. 
+        // This makes WhatsApp recognize it as an IMAGE file for the preview card.
+        const cleanId = matches[1].replace('~', '%7E'); 
+        return `https://static.wixstatic.com/media/${cleanId}`;
+      }
+    }
+    return wixUrl;
+  };
+
+  // --- 2. The Updated Handler (Uses your preferred formatting) ---
   const handleWhatsAppClick = (toy?: Toys) => {
     let message = '';
 
     if (toy) {
-      // 1. Convert the image using the helper we added above
+      // Convert the image URL using the helper above
       const publicImage = getPublicImageUrl(toy.image);
 
-      // 2. Construct the message using the PUBLIC image link
+      // Your formatted message
       message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\nImage: ${publicImage}\n\nPlease provide more details.`;
     } else {
-      // Fallback message for the general "Chat with Us" button
+      // Fallback message
       message = "Hello! I would like to inquire about your toys.";
     }
 
-    // Generate the WhatsApp URL with normalized phone number
-    // We keep this exactly as Wix AI set it up to prevent crashes
+    // Use the Wix AI generator function to open the window safely
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
   };
