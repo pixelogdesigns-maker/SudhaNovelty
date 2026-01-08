@@ -75,30 +75,45 @@ export default function ToysPage() {
     const ageGroup = ageGroups.find(ag => ag.id === selectedAgeGroup);
     if (!ageGroup || !toy.ageGroup) return true;
 
-    // Parse the age group string (e.g., "3-5 years", "2+", "3 years")
     const ageText = toy.ageGroup.toLowerCase().trim();
-    
-    // Handle "X+" format (e.g., "3+")
-    if (ageText.includes('+')) {
-      const minAge = parseInt(ageText.split('+')[0]);
-      return !isNaN(minAge) && minAge <= ageGroup.maxAge;
-    }
-    
-    // Handle "X-Y" format (e.g., "3-5")
+
+    // NEW: Helper to convert "6 months" -> 0.5 and "2 years" -> 2
+    const parseToYears = (str: string) => {
+      const number = parseFloat(str);
+      if (isNaN(number)) return null;
+      
+      if (str.includes('month')) {
+        return number / 12; // Convert months to years
+      }
+      return number; // Default is years
+    };
+
+    // Handle "X-Y" format (e.g., "6 months - 2 years")
     if (ageText.includes('-')) {
-      const parts = ageText.split('-').map(p => parseInt(p.trim()));
-      if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
-        const toyMinAge = parts[0];
-        const toyMaxAge = parts[1];
-        // Check if there's any overlap between toy age range and selected age group
-        return toyMinAge <= ageGroup.maxAge && toyMaxAge >= ageGroup.minAge;
+      const parts = ageText.split('-');
+      const minVal = parseToYears(parts[0]);
+      const maxVal = parseToYears(parts[1]);
+
+      if (minVal !== null && maxVal !== null) {
+        // Check for range overlap: 
+        // A toy range [0.5, 2] overlaps with filter [0, 2] if:
+        // ToyStarts (0.5) <= FilterEnds (2) AND ToyEnds (2) >= FilterStarts (0)
+        return minVal <= ageGroup.maxAge && maxVal >= ageGroup.minAge;
       }
     }
     
-    // Handle single number format (e.g., "3 years")
-    const singleAge = parseInt(ageText);
-    if (!isNaN(singleAge)) {
-      return singleAge >= ageGroup.minAge && singleAge <= ageGroup.maxAge;
+    // Handle "X+" format (e.g., "3+")
+    if (ageText.includes('+')) {
+      const minVal = parseToYears(ageText.replace('+', ''));
+      if (minVal !== null) {
+        return minVal <= ageGroup.maxAge;
+      }
+    }
+    
+    // Handle single number format (e.g., "6 months")
+    const val = parseToYears(ageText);
+    if (val !== null) {
+      return val >= ageGroup.minAge && val <= ageGroup.maxAge;
     }
     
     return true;
