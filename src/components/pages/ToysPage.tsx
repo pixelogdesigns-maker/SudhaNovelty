@@ -323,17 +323,33 @@ export default function ToysPage() {
                 >
                  {/* Product Image */}
 <div className="aspect-square overflow-hidden bg-gray-50 relative group">
-  {/* LEAD DEV LOGIC: Check Gallery First, then fallback to single image */}
-  <Image
-    src={
-      (toy.productImages && toy.productImages.length > 0)
-        ? toy.productImages[0].src  // Grab the first image from the gallery
-        : (toy.image || 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY') // Fallback
+  {/* LEAD DEV LOGIC: Check Media Gallery First, then fallback to single images */}
+  {(() => {
+    let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
+    
+    // Priority 1: Media Gallery (productImages1)
+    if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
+      const firstImage = toy.productImages1[0];
+      imageUrl = firstImage.src || firstImage.url || firstImage;
     }
-    alt={toy.name || 'Toy product'}
-    width={400}
-    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-  />
+    // Priority 2: Single image field (productImages)
+    else if (toy.productImages && typeof toy.productImages === 'string') {
+      imageUrl = toy.productImages;
+    }
+    // Priority 3: Single image field (image)
+    else if (toy.image && typeof toy.image === 'string') {
+      imageUrl = toy.image;
+    }
+    
+    return (
+      <Image
+        src={imageUrl}
+        alt={toy.name || 'Toy product'}
+        width={400}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+      />
+    );
+  })()}
 </div>
 
                   {/* Product Info - Compact Layout */}

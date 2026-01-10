@@ -85,6 +85,8 @@ export interface Toys {
   /** @wixFieldType text */
   name?: string;
   /** @wixFieldType image */
+  productImages?: string;
+  /** @wixFieldType image */
   image?: string;
   /** @wixFieldType text */
   shortDescription?: string;
@@ -96,6 +98,6 @@ export interface Toys {
   whatsAppInquiryLink?: string;
   /** @wixFieldType number */
   price?: number;
-  /** @wixFieldType image */
-  productImages?: string;
+  /** @wixFieldType media_gallery */
+  productImages1?: any;
 }

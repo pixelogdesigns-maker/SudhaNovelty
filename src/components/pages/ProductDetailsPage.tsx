@@ -85,14 +85,23 @@ export default function ProductDetailsPage() {
     );
   }
 
-  // Get all images - use productImages array if available, otherwise fall back to main image
-  const images = toy.productImages && Array.isArray(toy.productImages) && toy.productImages.length > 0
-    ? toy.productImages
-    : toy.image
-      ? [toy.image]
-      : [];
+  // Get all images - prioritize media gallery, then fall back to single images
+  let images: string[] = [];
+  
+  // Check productImages1 (MEDIA_GALLERY) first
+  if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
+    images = toy.productImages1.map((item: any) => item.src || item.url || item);
+  }
+  // Fall back to productImages (single image field)
+  else if (toy.productImages && typeof toy.productImages === 'string') {
+    images = [toy.productImages];
+  }
+  // Fall back to image (single image field)
+  else if (toy.image && typeof toy.image === 'string') {
+    images = [toy.image];
+  }
 
-  const mainImage = images[selectedImageIndex] || toy.image;
+  const mainImage = images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
 
   return (
     <div className="min-h-screen bg-white">
