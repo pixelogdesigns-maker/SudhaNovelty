@@ -7,6 +7,7 @@ import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import HomePage from '@/components/pages/HomePage';
 import AboutPage from '@/components/pages/AboutPage';
 import ToysPage from '@/components/pages/ToysPage';
+import ProductDetailsPage from '@/components/pages/ProductDetailsPage';
 import VisitStorePage from '@/components/pages/VisitStorePage';
 import ContactPage from '@/components/pages/ContactPage';
 
@@ -45,6 +46,13 @@ const router = createBrowserRouter([
         element: <ToysPage />,
         routeMetadata: {
           pageIdentifier: 'toys',
+        },
+      },
+      {
+        path: "toys/:toyId",
+        element: <ProductDetailsPage />,
+        routeMetadata: {
+          pageIdentifier: 'product-details',
         },
       },
       {

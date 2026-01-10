@@ -96,4 +96,6 @@ export interface Toys {
   whatsAppInquiryLink?: string;
   /** @wixFieldType number */
   price?: number;
+  /** @wixFieldType image */
+  productImages?: string;
 }

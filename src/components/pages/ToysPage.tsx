@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ShoppingCart, ChevronDown, Check } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { MessageCircle, Filter, ChevronDown, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -365,21 +364,12 @@ export default function ToysPage() {
                     {/* Action Area */}
                     <div className="space-y-3">
                       {/* Primary Buy Button */}
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <button
-                              disabled
-                              className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100"
-                            >
-                              Buy Now
-                            </button>
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-foreground text-white border-0">
-                            <p>Coming soon! Use WhatsApp to order now.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
+                      <Link
+                        to={`/toys/${toy._id}`}
+                        className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
+                      >
+                        View Details
+                      </Link>
 
                       {/* Secondary Text Link for WhatsApp */}
                       <div className="text-center">
