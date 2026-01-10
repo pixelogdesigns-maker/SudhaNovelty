@@ -321,15 +321,20 @@ export default function ToysPage() {
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                 >
-                  {/* Product Image */}
-                  <div className="aspect-square overflow-hidden bg-gray-50 relative group">
-                    <Image
-                      src={toy.image || 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY'}
-                      alt={toy.name || 'Toy product'}
-                      width={400}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
+                 {/* Product Image */}
+<div className="aspect-square overflow-hidden bg-gray-50 relative group">
+  {/* LEAD DEV LOGIC: Check Gallery First, then fallback to single image */}
+  <Image
+    src={
+      (toy.productImages && toy.productImages.length > 0)
+        ? toy.productImages[0].src  // Grab the first image from the gallery
+        : (toy.image || 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY') // Fallback
+    }
+    alt={toy.name || 'Toy product'}
+    width={400}
+    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+</div>
 
                   {/* Product Info - Compact Layout */}
                   <div className="p-4 flex flex-col flex-grow">
