@@ -56,6 +56,197 @@ export default function VisitStorePage() {
         </div>
       </section>
 
+      {/* Multiple Stores Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-[120rem] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
+              Our Store Locations
+            </h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
+              Visit us at any of our convenient locations to explore our complete toy collection
+            </p>
+          </motion.div>
+
+          {/* Store 1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-20"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Store 1 Image */}
+              <div className="rounded-3xl overflow-hidden shadow-2xl">
+                <Image
+                  src="https://static.wixstatic.com/media/b9ec8c_ad2d1c23443f41ada8bfc2f770f2a64c~mv2.png?originWidth=1152&originHeight=640"
+                  alt="Sudha Novelties - Main Store"
+                  width={600}
+                  className="w-full h-auto"
+                />
+              </div>
+
+              {/* Store 1 Info */}
+              <div className="bg-light-pink/20 rounded-3xl p-10">
+                <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6">
+                  Main Store
+                </h3>
+                
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <MapPin className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Address</h4>
+                      <p className="font-paragraph text-base text-foreground leading-relaxed">
+                        {storeInfo?.address || 'Sudha Novelties, Main Location'}
+                      </p>
+                      <a
+                        href="https://maps.app.goo.gl/T2LkaYruKfHbXm6d8"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors"
+                      >
+                        <Navigation size={18} />
+                        Get Directions
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Phone className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Phone</h4>
+                      <a
+                        href={`tel:${storeInfo?.phoneNumber || '919025398147'}`}
+                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
+                      >
+                        {storeInfo?.phoneNumber || '+91 9025398147'}
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Clock className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Hours</h4>
+                      <p className="font-paragraph text-base text-foreground">
+                        {storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleWhatsAppClick}
+                  className="w-full bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={20} />
+                  Chat on WhatsApp
+                </button>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Store 2 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Store 2 Info (Order reversed on desktop) */}
+              <div className="bg-light-pink/20 rounded-3xl p-10 order-2 lg:order-1">
+                <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6">
+                  Downtown Store
+                </h3>
+                
+                <div className="space-y-6 mb-8">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <MapPin className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Address</h4>
+                      <p className="font-paragraph text-base text-foreground leading-relaxed">
+                        123 Toy Street, Downtown District, City Center
+                      </p>
+                      <a
+                        href="https://maps.app.goo.gl/example"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-3 inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors"
+                      >
+                        <Navigation size={18} />
+                        Get Directions
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Phone className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Phone</h4>
+                      <a
+                        href="tel:919876543210"
+                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
+                      >
+                        +91 9876543210
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Clock className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-heading text-lg text-primary mb-2">Hours</h4>
+                      <p className="font-paragraph text-base text-foreground">
+                        Mon - Sun: 11:00 AM - 8:00 PM
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleWhatsAppClick}
+                  className="w-full bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                >
+                  <MessageCircle size={20} />
+                  Chat on WhatsApp
+                </button>
+              </div>
+
+              {/* Store 2 Image */}
+              <div className="rounded-3xl overflow-hidden shadow-2xl order-1 lg:order-2">
+                <Image
+                  src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384"
+                  alt="Sudha Novelties - Downtown Store"
+                  width={600}
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Store Image Section */}
       <section className="py-16 bg-white">
         <div className="max-w-[120rem] mx-auto px-6">

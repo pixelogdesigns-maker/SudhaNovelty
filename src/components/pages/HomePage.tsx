@@ -107,6 +107,13 @@ export default function HomePage() {
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [mutedStates, setMutedStates] = useState({});
+
+  // Toggle mute for a specific video
+  const toggleMute = (id, e) => {
+    e.preventDefault(); // Prevent clicking the parent link
+    setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -476,7 +483,7 @@ export default function HomePage() {
         </div>
       </section>
       {/* --- Our Videos Section --- */}
-      <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+     <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         {/* Internal CSS for the Marquee */}
         <style>{`
@@ -487,6 +494,10 @@ export default function HomePage() {
           .marquee-container {
             width: fit-content;
             animation: scroll 40s linear infinite;
+          }
+          /* Pause animation on hover */
+          .marquee-container:hover {
+            animation-play-state: paused;
           }
         `}</style>
 
@@ -507,78 +518,70 @@ export default function HomePage() {
                 className="flex gap-6 marquee-container"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
-                style={{ 
-                  animationPlayState: isPaused ? 'paused' : 'running',
-                }}
               >
                 
                 {/* DEVELOPER NOTE:
-                   1. I have set up the first video with the REAL link you provided to show it working.
-                   2. For the others, you MUST replace 'https://www.instagram.com/sudha_novelties_/' 
-                      with the specific link to a post/reel (e.g., https://www.instagram.com/reel/C3...)
-                      otherwise they will show the fallback card.
+                   You must replace these 'videoSrc' links with direct paths to .mp4 files.
+                   You can host these on the public folder or use a service like Cloudinary.
+                   Do NOT use Instagram links here.
                 */}
                 {[...Array(2)].map((_, batch) => {
                   const videos = [
-                    // This is the real link you provided - it will render as an embed
-                    { id: 1, title: "New Arrivals", link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
-                    
-                    // These are placeholders. Replace links to see them transform into players!
-                    { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 5, title: "Best Sellers", link: "https://www.instagram.com/sudha_novelties_/" },
-                    { id: 6, title: "Educational Toys", link: "https://www.instagram.com/sudha_novelties_/" },
+                    { id: 1, title: "New Arrivals", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-little-girl-playing-with-a-toy-robot-43529-large.mp4" },
+                    { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-lego-pieces-falling-on-a-surface-slow-motion-42674-large.mp4" },
+                    { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-child-playing-with-colorful-plastic-bricks-42721-large.mp4" },
+                    { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-colorful-plastic-toy-bricks-falling-on-white-background-42724-large.mp4" },
                   ];
-
-                  // Helper to convert standard URL to Embed URL
-                  const getEmbedUrl = (url) => {
-                    // Removes query parameters and adds /embed
-                    const cleanUrl = url.split('?')[0].replace(/\/$/, "");
-                    return `${cleanUrl}/embed`;
-                  };
 
                   return (
                     <div key={batch} className="flex gap-6 shrink-0">
                       {videos.map((video) => {
-                        // Check if it's a specific post/reel link
-                        const isEmbeddable = video.link.includes('/p/') || video.link.includes('/reel/');
+                        const uniqueId = `${batch}-${video.id}`;
+                        const isMuted = mutedStates[uniqueId] ?? true; // Default to muted
 
                         return (
                           <div
-                            key={`${batch}-${video.id}`}
-                            className="flex-shrink-0 w-[350px] h-[550px] rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-100 relative"
+                            key={uniqueId}
+                            className="flex-shrink-0 w-[300px] h-[500px] rounded-2xl overflow-hidden shadow-lg bg-black relative group cursor-pointer"
                           >
-                            {isEmbeddable ? (
-                              /* --- OPTION A: Live Instagram Embed --- */
-                              <iframe 
-                                className="w-full h-full"
-                                src={getEmbedUrl(video.link)}
-                                frameBorder="0" 
-                                scrolling="no" 
-                                allowTransparency="true"
-                                allow="encrypted-media"
-                                title={video.title}
-                              ></iframe>
-                            ) : (
-                              /* --- OPTION B: Fallback Card (If link is just profile) --- */
-                              <a 
-                                href={video.link}
-                                target="_blank"
+                            {/* The Native Video Player */}
+                            <video
+                              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                              src={video.videoSrc}
+                              autoPlay
+                              loop
+                              muted={isMuted}
+                              playsInline // Critical for iOS
+                              poster="/path/to/placeholder-image.jpg" // Optional placeholder
+                            />
+
+                            {/* Overlay Gradient (for better text readability) */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
+
+                            {/* Sound Control Button */}
+                            <button
+                                onClick={(e) => toggleMute(uniqueId, e)}
+                                className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                            </button>
+
+                            {/* Content Overlay */}
+                            <a 
+                                href={video.link} 
+                                target="_blank" 
                                 rel="noopener noreferrer"
-                                className="w-full h-full flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-colors group cursor-pointer"
-                              >
-                                <div className="text-center p-6">
-                                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform">
-                                    <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                      <path d="M8 5v14l11-7z" />
-                                    </svg>
-                                  </div>
-                                  <p className="text-gray-900 font-heading text-lg font-bold">Video Link Needed</p>
-                                  <p className="text-gray-500 text-sm mt-2">Add a specific Reel URL to play here</p>
+                                className="absolute inset-0 flex flex-col justify-end p-6"
+                            >
+                              <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                <h3 className="text-white font-bold text-xl mb-1">{video.title}</h3>
+                                <div className="flex items-center gap-2 text-white/80 text-sm font-medium">
+                                  <span>View on Instagram</span>
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                                 </div>
-                              </a>
-                            )}
+                              </div>
+                            </a>
+
                           </div>
                         );
                       })}
@@ -606,7 +609,7 @@ export default function HomePage() {
             </a>
           </div>
         </div>
-      </section>
+    </section>
 
       <Footer />
     </div>
