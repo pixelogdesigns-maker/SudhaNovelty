@@ -331,4 +331,207 @@ export default function HomePage() {
                 <Link to={`/toys?category=${encodeURIComponent(category.categoryName || '')}`} className="group block relative">
                   <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-gray-100 shadow-lg transition-transform duration-500 group-hover:-translate-y-2">
                     <Image
-                      src={category.categoryImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f10
+                      src={category.categoryImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768'}
+                      alt={category.categoryName || 'Category'}
+                      width={600}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                    
+                    <div className="absolute bottom-0 left-0 w-full p-8">
+                      <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <h3 className="font-heading text-2xl text-foreground mb-2 group-hover:text-primary transition-colors">
+                          {category.categoryName}
+                        </h3>
+                        <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                          {category.description}
+                        </p>
+                        <div className="flex items-center text-primary font-bold text-sm uppercase tracking-wider">
+                          Explore <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </AnimatedReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="relative bg-light-pink/30 py-24 lg:py-32 overflow-hidden">
+        <div className="max-w-[120rem] mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="lg:col-span-4 relative">
+              <div className="lg:sticky lg:top-32">
+                <AnimatedReveal>
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary shadow-md mb-8">
+                    <Heart size={32} fill="currentColor" />
+                  </div>
+                  <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-6">
+                    Why Parents <br />
+                    <span className="text-primary">Love Us</span>
+                  </h2>
+                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                    We don't just sell toys; we curate experiences that help your children grow, learn, and create memories that last a lifetime.
+                  </p>
+                  <a href="https://wa.me/+919025398147"
+                    className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors text-lg group"
+                  >
+                    Ask us anything
+                    <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </AnimatedReveal>
+              </div>
+            </div>
+
+            <div className="lg:col-span-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {features.map((feature, index) => (
+                  <AnimatedReveal key={index} delay={index * 100} direction="up">
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-pink-100 h-full">
+                      <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mb-6`}>
+                        <feature.icon size={28} />
+                      </div>
+                      <h3 className="font-heading text-xl text-foreground mb-3">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </AnimatedReveal>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 lg:py-32 bg-white">
+        <div className="max-w-[120rem] mx-auto px-6">
+          <div className="bg-foreground rounded-[3rem] overflow-hidden text-white relative">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="p-12 lg:p-24 flex flex-col justify-center relative z-10">
+                <AnimatedReveal>
+                  <h2 className="font-heading text-4xl md:text-5xl mb-6">
+                    Come Play With Us!
+                  </h2>
+                  <p className="text-gray-300 text-lg mb-12 max-w-md">
+                    Visit our physical store to see, touch, and try our toys before you buy. Our friendly staff is ready to help you find the perfect gift.
+                  </p>
+                  
+                  <div className="space-y-6 mb-12">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center shrink-0">
+                        <MapPin className="text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg mb-1">Location</h4>
+                        <p className="text-gray-400">{storeInfo?.address || '123 Toy Street, Fun City'}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center shrink-0">
+                        <Clock className="text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-lg mb-1">Working Hours</h4>
+                        <p className="text-gray-400">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Link 
+                    to="/visit-store"
+                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-foreground font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 w-fit"
+                  >
+                    Get Directions
+                  </Link>
+                </AnimatedReveal>
+              </div>
+
+              <div className="relative h-[400px] lg:h-auto">
+                <Image
+                  src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384"
+                  alt="Inside our toy store"
+                  width={800}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-foreground via-transparent to-transparent lg:bg-gradient-to-l" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Our Videos Section (OFFICIAL INSTAGRAM EMBEDS) --- */}
+      <section id="videos" className="py-12 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+        
+        {/* Marquee Animation Styles */}
+        <style>{`
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-container {
+            width: fit-content;
+            animation: scroll 60s linear infinite; /* Slowed down for embeds */
+          }
+          .marquee-container:hover {
+            animation-play-state: paused;
+          }
+          /* Ensure iframe wrappers don't collapse */
+          .instagram-embed-wrapper {
+             width: 326px !important;
+             flex-shrink: 0;
+          }
+          /* UPDATED: CSS to CROP the bottom of the Instagram card */
+          .instagram-embed-wrapper iframe {
+              height: 120% !important; /* Make iframe taller than wrapper */
+              margin-bottom: -20% !important; /* Pull bottom up */
+          }
+        `}</style>
+
+        <div className="max-w-[120rem] mx-auto">
+          
+          {/* Videos Marquee */}
+          <div className="relative w-full">
+            <div className="flex gap-6 marquee-container"
+                 onMouseEnter={() => setIsPaused(true)}
+                 onMouseLeave={() => setIsPaused(false)}
+            >
+                {/* Loop 2 times for infinite scroll effect */}
+                {[...Array(2)].map((_, loopIndex) => (
+                  <div key={loopIndex} className="flex gap-6 shrink-0">
+                    
+                    {videoEmbeds.map((htmlString, index) => (
+                       <div key={`${loopIndex}-${index}`} className="shrink-0">
+                          {/* We render the official Instagram Helper Component */}
+                          <InstagramEmbed rawHtml={htmlString} />
+                       </div>
+                    ))}
+                    
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          <div className="text-center mt-12 px-6">
+            <a href="https://wa.me/+919025398147"
+              className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+            >
+              <MessageCircle size={24} />
+              Share Your Feedback
+            </a>
+          </div>
+        </div>
+    </section>
+
+      <Footer />
+    </div>
+  );
+}
