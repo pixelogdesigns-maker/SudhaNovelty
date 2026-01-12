@@ -267,159 +267,80 @@ export default function VisitStorePage() {
         </div>
       </section>
 
-      {/* Store Information Section */}
-      <section className="py-16 bg-gradient-to-br from-light-pink to-white">
+      {/* Why Visit Section */}
+      <section className="py-20 bg-gradient-to-br from-light-pink to-white">
         <div className="max-w-[120rem] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Information */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
+              Why Visit Our Stores?
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="bg-white rounded-3xl p-10 shadow-lg"
+              transition={{ duration: 0.5 }}
+              className="bg-white rounded-2xl p-6 shadow-md"
             >
-              <h2 className="font-heading text-3xl md:text-4xl text-primary mb-8">
-                Store Information
-              </h2>
-
-              <div className="space-y-6">
-                {storeInfo?.address && (
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                      <MapPin className="text-primary" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-primary mb-2">Address</h3>
-                      <p className="font-paragraph text-base text-foreground leading-relaxed">
-                        {storeInfo.address}
-                      </p>
-                      <button
-                        onClick={handleGetDirections}
-                        className="mt-3 inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors"
-                      >
-                        <Navigation size={18} />
-                        Get Directions
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {storeInfo?.phoneNumber && (
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                      <Phone className="text-primary" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-primary mb-2">Phone</h3>
-                      <a
-                        href={`tel:919025398147`}
-                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                      >
-                        {storeInfo.phoneNumber}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {storeInfo?.whatsAppNumber && (
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-whatsapp-green/10 rounded-full flex items-center justify-center">
-                      <MessageCircle className="text-whatsapp-green" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-primary mb-2">WhatsApp</h3>
-                      <button
-                        onClick={handleWhatsAppClick}
-                        className="font-paragraph text-base text-foreground hover:text-whatsapp-green transition-colors"
-                      >
-                        {storeInfo.whatsAppNumber}
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {storeInfo?.emailAddress && (
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                      <Mail className="text-primary" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-primary mb-2">Email</h3>
-                      <a
-                        href={`mailto:${storeInfo.emailAddress}`}
-                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                      >
-                        {storeInfo.emailAddress}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {storeInfo?.workingHours && (
-                  <div className="flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                      <Clock className="text-primary" size={24} />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-primary mb-2">Working Hours</h3>
-                      <p className="font-paragraph text-base text-foreground whitespace-pre-line leading-relaxed">
-                        {storeInfo.workingHours}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <h3 className="font-heading text-xl text-primary mb-3">
+                Hands-On Experience
+              </h3>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">
+                Let your child see, touch, and play with toys before making a decision.
+              </p>
             </motion.div>
 
-            {/* Why Visit Section */}
             <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-white rounded-2xl p-6 shadow-md"
             >
-              <h2 className="font-heading text-3xl md:text-4xl text-primary mb-8">
-                Why Visit Our Store?
-              </h2>
+              <h3 className="font-heading text-xl text-primary mb-3">
+                Expert Guidance
+              </h3>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">
+                Our knowledgeable staff helps you find the perfect toy for any age.
+              </p>
+            </motion.div>
 
-              <div className="space-y-6">
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                  <h3 className="font-heading text-xl text-primary mb-3">
-                    Hands-On Experience
-                  </h3>
-                  <p className="font-paragraph text-base text-foreground leading-relaxed">
-                    Let your child see, touch, and play with toys before making a decision. There's nothing like experiencing a toy in person.
-                  </p>
-                </div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-white rounded-2xl p-6 shadow-md"
+            >
+              <h3 className="font-heading text-xl text-primary mb-3">
+                Immediate Availability
+              </h3>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">
+                Take your purchase home immediately. No waiting for delivery.
+              </p>
+            </motion.div>
 
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                  <h3 className="font-heading text-xl text-primary mb-3">
-                    Expert Guidance
-                  </h3>
-                  <p className="font-paragraph text-base text-foreground leading-relaxed">
-                    Our knowledgeable staff can help you find the perfect toy based on your child's age, interests, and developmental needs.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                  <h3 className="font-heading text-xl text-primary mb-3">
-                    Immediate Availability
-                  </h3>
-                  <p className="font-paragraph text-base text-foreground leading-relaxed">
-                    Take your purchase home immediately. No waiting for delivery when you shop in-store.
-                  </p>
-                </div>
-
-                <div className="bg-white rounded-2xl p-6 shadow-md">
-                  <h3 className="font-heading text-xl text-primary mb-3">
-                    Family-Friendly Environment
-                  </h3>
-                  <p className="font-paragraph text-base text-foreground leading-relaxed">
-                    Our store is designed to be welcoming for both parents and children, making shopping a fun family activity.
-                  </p>
-                </div>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-md"
+            >
+              <h3 className="font-heading text-xl text-primary mb-3">
+                Family-Friendly
+              </h3>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">
+                Our stores are designed to be welcoming for both parents and children.
+              </p>
             </motion.div>
           </div>
         </div>
