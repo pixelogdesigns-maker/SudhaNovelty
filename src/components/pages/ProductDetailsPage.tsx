@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, Heart, Share2 } from 'lucide-react';
+import { MessageCircle, ArrowLeft } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -223,21 +223,6 @@ export default function ProductDetailsPage() {
                   <MessageCircle size={24} />
                   Order via WhatsApp
                 </button>
-
-                <div className="flex gap-4">
-                  <button
-                    className="flex-1 border-2 border-primary text-primary font-paragraph text-base px-6 py-3 rounded-xl hover:bg-light-pink transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Heart size={20} />
-                    Save
-                  </button>
-                  <button
-                    className="flex-1 border-2 border-gray-200 text-foreground font-paragraph text-base px-6 py-3 rounded-xl hover:border-primary hover:text-primary transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Share2 size={20} />
-                    Share
-                  </button>
-                </div>
               </div>
 
               {/* Additional Info */}
