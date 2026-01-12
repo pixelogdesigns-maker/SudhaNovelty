@@ -109,11 +109,51 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
   const [mutedStates, setMutedStates] = useState({});
 
-  // Toggle mute for a specific video
-  const toggleMute = (id, e) => {
-    e.preventDefault(); // Prevent clicking the parent link
+const toggleMute = (id, e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
   };
+
+  const videos = [
+    { 
+      id: 1, 
+      title: "New Arrivals", 
+      link: "https://www.instagram.com/p/DS4zVo3ky9v/", 
+      // Client requested to use the Instagram link directly as source
+      videoSrc: "https://www.instagram.com/p/DS4zVo3ky9v/" 
+    },
+    { 
+      id: 2, 
+      title: "Toy Unboxing", 
+      link: "https://www.instagram.com/sudha_novelties_/", 
+      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-lego-pieces-falling-on-a-surface-slow-motion-42674-large.mp4" 
+    },
+    { 
+      id: 3, 
+      title: "Fun Playtime", 
+      link: "https://www.instagram.com/sudha_novelties_/", 
+      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-child-playing-with-colorful-plastic-bricks-42721-large.mp4" 
+    },
+    { 
+      id: 4, 
+      title: "Customer Review", 
+      link: "https://www.instagram.com/sudha_novelties_/", 
+      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-colorful-plastic-toy-bricks-falling-on-white-background-42724-large.mp4" 
+    },
+    { 
+      id: 5, 
+      title: "Best Sellers", 
+      link: "https://www.instagram.com/sudha_novelties_/", 
+      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-mechanical-toy-robot-moving-its-head-43532-large.mp4" 
+    },
+    { 
+      id: 6, 
+      title: "Educational Toys", 
+      link: "https://www.instagram.com/sudha_novelties_/", 
+      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-stacked-colorful-toy-bricks-42722-large.mp4" 
+    },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -483,9 +523,9 @@ export default function HomePage() {
         </div>
       </section>
       {/* --- Our Videos Section --- */}
-     <section id="videos" className="py-24 lg:py-32 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+    <section id="videos" className="py-12 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
-        {/* Internal CSS for the Marquee */}
+        {/* Marquee Animation Styles */}
         <style>{`
           @keyframes scroll {
             0% { transform: translateX(0); }
@@ -495,112 +535,77 @@ export default function HomePage() {
             width: fit-content;
             animation: scroll 40s linear infinite;
           }
-          /* Pause animation on hover */
           .marquee-container:hover {
             animation-play-state: paused;
           }
         `}</style>
 
-        <div className="max-w-[120rem] mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground mb-6">
-              Our <span className="text-primary">Videos</span>
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Watch our latest toy reviews, unboxings, and playtime moments
-            </p>
-          </div>
+        <div className="max-w-[120rem] mx-auto">
+          
+          {/* Videos Marquee */}
+          <div className="relative w-full">
+            <div className="flex gap-6 marquee-container"
+                 onMouseEnter={() => setIsPaused(true)}
+                 onMouseLeave={() => setIsPaused(false)}
+            >
+                {/* We map twice to create the infinite loop effect seamlessly */}
+                {[...Array(2)].map((_, loopIndex) => (
+                  <div key={loopIndex} className="flex gap-6 shrink-0">
+                    {videos.map((video) => {
+                      const uniqueId = `${loopIndex}-${video.id}`;
+                      const isMuted = mutedStates[uniqueId] ?? true;
 
-          {/* Videos Carousel/Marquee */}
-          <div className="relative">
-            <div className="overflow-hidden w-full">
-              <div 
-                className="flex gap-6 marquee-container"
-                onMouseEnter={() => setIsPaused(true)}
-                onMouseLeave={() => setIsPaused(false)}
-              >
-                
-                {/* DEVELOPER NOTE:
-                   You must replace these 'videoSrc' links with direct paths to .mp4 files.
-                   You can host these on the public folder or use a service like Cloudinary.
-                   Do NOT use Instagram links here.
-                */}
-                {[...Array(2)].map((_, batch) => {
-                  const videos = [
-                    { id: 1, title: "New Arrivals", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-little-girl-playing-with-a-toy-robot-43529-large.mp4" },
-                    { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-lego-pieces-falling-on-a-surface-slow-motion-42674-large.mp4" },
-                    { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-child-playing-with-colorful-plastic-bricks-42721-large.mp4" },
-                    { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-colorful-plastic-toy-bricks-falling-on-white-background-42724-large.mp4" },
-                  ];
+                      return (
+                        <div
+                          key={uniqueId}
+                          className="flex-shrink-0 w-[300px] h-[500px] rounded-2xl overflow-hidden shadow-lg bg-black relative group cursor-pointer border border-gray-100"
+                        >
+                          {/* Native HTML5 Video Player */}
+                          <video
+                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                            src={video.videoSrc}
+                            autoPlay
+                            loop
+                            muted={isMuted}
+                            playsInline
+                            onError={(e) => console.error("Video failed to load:", video.title)}
+                          />
 
-                  return (
-                    <div key={batch} className="flex gap-6 shrink-0">
-                      {videos.map((video) => {
-                        const uniqueId = `${batch}-${video.id}`;
-                        const isMuted = mutedStates[uniqueId] ?? true; // Default to muted
+                          {/* Dark overlay for text readability */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
-                        return (
-                          <div
-                            key={uniqueId}
-                            className="flex-shrink-0 w-[300px] h-[500px] rounded-2xl overflow-hidden shadow-lg bg-black relative group cursor-pointer"
+                          {/* Sound Toggle */}
+                          <button
+                              onClick={(e) => toggleMute(uniqueId, e)}
+                              className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity z-20 hover:bg-black/60"
                           >
-                            {/* The Native Video Player */}
-                            <video
-                              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                              src={video.videoSrc}
-                              autoPlay
-                              loop
-                              muted={isMuted}
-                              playsInline // Critical for iOS
-                              poster="/path/to/placeholder-image.jpg" // Optional placeholder
-                            />
+                              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                          </button>
 
-                            {/* Overlay Gradient (for better text readability) */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
-
-                            {/* Sound Control Button */}
-                            <button
-                                onClick={(e) => toggleMute(uniqueId, e)}
-                                className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                            >
-                                {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                            </button>
-
-                            {/* Content Overlay */}
-                            <a 
-                                href={video.link} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="absolute inset-0 flex flex-col justify-end p-6"
-                            >
-                              <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                <h3 className="text-white font-bold text-xl mb-1">{video.title}</h3>
-                                <div className="flex items-center gap-2 text-white/80 text-sm font-medium">
-                                  <span>View on Instagram</span>
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                                </div>
+                          {/* Clickable Overlay */}
+                          <a 
+                              href={video.link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="absolute inset-0 flex flex-col justify-end p-6 z-10"
+                          >
+                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                              <div className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium hover:bg-white/30 transition-colors">
+                                <span>View on Instagram</span>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                               </div>
-                            </a>
-
-                          </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
+                            </div>
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
             </div>
-
-            {/* Gradient Overlays - Adjusted for white background */}
-            <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-light-pink/10 to-transparent pointer-events-none z-10" />
           </div>
 
-          {/* CTA */}
-          <div className="text-center mt-16">
-            <p className="text-gray-600 mb-6">
-              Follow us on social media for more videos and updates!
-            </p>
+          {/* CTA Section */}
+          <div className="text-center mt-12 px-6">
             <a href="https://wa.me/+919025398147"
               className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
