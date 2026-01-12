@@ -1,11 +1,11 @@
-// HPI 1.7-V (Clean Video Version)
+// HPI 1.9-V (The "Cropped Iframe" Hack)
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Award, Shield, Heart, Store, Star, Sparkles, MapPin, Clock, ArrowRight, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
+import { MessageCircle, Award, Shield, Heart, Store, Star, Sparkles, MapPin, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -71,19 +71,53 @@ const AnimatedReveal: React.FC<AnimatedElementProps> = ({
   );
 };
 
+// --- NEW COMPONENT: Cropped Instagram Card ---
+// This uses CSS to visually "cut off" the header and footer of the official Instagram Embed
+const CroppedInstagramCard = ({ link }: { link: string }) => {
+  // We construct the embed URL manually. 
+  // We use '/embed' NOT '/embed/captioned' to get the cleanest possible version to start with.
+  const embedUrl = `${link.replace(/\/$/, "")}/embed`;
+
+  return (
+    <div className="relative w-[300px] h-[500px] overflow-hidden rounded-2xl shadow-lg bg-black border border-gray-100 group">
+       {/* THE HACK:
+          1. We make the iframe taller (120%) and wider (110%) to zoom in.
+          2. We use 'top: -15%' to pull the Profile Header UP and out of sight.
+          3. We allow the bottom to overflow to push the Footer DOWN and out of sight.
+       */}
+       <div className="absolute w-[120%] h-[130%] -left-[10%] -top-[15%] pointer-events-none md:pointer-events-auto">
+          <iframe 
+            src={embedUrl}
+            className="w-full h-full border-0"
+            scrolling="no"
+            allowTransparency={true}
+            allow="encrypted-media"
+            title="Instagram Video"
+          />
+       </div>
+
+       {/* Clickable Overlay to restore functionality (since we messed with the iframe layout) */}
+       <a 
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 z-20 flex flex-col justify-end p-6 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+       >
+          <div className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium w-fit mx-auto hover:bg-white/30 transition-colors">
+            <span>Watch on Instagram</span>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+          </div>
+       </a>
+    </div>
+  );
+};
+
 // --- Main Component ---
 
 export default function HomePage() {
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [mutedStates, setMutedStates] = useState({});
-
-  const toggleMute = (id, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,23 +138,18 @@ export default function HomePage() {
   }, []);
 
   // --- 1. Video Data Configuration ---
-  // DEVELOPER NOTE: This 'videoSrc' is a placeholder. 
-  // To show your specific Instagram Reel without the UI clutter, download it as an MP4 
-  // and upload it to your site, then paste the link here.
+  // NOW YOU CAN USE REAL LINKS!
   const videos = [
     { 
       id: 1, 
-      title: "New Arrivals", 
-      link: "https://www.instagram.com/p/DS4zVo3ky9v/", 
-      // Using a high-quality stock toy video to demonstrate the clean look
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-little-girl-playing-with-a-toy-robot-43529-large.mp4" 
+      link: "https://www.instagram.com/p/DS4zVo3ky9v/" // Your Real Link
     },
-    // Placeholder duplicates for the marquee effect
-    { id: 2, title: "Toy Unboxing", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-lego-pieces-falling-on-a-surface-slow-motion-42674-large.mp4" },
-    { id: 3, title: "Fun Playtime", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-child-playing-with-colorful-plastic-bricks-42721-large.mp4" },
-    { id: 4, title: "Customer Review", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-colorful-plastic-toy-bricks-falling-on-white-background-42724-large.mp4" },
-    { id: 5, title: "Best Sellers", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-mechanical-toy-robot-moving-its-head-43532-large.mp4" },
-    { id: 6, title: "Educational Toys", link: "https://www.instagram.com/sudha_novelties_/", videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-stacked-colorful-toy-bricks-42722-large.mp4" },
+    // Duplicates for the marquee effect - Replace these with other real reel links
+    { id: 2, link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
+    { id: 3, link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
+    { id: 4, link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
+    { id: 5, link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
+    { id: 6, link: "https://www.instagram.com/p/DS4zVo3ky9v/" },
   ];
 
   const features = [
@@ -443,7 +472,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (CLEAN VERSION) --- */}
+      {/* --- Our Videos Section (CROPPED IFRAME HACK) --- */}
       <section id="videos" className="py-12 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         {/* Marquee Animation Styles */}
@@ -472,54 +501,14 @@ export default function HomePage() {
                 {/* Loop 2 times for infinite scroll effect */}
                 {[...Array(2)].map((_, loopIndex) => (
                   <div key={loopIndex} className="flex gap-6 shrink-0">
-                    {videos.map((video) => {
-                      const uniqueId = `${loopIndex}-${video.id}`;
-                      const isMuted = mutedStates[uniqueId] ?? true;
-
-                      return (
-                        <div
-                          key={uniqueId}
-                          className="flex-shrink-0 w-[300px] h-[500px] rounded-2xl overflow-hidden shadow-lg bg-black relative group cursor-pointer border border-gray-100"
-                        >
-                          {/* Native HTML5 Video Player - The Cleanest Look Possible */}
-                          <video
-                            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                            src={video.videoSrc}
-                            autoPlay
-                            loop
-                            muted={isMuted}
-                            playsInline
-                            onError={(e) => console.error("Video failed to load:", video.title)}
-                          />
-
-                          {/* Dark overlay for text readability */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-
-                          {/* Sound Toggle */}
-                          <button
-                              onClick={(e) => toggleMute(uniqueId, e)}
-                              className="absolute top-4 right-4 bg-black/40 backdrop-blur-md p-2 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity z-20 hover:bg-black/60"
-                          >
-                              {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                          </button>
-
-                          {/* Clean Clickable Overlay */}
-                          <a 
-                              href={video.link} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className="absolute inset-0 flex flex-col justify-end p-6 z-10"
-                          >
-                            <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                              <div className="inline-flex items-center gap-2 text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-sm font-medium hover:bg-white/30 transition-colors">
-                                <span>View on Instagram</span>
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                              </div>
-                            </div>
-                          </a>
-                        </div>
-                      );
-                    })}
+                    
+                    {videos.map((video) => (
+                       <div key={`${loopIndex}-${video.id}`} className="shrink-0">
+                          {/* We call our new Cropped Component here */}
+                          <CroppedInstagramCard link={video.link} />
+                       </div>
+                    ))}
+                    
                   </div>
                 ))}
             </div>
