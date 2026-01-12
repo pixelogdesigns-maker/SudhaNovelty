@@ -109,13 +109,11 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
   const [mutedStates, setMutedStates] = useState({});
 
-const toggleMute = (id, e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // Toggle mute for a specific video
+  const toggleMute = (id, e) => {
+    e.preventDefault(); // Prevent clicking the parent link
     setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
   };
-
-  
 
   useEffect(() => {
     const fetchData = async () => {
