@@ -374,7 +374,8 @@ export default function HomePage() {
                   <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                     We don't just sell toys; we curate experiences that help your children grow, learn, and create memories that last a lifetime.
                   </p>
-                  <a href="https://wa.me/+919025398147"
+                  <a 
+                    href="https://wa.me/+919025398147"
                     className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors text-lg group"
                   >
                     Ask us anything
