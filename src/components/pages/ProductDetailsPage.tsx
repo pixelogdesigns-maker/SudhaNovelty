@@ -206,7 +206,7 @@ export default function ProductDetailsPage() {
 
               {/* Description */}
               {toy.shortDescription && (
-                <div className="mb-8">
+                <div className="mb-4">
                   <p className="text-gray-500 font-paragraph text-sm mb-2">Description</p>
                   <p className="font-paragraph text-lg text-foreground leading-relaxed">
                     {toy.shortDescription}
