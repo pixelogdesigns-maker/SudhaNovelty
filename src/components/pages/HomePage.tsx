@@ -115,45 +115,7 @@ const toggleMute = (id, e) => {
     setMutedStates(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const videos = [
-    { 
-      id: 1, 
-      title: "New Arrivals", 
-      link: "https://www.instagram.com/p/DS4zVo3ky9v/", 
-      // Client requested to use the Instagram link directly as source
-      videoSrc: "https://www.instagram.com/p/DS4zVo3ky9v/" 
-    },
-    { 
-      id: 2, 
-      title: "Toy Unboxing", 
-      link: "https://www.instagram.com/sudha_novelties_/", 
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-lego-pieces-falling-on-a-surface-slow-motion-42674-large.mp4" 
-    },
-    { 
-      id: 3, 
-      title: "Fun Playtime", 
-      link: "https://www.instagram.com/sudha_novelties_/", 
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-child-playing-with-colorful-plastic-bricks-42721-large.mp4" 
-    },
-    { 
-      id: 4, 
-      title: "Customer Review", 
-      link: "https://www.instagram.com/sudha_novelties_/", 
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-colorful-plastic-toy-bricks-falling-on-white-background-42724-large.mp4" 
-    },
-    { 
-      id: 5, 
-      title: "Best Sellers", 
-      link: "https://www.instagram.com/sudha_novelties_/", 
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-mechanical-toy-robot-moving-its-head-43532-large.mp4" 
-    },
-    { 
-      id: 6, 
-      title: "Educational Toys", 
-      link: "https://www.instagram.com/sudha_novelties_/", 
-      videoSrc: "https://assets.mixkit.co/videos/preview/mixkit-stacked-colorful-toy-bricks-42722-large.mp4" 
-    },
-  ];
+  
 
   useEffect(() => {
     const fetchData = async () => {
