@@ -187,13 +187,6 @@ export default function HomePage() {
       thumbnailUrl: '',
       description: ''
     },
-    {
-      id: 'video-6',
-      title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
-      thumbnailUrl: '',
-      description: ''
-    },
   ];
 
   useEffect(() => {
