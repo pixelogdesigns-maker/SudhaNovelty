@@ -113,7 +113,7 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
         />
       </div>
 
-      {/* Video Title Overlay */}
+      {/* Video Title Overlay - Only show if title exists */}
       {video.title && (
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-10">
           <p className="text-white font-bold text-sm line-clamp-2">
@@ -133,43 +133,48 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
 
   // --- 1. WIX VIDEO REELS DATA ---
-  // Replace these URLs with your actual Wix video links
-  // See instructions below on how to get Wix video URLs
   const videoReels: VideoReel[] = [
     {
       id: 'video-1',
-      title: 'Toy Unboxing & Review',
-      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-1',
-      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-1-thumb',
-      description: 'Check out our latest toy collection'
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
     },
     {
       id: 'video-2',
-      title: 'Customer Testimonials',
-      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-2',
-      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-2-thumb',
-      description: 'Happy customers sharing their experiences'
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
     },
     {
       id: 'video-3',
-      title: 'Store Tour',
-      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-3',
-      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-3-thumb',
-      description: 'Explore our toy store'
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
     },
     {
       id: 'video-4',
-      title: 'Educational Toys Guide',
-      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-4',
-      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-4-thumb',
-      description: 'Learn about educational toys'
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
     },
     {
       id: 'video-5',
-      title: 'New Arrivals Showcase',
-      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-5',
-      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-5-thumb',
-      description: 'Latest toys in stock'
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
+    },
+    {
+      id: 'video-6',
+      title: '',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4',
+      thumbnailUrl: '',
+      description: ''
     },
   ];
 
