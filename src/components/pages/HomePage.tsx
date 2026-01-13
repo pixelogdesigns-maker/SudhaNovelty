@@ -1,4 +1,4 @@
-// HPI 2.6-V (Single Playback Enforced)
+// HPI 2.7-V (Mobile Thumbnails Fixed + Single Play + Responsive)
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -90,15 +90,11 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
     return () => clearTimeout(timer);
   }, [video.id]);
 
-  // --- NEW: ONE-AT-A-TIME PLAYBACK LOGIC ---
+  // One-at-a-time playback logic
   const handlePlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
     const currentVideo = e.currentTarget;
-    
-    // Find all other videos in the video section
     const allVideos = document.querySelectorAll('section#videos video');
-    
     allVideos.forEach((vid) => {
-        // If it's not the video that was just clicked, pause it
         if (vid !== currentVideo) {
             (vid as HTMLVideoElement).pause();
         }
@@ -106,7 +102,8 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
   };
 
   return (
-    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200 flex-shrink-0" style={{ height: '500px', width: '280px' }}>
+    // Changed bg-black to bg-gray-200 to avoid "black hole" look while loading
+    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-gray-200 border border-gray-200 flex-shrink-0" style={{ height: '500px', width: '280px' }}>
       
       {/* LOADING SPINNER OVERLAY */}
       <div 
@@ -120,17 +117,19 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
       <div className={`w-full h-full transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <video
           ref={videoRef}
-          src={video.videoUrl}
+          src={video.videoUrl} 
+          // FIX: Added preload="metadata" to force mobile browsers to fetch the first frame
+          preload="metadata"
           poster={video.thumbnailUrl}
           controls
-          playsInline // CRITICAL for mobile scrolling
-          onPlay={handlePlay} // ATTACH THE NEW HANDLER HERE
+          playsInline 
+          onPlay={handlePlay} 
           className="w-full h-full object-cover"
           controlsList="nodownload"
         />
       </div>
 
-      {/* Video Title Overlay - Only show if title exists */}
+      {/* Video Title Overlay */}
       {video.title && (
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-10 pointer-events-none">
           <p className="text-white font-bold text-sm line-clamp-2">
@@ -150,46 +149,48 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
 
   // --- 1. WIX VIDEO REELS DATA ---
+  // FIX: Appended '#t=0.001' to all URLs. This is a hack that forces the browser
+  // to fetch the 1st millisecond frame as the thumbnail immediately.
   const videoReels: VideoReel[] = [
     {
       id: 'video-1',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
     {
       id: 'video-2',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
     {
       id: 'video-3',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
     {
       id: 'video-4',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
     {
       id: 'video-5',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
     {
       id: 'video-6',
       title: '',
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4',
+      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
       thumbnailUrl: '',
       description: ''
     },
@@ -533,7 +534,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX + SINGLE PLAY) --- */}
+      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX + SINGLE PLAY + THUMBNAILS FIXED) --- */}
       <section id="videos" className="py-20 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         <div className="max-w-[120rem] mx-auto px-6">
