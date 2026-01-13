@@ -80,15 +80,53 @@ interface VideoReel {
   description?: string;
 }
 
+interface VideoContextType {
+  playingVideoId: string | null;
+  setPlayingVideoId: (id: string | null) => void;
+}
+
+const VideoContext = React.createContext<VideoContextType | undefined>(undefined);
+
+const useVideoContext = () => {
+  const context = React.useContext(VideoContext);
+  if (!context) {
+    throw new Error('useVideoContext must be used within VideoProvider');
+  }
+  return context;
+};
+
 const WixVideoReel = ({ video }: { video: VideoReel }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { playingVideoId, setPlayingVideoId } = useVideoContext();
 
   useEffect(() => {
     // Simulate video loading
     const timer = setTimeout(() => setIsLoaded(true), 800);
     return () => clearTimeout(timer);
   }, [video.id]);
+
+  const handlePlay = () => {
+    // Pause all other videos
+    setPlayingVideoId(video.id);
+  };
+
+  const handlePause = () => {
+    // Only clear if this video is the one playing
+    if (playingVideoId === video.id) {
+      setPlayingVideoId(null);
+    }
+  };
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (!videoElement) return;
+
+    // If another video is playing, pause this one
+    if (playingVideoId && playingVideoId !== video.id && !videoElement.paused) {
+      videoElement.pause();
+    }
+  }, [playingVideoId, video.id]);
 
   return (
     <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200" style={{ height: '500px', width: '280px' }}>
@@ -110,6 +148,8 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
           controls
           className="w-full h-full object-cover"
           controlsList="nodownload"
+          onPlay={handlePlay}
+          onPause={handlePause}
         />
       </div>
 
@@ -122,6 +162,17 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
         </div>
       )}
     </div>
+  );
+};
+
+// --- Video Provider Component ---
+const VideoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
+
+  return (
+    <VideoContext.Provider value={{ playingVideoId, setPlayingVideoId }}>
+      {children}
+    </VideoContext.Provider>
   );
 };
 
@@ -536,7 +587,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          {/* Marquee Animation Styles */}
+          {/* Marquee Animation Styles - Responsive speeds */}
           <style>{`
             @keyframes scroll {
               0% { transform: translateX(0); }
@@ -550,26 +601,34 @@ export default function HomePage() {
             .video-marquee-container:hover {
               animation-play-state: paused;
             }
+            /* Mobile: Faster animation (20s instead of 40s) */
+            @media (max-width: 768px) {
+              .video-marquee-container {
+                animation: scroll 20s linear infinite;
+              }
+            }
           `}</style>
 
           {/* Videos Marquee */}
-          <div className="relative w-full overflow-hidden">
-            <div className="flex gap-8 video-marquee-container"
-                 onMouseEnter={() => setIsPaused(true)}
-                 onMouseLeave={() => setIsPaused(false)}
-            >
-              {/* Loop 2 times for infinite scroll effect */}
-              {[...Array(2)].map((_, loopIndex) => (
-                <div key={loopIndex} className="flex gap-8 shrink-0">
-                  {videoReels.map((video) => (
-                    <div key={`${loopIndex}-${video.id}`} className="shrink-0">
-                      <WixVideoReel video={video} />
-                    </div>
-                  ))}
-                </div>
-              ))}
+          <VideoProvider>
+            <div className="relative w-full overflow-hidden">
+              <div className="flex gap-8 video-marquee-container"
+                   onMouseEnter={() => setIsPaused(true)}
+                   onMouseLeave={() => setIsPaused(false)}
+              >
+                {/* Loop 2 times for infinite scroll effect */}
+                {[...Array(2)].map((_, loopIndex) => (
+                  <div key={loopIndex} className="flex gap-8 shrink-0">
+                    {videoReels.map((video) => (
+                      <div key={`${loopIndex}-${video.id}`} className="shrink-0">
+                        <WixVideoReel video={video} />
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          </VideoProvider>
 
           {/* CTA Section */}
           <motion.div
