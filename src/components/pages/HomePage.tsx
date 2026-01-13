@@ -71,71 +71,56 @@ const AnimatedReveal: React.FC<AnimatedElementProps> = ({
   );
 };
 
-// --- HELPER: Instagram Embed with SPINNER ---
-const InstagramEmbed = ({ rawHtml }: { rawHtml: string }) => {
+// --- HELPER: Wix Video Reel Component ---
+interface VideoReel {
+  id: string;
+  title: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  description?: string;
+}
+
+const WixVideoReel = ({ video }: { video: VideoReel }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    // 1. Process Embeds
-    const processEmbeds = () => {
-      // @ts-ignore
-      if (window.instgrm) {
-        // @ts-ignore
-        window.instgrm.Embeds.process();
-      }
-    };
-
-    // 2. Load Script if missing
-    if (!document.getElementById('react-instagram-embed-script')) {
-      const script = document.createElement('script');
-      script.id = 'react-instagram-embed-script';
-      script.src = "//www.instagram.com/embed.js";
-      script.async = true;
-      script.onload = () => processEmbeds();
-      document.body.appendChild(script);
-    } else {
-      processEmbeds();
-    }
-
-    // 3. Detect when the iframe is actually injected to hide the spinner
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.addedNodes.length > 0) {
-          // Instagram has injected the iframe.
-          // Wait 1.5 seconds to let it render the image, then hide spinner.
-          setTimeout(() => setIsLoaded(true), 1500); 
-          observer.disconnect();
-        }
-      });
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current, { childList: true, subtree: true });
-    }
-
-    return () => observer.disconnect();
-  }, [rawHtml]);
+    // Simulate video loading
+    const timer = setTimeout(() => setIsLoaded(true), 800);
+    return () => clearTimeout(timer);
+  }, [video.id]);
 
   return (
-    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-white border border-gray-100" style={{ height: '400px', width: '326px' }}>
+    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200" style={{ height: '500px', width: '280px' }}>
       
-      {/* LOADING SPINNER OVERLAY (The "Shield") */}
+      {/* LOADING SPINNER OVERLAY */}
       <div 
-        className={`absolute inset-0 bg-white flex flex-col items-center justify-center transition-opacity duration-700 z-20 ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+        className={`absolute inset-0 bg-black/50 flex flex-col items-center justify-center transition-opacity duration-700 z-20 ${isLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
       >
-        <Loader2 className="w-10 h-10 text-primary animate-spin mb-3" />
-        <p className="text-gray-400 font-bold text-xs tracking-widest uppercase">Loading Reel...</p>
+        <Loader2 className="w-10 h-10 text-white animate-spin mb-3" />
+        <p className="text-gray-300 font-bold text-xs tracking-widest uppercase">Loading Video...</p>
       </div>
 
-      {/* The Actual Embed Container */}
-      <div 
-        ref={containerRef}
-        className={`instagram-embed-wrapper bg-white transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-        // CSS Crop Logic
-        style={{ height: '400px', width: '326px', overflow: 'hidden' }} 
-        dangerouslySetInnerHTML={{ __html: rawHtml }} 
-      />
+      {/* Video Container */}
+      <div className={`w-full h-full transition-opacity duration-700 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        <video
+          ref={videoRef}
+          src={video.videoUrl}
+          poster={video.thumbnailUrl}
+          controls
+          className="w-full h-full object-cover"
+          controlsList="nodownload"
+        />
+      </div>
+
+      {/* Video Title Overlay */}
+      {video.title && (
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-10">
+          <p className="text-white font-bold text-sm line-clamp-2">
+            {video.title}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
@@ -147,18 +132,45 @@ export default function HomePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // --- 1. YOUR INSTAGRAM DATA ---
-  const rcCarVideoHTML = `
-    <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DS4zVo3ky9v/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-    <div style="padding:16px;"> <a href="https://www.instagram.com/reel/DS4zVo3ky9v/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">View this post on Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DS4zVo3ky9v/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">A post shared by Sudha Novelties (@sudha_novelties_)</a></p></div></blockquote>
-  `;
-
-  const videoEmbeds = [
-    rcCarVideoHTML, // Video 1
-    rcCarVideoHTML, // Video 2 (duplicate)
-    rcCarVideoHTML, // Video 3 (duplicate)
-    rcCarVideoHTML, // Video 4 (duplicate)
-    rcCarVideoHTML, // Video 5 (duplicate)
+  // --- 1. WIX VIDEO REELS DATA ---
+  // Replace these URLs with your actual Wix video links
+  // See instructions below on how to get Wix video URLs
+  const videoReels: VideoReel[] = [
+    {
+      id: 'video-1',
+      title: 'Toy Unboxing & Review',
+      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-1',
+      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-1-thumb',
+      description: 'Check out our latest toy collection'
+    },
+    {
+      id: 'video-2',
+      title: 'Customer Testimonials',
+      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-2',
+      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-2-thumb',
+      description: 'Happy customers sharing their experiences'
+    },
+    {
+      id: 'video-3',
+      title: 'Store Tour',
+      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-3',
+      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-3-thumb',
+      description: 'Explore our toy store'
+    },
+    {
+      id: 'video-4',
+      title: 'Educational Toys Guide',
+      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-4',
+      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-4-thumb',
+      description: 'Learn about educational toys'
+    },
+    {
+      id: 'video-5',
+      title: 'New Arrivals Showcase',
+      videoUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.mp4?id=video-5',
+      thumbnailUrl: 'https://static.wixstatic.com/media/12d367_71ebdd7141d041e4be3d91d80d4578dd~mv2.jpg?id=video-5-thumb',
+      description: 'Latest toys in stock'
+    },
   ];
 
   useEffect(() => {
@@ -499,69 +511,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (OFFICIAL INSTAGRAM EMBEDS) --- */}
-      <section id="videos" className="py-12 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+      {/* --- Our Videos Section (WIX VIDEO REELS) --- */}
+      <section id="videos" className="py-20 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
-        {/* Marquee Animation Styles */}
-        <style>{`
-          @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .marquee-container {
-            width: fit-content;
-            animation: scroll 25s linear infinite; /* Faster scroll */
-            will-change: transform; /* Optimized rendering */
-          }
-          .marquee-container:hover {
-            animation-play-state: paused;
-          }
-          /* Ensure iframe wrappers don't collapse */
-          .instagram-embed-wrapper {
-             width: 326px !important;
-             flex-shrink: 0;
-          }
-          /* UPDATED: CSS to CROP the bottom of the Instagram card */
-          .instagram-embed-wrapper iframe {
-              height: 120% !important; /* Make iframe taller than wrapper */
-              margin-bottom: -20% !important; /* Pull bottom up */
-          }
-        `}</style>
+        <div className="max-w-[120rem] mx-auto px-6">
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
+              Watch Our Videos
+            </h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
+              Explore our toy collection through engaging video content. See products in action and hear from happy customers!
+            </p>
+          </motion.div>
 
-        <div className="max-w-[120rem] mx-auto">
-          
+          {/* Marquee Animation Styles */}
+          <style>{`
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .video-marquee-container {
+              width: fit-content;
+              animation: scroll 40s linear infinite;
+              will-change: transform;
+            }
+            .video-marquee-container:hover {
+              animation-play-state: paused;
+            }
+          `}</style>
+
           {/* Videos Marquee */}
-          <div className="relative w-full">
-            <div className="flex gap-6 marquee-container"
+          <div className="relative w-full overflow-hidden">
+            <div className="flex gap-8 video-marquee-container"
                  onMouseEnter={() => setIsPaused(true)}
                  onMouseLeave={() => setIsPaused(false)}
             >
-                {/* Loop 2 times for infinite scroll effect */}
-                {[...Array(2)].map((_, loopIndex) => (
-                  <div key={loopIndex} className="flex gap-6 shrink-0">
-                    
-                    {videoEmbeds.map((htmlString, index) => (
-                       <div key={`${loopIndex}-${index}`} className="shrink-0">
-                          {/* We render the official Instagram Helper Component */}
-                          <InstagramEmbed rawHtml={htmlString} />
-                       </div>
-                    ))}
-                    
-                  </div>
-                ))}
+              {/* Loop 2 times for infinite scroll effect */}
+              {[...Array(2)].map((_, loopIndex) => (
+                <div key={loopIndex} className="flex gap-8 shrink-0">
+                  {videoReels.map((video) => (
+                    <div key={`${loopIndex}-${video.id}`} className="shrink-0">
+                      <WixVideoReel video={video} />
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="text-center mt-12 px-6">
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-center mt-16"
+          >
+            <p className="font-paragraph text-base text-gray-600 mb-6">
+              Have a video you'd like to share? We'd love to feature customer testimonials and toy reviews!
+            </p>
             <a href="https://wa.me/+919025398147"
-              className="inline-flex items-center gap-3 bg-green-500 text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center gap-3 bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
               <MessageCircle size={24} />
-              Share Your Feedback
+              Share Your Video
             </a>
-          </div>
+          </motion.div>
         </div>
-    </section>
+      </section>
 
       <Footer />
     </div>
