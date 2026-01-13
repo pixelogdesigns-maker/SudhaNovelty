@@ -1,4 +1,4 @@
-// HPI 2.7-V (Mobile Thumbnails Fixed + Single Play + Responsive)
+// HPI 2.8-V (Mobile Duplicates Removed + Thumbnails Fixed)
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -102,7 +102,6 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
   };
 
   return (
-    // Changed bg-black to bg-gray-200 to avoid "black hole" look while loading
     <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-gray-200 border border-gray-200 flex-shrink-0" style={{ height: '500px', width: '280px' }}>
       
       {/* LOADING SPINNER OVERLAY */}
@@ -118,11 +117,10 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
         <video
           ref={videoRef}
           src={video.videoUrl} 
-          // FIX: Added preload="metadata" to force mobile browsers to fetch the first frame
-          preload="metadata"
+          preload="metadata" // Helper for mobile thumbnails
           poster={video.thumbnailUrl}
           controls
-          playsInline 
+          playsInline // CRITICAL for mobile scrolling
           onPlay={handlePlay} 
           className="w-full h-full object-cover"
           controlsList="nodownload"
@@ -149,8 +147,7 @@ export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false);
 
   // --- 1. WIX VIDEO REELS DATA ---
-  // FIX: Appended '#t=0.001' to all URLs. This is a hack that forces the browser
-  // to fetch the 1st millisecond frame as the thumbnail immediately.
+  // EXACTLY 5 VIDEOS as requested
   const videoReels: VideoReel[] = [
     {
       id: 'video-1',
@@ -527,11 +524,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX + SINGLE PLAY + THUMBNAILS FIXED) --- */}
+      {/* --- Our Videos Section (FINAL FIX) --- */}
       <section id="videos" className="py-20 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         <div className="max-w-[120rem] mx-auto px-6">
-          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -547,42 +543,38 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          {/* INTERNAL CSS FOR RESPONSIVE BEHAVIOR */}
           <style>{`
-            /* Default: Mobile "Netflix Style" Swipe List */
+            /* Mobile Swipe */
             .video-container-responsive {
                 display: flex;
-                gap: 1.5rem; /* gap-6 */
+                gap: 1.5rem;
                 overflow-x: auto;
                 scroll-snap-type: x mandatory;
-                -webkit-overflow-scrolling: touch; /* smooth scroll iOS */
-                scrollbar-width: none; /* Hide scrollbar Firefox */
-                padding-bottom: 1rem; /* Space for shadow */
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 1rem;
                 width: 100%;
             }
             .video-container-responsive::-webkit-scrollbar {
-                display: none; /* Hide scrollbar Chrome/Safari */
+                display: none;
             }
-            /* Helper to snap items */
             .video-item-responsive {
                 flex-shrink: 0;
                 scroll-snap-align: center;
             }
 
-            /* Desktop (Large Screens): Infinite Marquee Animation */
+            /* Desktop Marquee */
             @media (min-width: 1024px) {
                 .video-container-responsive {
                     width: fit-content;
                     animation: scroll 40s linear infinite;
                     overflow-x: visible; 
                     scroll-snap-type: none;
-                    display: flex;
-                    gap: 2rem; /* gap-8 */
+                    gap: 2rem;
                 }
                 .video-container-responsive:hover {
                     animation-play-state: paused;
                 }
-                /* Wrapper logic for marquee */
                 .desktop-marquee-wrapper {
                     overflow: hidden;
                     width: 100%;
@@ -596,27 +588,28 @@ export default function HomePage() {
             }
           `}</style>
 
-          {/* Videos Container */}
           <div className="desktop-marquee-wrapper">
             <div 
                 className="video-container-responsive"
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
             >
-              {/* Loop 2 times for infinite scroll effect (Useful for Desktop Marquee, harmless for Mobile Swipe) */}
-              {[...Array(2)].map((_, loopIndex) => (
-                <React.Fragment key={loopIndex}>
-                  {videoReels.map((video) => (
-                    <div key={`${loopIndex}-${video.id}`} className="video-item-responsive">
-                      <WixVideoReel video={video} />
-                    </div>
-                  ))}
-                </React.Fragment>
+              {/* ORIGINAL SET (Visible on Mobile & Desktop) */}
+              {videoReels.map((video) => (
+                <div key={`original-${video.id}`} className="video-item-responsive">
+                  <WixVideoReel video={video} />
+                </div>
+              ))}
+
+              {/* DUPLICATE SET (Hidden on Mobile, Visible on Desktop for Infinite Scroll) */}
+              {videoReels.map((video) => (
+                <div key={`duplicate-${video.id}`} className="video-item-responsive hidden lg:block">
+                  <WixVideoReel video={video} />
+                </div>
               ))}
             </div>
           </div>
 
-          {/* CTA Section */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
