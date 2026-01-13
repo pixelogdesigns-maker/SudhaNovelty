@@ -1,4 +1,4 @@
-// HPI 2.5-V (Mobile Swipe List + Desktop Marquee)
+// HPI 2.6-V (Single Playback Enforced)
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -90,6 +90,21 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
     return () => clearTimeout(timer);
   }, [video.id]);
 
+  // --- NEW: ONE-AT-A-TIME PLAYBACK LOGIC ---
+  const handlePlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+    const currentVideo = e.currentTarget;
+    
+    // Find all other videos in the video section
+    const allVideos = document.querySelectorAll('section#videos video');
+    
+    allVideos.forEach((vid) => {
+        // If it's not the video that was just clicked, pause it
+        if (vid !== currentVideo) {
+            (vid as HTMLVideoElement).pause();
+        }
+    });
+  };
+
   return (
     <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200 flex-shrink-0" style={{ height: '500px', width: '280px' }}>
       
@@ -109,7 +124,7 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
           poster={video.thumbnailUrl}
           controls
           playsInline // CRITICAL for mobile scrolling
-          muted={false}
+          onPlay={handlePlay} // ATTACH THE NEW HANDLER HERE
           className="w-full h-full object-cover"
           controlsList="nodownload"
         />
@@ -518,7 +533,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX) --- */}
+      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX + SINGLE PLAY) --- */}
       <section id="videos" className="py-20 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         <div className="max-w-[120rem] mx-auto px-6">
