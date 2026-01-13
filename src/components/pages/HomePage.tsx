@@ -1,4 +1,4 @@
-// HPI 2.4-V (Spinner Loading State)
+// HPI 2.5-V (Mobile Swipe List + Desktop Marquee)
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
@@ -80,25 +80,9 @@ interface VideoReel {
   description?: string;
 }
 
-interface VideoContextType {
-  playingVideoId: string | null;
-  setPlayingVideoId: (id: string | null) => void;
-}
-
-const VideoContext = React.createContext<VideoContextType | undefined>(undefined);
-
-const useVideoContext = () => {
-  const context = React.useContext(VideoContext);
-  if (!context) {
-    throw new Error('useVideoContext must be used within VideoProvider');
-  }
-  return context;
-};
-
 const WixVideoReel = ({ video }: { video: VideoReel }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { playingVideoId, setPlayingVideoId } = useVideoContext();
 
   useEffect(() => {
     // Simulate video loading
@@ -106,30 +90,8 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
     return () => clearTimeout(timer);
   }, [video.id]);
 
-  const handlePlay = () => {
-    // Pause all other videos
-    setPlayingVideoId(video.id);
-  };
-
-  const handlePause = () => {
-    // Only clear if this video is the one playing
-    if (playingVideoId === video.id) {
-      setPlayingVideoId(null);
-    }
-  };
-
-  useEffect(() => {
-    const videoElement = videoRef.current;
-    if (!videoElement) return;
-
-    // If another video is playing, pause this one
-    if (playingVideoId && playingVideoId !== video.id && !videoElement.paused) {
-      videoElement.pause();
-    }
-  }, [playingVideoId, video.id]);
-
   return (
-    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200" style={{ height: '500px', width: '280px' }}>
+    <div className="relative mx-auto rounded-xl overflow-hidden shadow-md bg-black border border-gray-200 flex-shrink-0" style={{ height: '500px', width: '280px' }}>
       
       {/* LOADING SPINNER OVERLAY */}
       <div 
@@ -146,33 +108,22 @@ const WixVideoReel = ({ video }: { video: VideoReel }) => {
           src={video.videoUrl}
           poster={video.thumbnailUrl}
           controls
+          playsInline // CRITICAL for mobile scrolling
+          muted={false}
           className="w-full h-full object-cover"
           controlsList="nodownload"
-          onPlay={handlePlay}
-          onPause={handlePause}
         />
       </div>
 
       {/* Video Title Overlay - Only show if title exists */}
       {video.title && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-10">
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 z-10 pointer-events-none">
           <p className="text-white font-bold text-sm line-clamp-2">
             {video.title}
           </p>
         </div>
       )}
     </div>
-  );
-};
-
-// --- Video Provider Component ---
-const VideoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
-
-  return (
-    <VideoContext.Provider value={{ playingVideoId, setPlayingVideoId }}>
-      {children}
-    </VideoContext.Provider>
   );
 };
 
@@ -333,8 +284,8 @@ export default function HomePage() {
                 <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] w-full max-w-2xl mx-auto">
                   <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700">
                     <Image
-                      src="https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png"
-                      alt="Children enjoying electric ride-on cars and toys"
+                      src="https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960"
+                      alt="Happy child playing with educational toys"
                       width={800}
                       className="w-full h-full object-cover"
                     />
@@ -567,7 +518,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- Our Videos Section (WIX VIDEO REELS) --- */}
+      {/* --- Our Videos Section (WIX VIDEO REELS - RESPONSIVE FIX) --- */}
       <section id="videos" className="py-20 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         
         <div className="max-w-[120rem] mx-auto px-6">
@@ -587,48 +538,74 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          {/* Marquee Animation Styles - Responsive speeds */}
+          {/* INTERNAL CSS FOR RESPONSIVE BEHAVIOR */}
           <style>{`
+            /* Default: Mobile "Netflix Style" Swipe List */
+            .video-container-responsive {
+                display: flex;
+                gap: 1.5rem; /* gap-6 */
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch; /* smooth scroll iOS */
+                scrollbar-width: none; /* Hide scrollbar Firefox */
+                padding-bottom: 1rem; /* Space for shadow */
+                width: 100%;
+            }
+            .video-container-responsive::-webkit-scrollbar {
+                display: none; /* Hide scrollbar Chrome/Safari */
+            }
+            /* Helper to snap items */
+            .video-item-responsive {
+                flex-shrink: 0;
+                scroll-snap-align: center;
+            }
+
+            /* Desktop (Large Screens): Infinite Marquee Animation */
+            @media (min-width: 1024px) {
+                .video-container-responsive {
+                    width: fit-content;
+                    animation: scroll 40s linear infinite;
+                    overflow-x: visible; 
+                    scroll-snap-type: none;
+                    display: flex;
+                    gap: 2rem; /* gap-8 */
+                }
+                .video-container-responsive:hover {
+                    animation-play-state: paused;
+                }
+                /* Wrapper logic for marquee */
+                .desktop-marquee-wrapper {
+                    overflow: hidden;
+                    width: 100%;
+                    position: relative;
+                }
+            }
+
             @keyframes scroll {
               0% { transform: translateX(0); }
               100% { transform: translateX(-50%); }
             }
-            .video-marquee-container {
-              width: fit-content;
-              animation: scroll 40s linear infinite;
-              will-change: transform;
-            }
-            .video-marquee-container:hover {
-              animation-play-state: paused;
-            }
-            /* Mobile: Faster animation (20s instead of 40s) */
-            @media (max-width: 768px) {
-              .video-marquee-container {
-                animation: scroll 20s linear infinite;
-              }
-            }
           `}</style>
 
-          {/* Videos Marquee */}
-          <VideoProvider>
-            <div className="relative w-full overflow-hidden">
-              <div className="flex gap-8 video-marquee-container"
-                   onMouseEnter={() => setIsPaused(true)}
-                   onMouseLeave={() => setIsPaused(false)}
-              >
-                {/* Loop 2 times for infinite scroll effect */}
-                {[...Array(2)].map((_, loopIndex) => (
-                  <div key={loopIndex} className="flex gap-8 shrink-0">
-                    {videoReels.map((video) => (
-                      <div key={`${loopIndex}-${video.id}`} className="shrink-0">
-                        <WixVideoReel video={video} />
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+          {/* Videos Container */}
+          <div className="desktop-marquee-wrapper">
+            <div 
+                className="video-container-responsive"
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+            >
+              {/* Loop 2 times for infinite scroll effect (Useful for Desktop Marquee, harmless for Mobile Swipe) */}
+              {[...Array(2)].map((_, loopIndex) => (
+                <React.Fragment key={loopIndex}>
+                  {videoReels.map((video) => (
+                    <div key={`${loopIndex}-${video.id}`} className="video-item-responsive">
+                      <WixVideoReel video={video} />
+                    </div>
+                  ))}
+                </React.Fragment>
+              ))}
             </div>
-          </VideoProvider>
+          </div>
 
           {/* CTA Section */}
           <motion.div
@@ -654,4 +631,4 @@ export default function HomePage() {
       <Footer />
     </div>
   );
-} 
+}
