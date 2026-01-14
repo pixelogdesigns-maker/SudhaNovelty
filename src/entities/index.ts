@@ -59,7 +59,7 @@ export interface ToyCategories {
   categoryName?: string;
   /** @wixFieldType text */
   description?: string;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   categoryImage?: string;
   /** @wixFieldType boolean */
   isActive?: boolean;
@@ -84,9 +84,9 @@ export interface Toys {
   _updatedDate?: Date;
   /** @wixFieldType text */
   name?: string;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   productImages?: string;
-  /** @wixFieldType image */
+  /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   image?: string;
   /** @wixFieldType text */
   shortDescription?: string;

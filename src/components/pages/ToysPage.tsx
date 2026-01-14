@@ -322,7 +322,7 @@ export default function ToysPage() {
                   className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                 >
                  {/* Product Image */}
-<div className="aspect-square overflow-hidden bg-gray-50 relative group">
+<Link to={`/toys/${toy._id}`} className="aspect-square overflow-hidden bg-gray-50 relative group block">
   {/* LEAD DEV LOGIC: Check Media Gallery First, then fallback to single images */}
   {(() => {
     let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
@@ -350,7 +350,7 @@ export default function ToysPage() {
       />
     );
   })()}
-</div>
+</Link>
 
                   {/* Product Info - Compact Layout */}
                   <div className="p-4 flex flex-col flex-grow">

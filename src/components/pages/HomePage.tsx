@@ -254,7 +254,7 @@ export default function HomePage() {
 
               <AnimatedReveal delay={600}> 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"> 
-                  <a href="https://wa.me/+919025398147" className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3">
+                  <a href="https://wa.me/919944234077" className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3">
                     <span className="relative z-10 flex items-center gap-2">
                       <MessageCircle className="w-6 h-6" />
                       Chat to Order
@@ -431,7 +431,7 @@ export default function HomePage() {
                   <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                     We don't just sell toys; we curate experiences that help your children grow, learn, and create memories that last a lifetime.
                   </p>
-                  <a href="https://wa.me/+919025398147"
+                  <a href="https://wa.me/919944234077"
                     className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors text-lg group"
                   >
                     Ask us anything
@@ -620,7 +620,7 @@ export default function HomePage() {
             <p className="font-paragraph text-base text-gray-600 mb-6">
               Have a video you'd like to share? We'd love to feature customer testimonials and toy reviews!
             </p>
-            <a href="https://wa.me/+919025398147"
+            <a href="https://wa.me/919944234077"
               className="inline-flex items-center gap-3 bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
             >
               <MessageCircle size={24} />

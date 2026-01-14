@@ -8,7 +8,7 @@
  * WhatsApp wa.me API requires format: https://wa.me/919025398147 (without +)
  */
 export const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
-  if (!phoneNumber) return '919025398147'; // Default fallback
+  if (!phoneNumber) return '919944234077'; // Default fallback
   
   return phoneNumber
     .replace(/^\+/, '') // Remove leading +
