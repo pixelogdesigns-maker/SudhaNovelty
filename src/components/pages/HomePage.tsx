@@ -1,61 +1,32 @@
-// [Instructions for Anti Gravity: Replace the WixVideoReel component and the video section with this code]
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { Button } from '@/components/ui/button';
+import { Image } from '@/components/ui/image';
+import { Link } from 'react-router-dom';
 
-// 1. The Simplified Video Component
-const MarqueeVideo = ({ videoUrl, posterUrl }: { videoUrl: string; posterUrl?: string }) => (
-  <div className="relative h-[350px] md:h-[450px] aspect-[9/16] rounded-2xl overflow-hidden shadow-lg border border-gray-100 bg-gray-100 flex-shrink-0">
-    <video
-      src={videoUrl}
-      poster={posterUrl}
-      autoPlay
-      loop
-      muted
-      playsInline // Vital for mobile autoplay
-      disablePictureInPicture
-      className="w-full h-full object-cover pointer-events-none" // pointer-events-none ensures no interaction
-    />
-  </div>
-);
-
-// 2. The Updated Section Implementation
-// (Inside your HomePage return)
-
-<section className="py-16 bg-white overflow-hidden relative">
-  {/* Header Text */}
-  <div className="text-center mb-10 px-4">
-     <h2 className="font-heading text-3xl md:text-5xl text-primary mb-2">
-       See It In Action
-     </h2>
-  </div>
-
-  {/* Marquee Container */}
-  <div className="relative w-full">
-    
-    {/* Fade Gradients (Optional: Adds polish) */}
-    <div className="absolute top-0 left-0 h-full w-12 md:w-32 bg-gradient-to-r from-white to-transparent z-10" />
-    <div className="absolute top-0 right-0 h-full w-12 md:w-32 bg-gradient-to-l from-white to-transparent z-10" />
-
-    {/* Moving Track */}
-    <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-      {/* We map the array TWICE to create the seamless loop effect */}
-      {[...videoReels, ...videoReels].map((video, index) => (
-        <div key={`${video.id}-${index}`} className="mx-3 md:mx-4">
-          <MarqueeVideo 
-            videoUrl={video.videoUrl} 
-            posterUrl={video.thumbnailUrl} 
-          />
+export default function HomePage() {
+  return (
+    <div className="min-h-screen bg-white">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="relative w-full max-w-[120rem] mx-auto min-h-[600px] flex items-center justify-center px-4 py-20">
+        <div className="text-center max-w-4xl">
+          <h1 className="font-heading text-5xl md:text-7xl text-primary mb-6">
+            Welcome to Our Toy Store
+          </h1>
+          <p className="font-paragraph text-lg md:text-xl text-foreground mb-8">
+            Discover amazing toys for children of all ages
+          </p>
+          <Link to="/toys">
+            <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+              Shop Now
+            </Button>
+          </Link>
         </div>
-      ))}
-    </div>
-  </div>
+      </section>
 
-  {/* Add this to your global CSS or Tailwind config if not present */}
-  <style>{`
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-    .animate-marquee {
-      animation: marquee 40s linear infinite;
-    }
-  `}</style>
-</section>
+      <Footer />
+    </div>
+  );
+}
