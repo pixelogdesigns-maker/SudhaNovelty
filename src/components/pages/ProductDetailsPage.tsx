@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -17,6 +17,8 @@ export default function ProductDetailsPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,13 +42,65 @@ export default function ProductDetailsPage() {
     fetchData();
   }, [toyId]);
 
+  // Get all images - prioritize media gallery, then fall back to single images
+  let images: string[] = [];
+  
+  if (toy) {
+    // Check productImages1 (MEDIA_GALLERY) first
+    if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
+      images = toy.productImages1.map((item: any) => item.src || item.url || item);
+    }
+    // Fall back to productImages (single image field)
+    else if (toy.productImages && typeof toy.productImages === 'string') {
+      images = [toy.productImages];
+    }
+    // Fall back to image (single image field)
+    else if (toy.image && typeof toy.image === 'string') {
+      images = [toy.image];
+    }
+  }
+
   const handleWhatsAppClick = () => {
     if (!toy) return;
 
-    const message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\n--------------------------\n\nPlease provide more details.`;
+    const message = `Hello! I am interested in this product:\\n--------------------------\\nName: ${toy.name}\\nPrice: Rs. ${toy.price || 'N/A'}\\nCategory: ${toy.category || 'General'}\\n--------------------------\\n\\nPlease provide more details.`;
 
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
+  };
+
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setSelectedImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleNextImage();
+    }
+    if (isRightSwipe) {
+      handlePrevImage();
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   if (isLoading) {
@@ -85,22 +139,6 @@ export default function ProductDetailsPage() {
     );
   }
 
-  // Get all images - prioritize media gallery, then fall back to single images
-  let images: string[] = [];
-  
-  // Check productImages1 (MEDIA_GALLERY) first
-  if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
-    images = toy.productImages1.map((item: any) => item.src || item.url || item);
-  }
-  // Fall back to productImages (single image field)
-  else if (toy.productImages && typeof toy.productImages === 'string') {
-    images = [toy.productImages];
-  }
-  // Fall back to image (single image field)
-  else if (toy.image && typeof toy.image === 'string') {
-    images = [toy.image];
-  }
-
   const mainImage = images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
 
   return (
@@ -132,14 +170,60 @@ export default function ProductDetailsPage() {
               transition={{ duration: 0.6 }}
             >
               <div className="space-y-4">
-                {/* Main Image */}
-                <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
-                  <Image
-                    src={mainImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png'}
-                    alt={toy.name || 'Product'}
-                    width={600}
-                    className="w-full h-full object-cover"
-                  />
+                {/* Main Image with Swipe and Navigation */}
+                <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
+                  {/* Image with swipe support */}
+                  <div
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    className="w-full h-full"
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={selectedImageIndex}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="w-full h-full"
+                      >
+                        <Image
+                          src={mainImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png'}
+                          alt={toy.name || 'Product'}
+                          width={600}
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Desktop Navigation Arrows */}
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        onClick={handlePrevImage}
+                        className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"
+                        aria-label="Previous image"
+                      >
+                        <ChevronLeft size={24} className="text-foreground" />
+                      </button>
+                      <button
+                        onClick={handleNextImage}
+                        className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"
+                        aria-label="Next image"
+                      >
+                        <ChevronRight size={24} className="text-foreground" />
+                      </button>
+                    </>
+                  )}
+
+                  {/* Image Counter */}
+                  {images.length > 1 && (
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-paragraph">
+                      {selectedImageIndex + 1} / {images.length}
+                    </div>
+                  )}
                 </div>
 
                 {/* Thumbnail Gallery */}
