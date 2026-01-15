@@ -245,7 +245,7 @@ export default function HomePage() {
                 <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] w-full max-w-2xl mx-auto">
                   <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700">
                     <Image
-                      src="https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960"
+                      src="https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960"
                       alt="Happy child playing with educational toys"
                       width={800}
                       className="w-full h-full object-cover"
