@@ -257,7 +257,7 @@ export default function HomePage() {
                   <motion.div 
                     animate={{ y: [0, -20, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute -top-8 -right-8 bg-white p-4 rounded-2xl shadow-xl max-w-[180px] hidden md:block"
+                    className="absolute top-4 -right-8 bg-white p-4 rounded-2xl shadow-xl max-w-[180px] hidden md:block z-20"
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <div className="flex -space-x-2">
@@ -277,7 +277,7 @@ export default function HomePage() {
                   <motion.div 
                     animate={{ y: [0, 20, 0] }}
                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute -bottom-12 -left-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 hidden md:flex"
+                    className="absolute bottom-4 -left-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 hidden md:flex z-20"
                   >
                     <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
                       <Store size={24} />
