@@ -451,7 +451,7 @@ export default function HomePage() {
                   </div>
 
                   <Link 
-                    to="/visit-store"
+                    to="/visit"
                     className="inline-flex items-center justify-center px-8 py-4 bg-white text-foreground font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 w-fit"
                   >
                     Get Directions
