@@ -84,6 +84,8 @@ export interface Toys {
   _updatedDate?: Date;
   /** @wixFieldType text */
   name?: string;
+  /** @wixFieldType boolean */
+  isBestSeller?: boolean;
   /** @wixFieldType text */
   color?: string;
   /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */

@@ -19,7 +19,7 @@ export default function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md border-b-2 border-primary">
+    <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
       <div className="max-w-[160rem] mx-auto px-6">
         {/* Container Height: h-20 (80px) mobile, h-24 (96px) desktop. 
             This is the standard size for e-commerce headers. */}
