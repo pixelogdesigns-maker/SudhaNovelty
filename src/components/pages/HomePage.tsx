@@ -1,4 +1,4 @@
-// HPI 3.2-V (Aegle Layout + Shop By Category Update)
+// HPI 3.3-V (Fixed Hero Carousel Aspect Ratio)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -88,7 +88,7 @@ const CATEGORY_COLORS = [
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Image Only)
+// 1. Hero Carousel (FIXED: Responsive Aspect Ratio + Object Contain)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -108,15 +108,17 @@ const HeroCarousel = () => {
   };
 
   return (
-    <section className="relative w-full h-[500px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gray-900">
+    // CHANGED: Use aspect ratio instead of fixed height so it scales perfectly with width.
+    // bg-[#FDF6F0] adds a nice cream background if the image doesn't fill the space perfectly.
+    <section className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:max-h-[800px] overflow-hidden bg-[#FDF6F0]">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="absolute inset-0 w-full h-full"
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0 w-full h-full flex items-center justify-center"
         >
           <Link to="/toys" className="block w-full h-full cursor-pointer">
             <Image 
@@ -124,27 +126,27 @@ const HeroCarousel = () => {
               alt={HERO_SLIDES[current].title}
               width={1920} 
               height={1080}
-              className="w-full h-full object-cover"
+              // CHANGED: object-contain ensures the entire image is visible without cropping
+              className="w-full h-full object-contain"
             />
           </Link>
-          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={goToPrev} className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">
-        <ChevronLeft size={28} />
+      <button onClick={goToPrev} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all">
+        <ChevronLeft size={24} />
       </button>
 
-      <button onClick={goToNext} className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">
-        <ChevronRight size={28} />
+      <button onClick={goToNext} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all">
+        <ChevronRight size={24} />
       </button>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
         {HERO_SLIDES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`h-3 rounded-full transition-all duration-500 shadow-sm backdrop-blur-md ${idx === current ? 'bg-white w-10' : 'bg-white/40 w-3 hover:bg-white/70'}`}
+            className={`h-2 rounded-full transition-all duration-500 shadow-sm ${idx === current ? 'bg-primary w-8' : 'bg-gray-300 w-2 hover:bg-gray-400'}`}
           />
         ))}
       </div>
@@ -242,21 +244,21 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
                      {(() => {
                       let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
-                      // Priority 1: Product Gallery (productGallery - media gallery field)
+                      // Priority 1: Product Gallery
                       if (product.productGallery && Array.isArray(product.productGallery) && product.productGallery.length > 0) {
                         const firstImage = product.productGallery[0];
                         imageUrl = firstImage.src || firstImage.url || firstImage;
                       }
-                      // Priority 2: Media Gallery (productImages1)
+                      // Priority 2: Media Gallery
                       else if (product.productImages1 && Array.isArray(product.productImages1) && product.productImages1.length > 0) {
                         const firstImage = product.productImages1[0];
                         imageUrl = firstImage.src || firstImage.url || firstImage;
                       }
-                      // Priority 3: Single image field (productImages)
+                      // Priority 3: Single image field
                       else if (product.productImages && typeof product.productImages === 'string') {
                         imageUrl = product.productImages;
                       }
-                      // Priority 4: Single image field (image)
+                      // Priority 4: Legacy image field
                       else if (product.image && typeof product.image === 'string') {
                         imageUrl = product.image;
                       }
@@ -280,14 +282,13 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 4. NEW: Shop By Category (Dynamically fetched from CMS)
+// 4. Shop By Category (Dynamically from CMS)
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   if (categories.length === 0) return null;
 
   return (
     <section className="py-24 bg-[#FFFDF9]">
       <div className="max-w-[120rem] mx-auto px-6">
-        {/* Section Header */}
         <div className="flex justify-between items-end mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground">
             Shop By Category
@@ -297,7 +298,6 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
           </Link>
         </div>
 
-        {/* Categories Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
           {categories.map((cat, index) => (
             <Link 
@@ -305,14 +305,12 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
               to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`}
               className="group flex flex-col items-center gap-5"
             >
-              {/* Image Circle Container */}
               <div className={`
                 relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
                 flex items-center justify-center 
                 shadow-sm transition-all duration-500 
                 group-hover:scale-105 group-hover:shadow-xl
               `}>
-                {/* Category Image */}
                 {cat.categoryImage ? (
                   <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
                     <Image 
@@ -327,12 +325,8 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
                     {cat.categoryName?.charAt(0) || '?'}
                   </div>
                 )}
-                
-                {/* Gloss/Shine effect on circle */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
-
-              {/* Text Label */}
               <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
                 {cat.categoryName}
               </h3>
@@ -383,7 +377,6 @@ export default function HomePage() {
 
       const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
       if (categoryItems) {
-        // Filter active categories and sort by displayOrder
         const activeCategories = categoryItems
           .filter(cat => cat.isActive)
           .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
@@ -407,7 +400,7 @@ export default function HomePage() {
       {/* 3. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 4. Shop By Category (Dynamically from CMS) */}
+      {/* 4. Shop By Category */}
       <ShopByCategory categories={categories} />
 
       {/* 5. Video Marquee Section */}
