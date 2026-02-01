@@ -1,10 +1,10 @@
-// HPI 3.0-V (Aegle-Inspired Layout Update)
+// HPI 3.1-V (Aegle Layout + Restored Video Marquee)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import useEmblaCarousel from 'embla-carousel-react'; // Ask Wix AI to install this
+import useEmblaCarousel from 'embla-carousel-react';
 import { BaseCrudService } from '@/integrations';
-import { ToyCategories, StoreInformation } from '@/entities'; // Assuming 'Products' entity exists, otherwise we mock
+import { ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { 
   MessageCircle, Star, ArrowRight, ShoppingBag, 
@@ -24,29 +24,61 @@ interface Product {
   isBestSeller?: boolean;
 }
 
-// --- Mock Data (Replace with real Fetch later) ---
+interface VideoReel {
+  id: string;
+  title: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  description?: string;
+}
+
+// --- Data Configuration ---
+
 const HERO_SLIDES = [
   {
     id: 1,
     title: "Playtime Reimagined",
-    subtitle: "Discover the magic of sustainable, educational toys.",
     image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960",
-    bg: "bg-[#FDF6F0]" // Cream
   },
   {
     id: 2,
     title: "Little Explorers",
-    subtitle: "Gear up for adventure with our outdoor collection.",
     image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768",
-    bg: "bg-[#F0F9FF]" // Light Blue
   },
   {
     id: 3,
     title: "Cozy Companions",
-    subtitle: "Soft plushies waiting for their forever home.",
     image: "https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384",
-    bg: "bg-[#FFF0F5]" // Pink
   }
+];
+
+// Restored Original Video Links
+const VIDEO_REELS: VideoReel[] = [
+  {
+    id: 'video-1',
+    title: '',
+    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
+  },
+  {
+    id: 'video-2',
+    title: '',
+    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001',
+  },
+  {
+    id: 'video-3',
+    title: '',
+    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001',
+  },
+  {
+    id: 'video-4',
+    title: '',
+    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001',
+  },
+  {
+    id: 'video-5',
+    title: '',
+    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001',
+  },
 ];
 
 const AGE_GROUPS = [
@@ -67,7 +99,7 @@ const MOCK_BEST_SELLERS: Product[] = [
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel Component with Text
+// 1. Hero Carousel (Image Only Version)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -79,131 +111,35 @@ const HeroCarousel = () => {
   }, []);
 
   return (
-    <section className="relative w-full h-[600px] lg:h-[750px] overflow-hidden bg-gray-50">
-      <AnimatePresence mode='wait'>
-        <motion.div
-          key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7 }}
-          className={`absolute inset-0 w-full h-full ${HERO_SLIDES[current].bg} flex items-center justify-center`}
-        >
-          <div className="max-w-[120rem] w-full mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center h-full pt-20 lg:pt-0">
-            {/* Text Content */}
-            <div className="z-10 text-center lg:text-left order-2 lg:order-1">
-              <motion.div
-                initial={{ y: 30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                <div className="inline-block px-4 py-2 bg-white rounded-full text-xs font-bold tracking-widest uppercase text-primary mb-4 shadow-sm">
-                  New Collection
-                </div>
-                <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl text-foreground mb-6 leading-[1.1]">
-                  {HERO_SLIDES[current].title}
-                </h1>
-                <p className="font-paragraph text-lg text-gray-600 mb-8 max-w-lg mx-auto lg:mx-0">
-                  {HERO_SLIDES[current].subtitle}
-                </p>
-                <Link to="/toys" className="inline-flex items-center justify-center px-10 py-5 bg-foreground text-white rounded-2xl font-bold text-lg hover:bg-primary transition-colors duration-300 shadow-lg hover:shadow-primary/30">
-                  Shop Now <ArrowRight className="ml-2 w-5 h-5" />
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Image Content */}
-            <div className="relative h-[300px] lg:h-[600px] w-full order-1 lg:order-2">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="w-full h-full relative"
-              >
-                <Image 
-                  src={HERO_SLIDES[current].image} 
-                  alt={HERO_SLIDES[current].title}
-                  width={800}
-                  className="w-full h-full object-contain drop-shadow-2xl"
-                />
-                
-                {/* Decorative Elements */}
-                <div className="absolute top-10 right-10 animate-bounce delay-700">
-                   <Star className="text-yellow-400 w-12 h-12 fill-current" />
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-
-      {/* Dots Navigation */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
-        {HERO_SLIDES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              idx === current ? 'bg-foreground w-10' : 'bg-gray-300 hover:bg-gray-400'
-            }`}
-          />
-        ))}
-      </div>
-    </section>
-  );
-};
-
-// 1. Hero Carousel Component with image only
-// 1. Hero Carousel Component (Image Only Update)
-const HeroCarouselImageonly = () => {
-  const [current, setCurrent] = useState(0);
-
-  // Auto-advance slides
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5000); // Change slides every 5 seconds
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    // Adjusted heights for a more cinematic feel
     <section className="relative w-full h-[500px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gray-900">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
-          initial={{ opacity: 0, scale: 1.05 }} // Start slightly zoomed in
-          animate={{ opacity: 1, scale: 1 }} // Fade in and scale down slowly to normal
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }} // Slower, smoother transition for big images
+          transition={{ duration: 1.2, ease: "easeOut" }}
           className="absolute inset-0 w-full h-full"
         >
           <Image 
             src={HERO_SLIDES[current].image} 
             alt={HERO_SLIDES[current].title}
-            // Use a large width value to ensure high-res loading
             width={1920} 
             height={1080}
-            // IMPORTANT: 'object-cover' makes the image fill the container without distorting, cropping if necessary.
             className="w-full h-full object-cover"
           />
-          
-          {/* Optional subtle overlay gradient so navigation dots are always visible at the bottom */}
           <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Dots Navigation - Updated to White for better contrast on images */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
         {HERO_SLIDES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            // Changed colors to white/transparent white for visibility against photos
             className={`h-3 rounded-full transition-all duration-500 shadow-sm backdrop-blur-md ${
               idx === current ? 'bg-white w-10' : 'bg-white/40 w-3 hover:bg-white/70'
             }`}
-            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
@@ -246,7 +182,6 @@ const ShopByAge = () => {
 
 // 3. Best Sellers Component (Carousel)
 const BestSellers = () => {
-  // Embla Carousel Setup
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
@@ -268,7 +203,6 @@ const BestSellers = () => {
 
   return (
     <section className="py-24 bg-[#FFF8F3] relative overflow-hidden">
-      {/* Background blobs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
@@ -299,18 +233,12 @@ const BestSellers = () => {
           </div>
         </div>
 
-        {/* Product Carousel */}
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex -ml-6 pb-12">
             {MOCK_BEST_SELLERS.map((product) => (
               <div className="pl-6 flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_25%] min-w-0" key={product._id}>
                 <div className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100">
-                  {/* Badge */}
-                  <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">
-                    Hot
-                  </div>
-                  
-                  {/* Wishlist Button */}
+                  <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
                   <button className="absolute top-6 right-6 z-10 p-2 bg-white rounded-full shadow-sm text-gray-400 hover:text-red-500 transition-colors">
                     <Heart size={18} />
                   </button>
@@ -322,8 +250,6 @@ const BestSellers = () => {
                       width={400}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     />
-                    
-                    {/* Add to Cart Overlay */}
                     <div className="absolute inset-x-4 bottom-4 translate-y-[150%] group-hover:translate-y-0 transition-transform duration-300">
                       <button className="w-full bg-white/90 backdrop-blur text-foreground font-bold py-3 rounded-xl shadow-lg hover:bg-foreground hover:text-white flex items-center justify-center gap-2">
                         <ShoppingBag size={18} />
@@ -352,6 +278,24 @@ const BestSellers = () => {
   );
 };
 
+// 4. Helper for Video Marquee (Restored)
+const MarqueeVideo = ({ video }: { video: VideoReel }) => {
+  return (
+    <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
+      <video
+        src={video.videoUrl} 
+        poster={video.thumbnailUrl}
+        autoPlay
+        loop
+        muted
+        playsInline 
+        className="w-full h-full object-cover pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+    </div>
+  );
+};
+
 // --- Main Page Integration ---
 
 export default function HomePage() {
@@ -359,7 +303,6 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Keep fetching store info for the Footer/Location section
       const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
       if (storeItems && storeItems.length > 0) {
         setStoreInfo(storeItems[0]);
@@ -373,9 +316,8 @@ export default function HomePage() {
       <Header />
       <WhatsAppFloatingButton />
       
-      {/* 1. Hero Carousel */}
+      {/* 1. Hero Carousel (Image Only) */}
       <HeroCarousel />
-      <HeroCarouselImageonly />
       
       {/* 2. Shop By Age */}
       <ShopByAge />
@@ -383,20 +325,25 @@ export default function HomePage() {
       {/* 3. Best Sellers */}
       <BestSellers />
 
-      {/* Keep the original Marquee Video Section (It's a nice vibe addition) */}
-       <section className="py-24 bg-white overflow-hidden">
-        <div className="max-w-[120rem] mx-auto mb-10 px-6 text-center">
-            <h2 className="font-heading text-3xl md:text-4xl text-primary">
-              See the Fun in Action
+      {/* 4. Restored Video Marquee Section */}
+      <section className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+        <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
+              See It In Action
             </h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
+               A peek into the fun world waiting for you at our store.
+            </p>
         </div>
+
         <div className="relative w-full">
+          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
           <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-            {/* Using mock video data here or bring back your original videoReels array */}
-            {[1,2,3,4,5,1,2,3,4,5].map((_, i) => (
-              <div key={i} className="relative h-[300px] aspect-[9/16] rounded-2xl overflow-hidden shadow-md bg-gray-200 mx-3">
-                 <div className="absolute inset-0 bg-gray-300 flex items-center justify-center text-gray-500">Video {i}</div>
-              </div>
+            {/* Using the original VIDEO_REELS data */}
+            {[...VIDEO_REELS, ...VIDEO_REELS, ...VIDEO_REELS].map((video, index) => (
+              <MarqueeVideo key={`${video.id}-${index}`} video={video} />
             ))}
           </div>
         </div>
@@ -420,7 +367,7 @@ export default function HomePage() {
             100% { transform: translateX(-50%); }
           }
           .animate-marquee {
-            animation: marquee 40s linear infinite;
+            animation: marquee 60s linear infinite;
           }
       `}</style>
     </div>
