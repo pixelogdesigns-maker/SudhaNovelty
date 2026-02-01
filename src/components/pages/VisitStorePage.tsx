@@ -1,4 +1,3 @@
-// VisitStorePage.tsx
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
@@ -27,7 +26,7 @@ export default function VisitStorePage() {
     window.open(whatsAppUrl, '_blank');
   };
 
-  // Helper to render a Store Location Block
+  // --- Sub-Component for Store Block ---
   const StoreBlock = ({ 
     title, 
     mapSrc, 
@@ -146,7 +145,7 @@ export default function VisitStorePage() {
       <Header />
       <WhatsAppFloatingButton />
 
-      {/* Concise Hero */}
+      {/* Hero */}
       <section className="relative w-full bg-white py-16 border-b border-gray-100">
         <div className="max-w-[120rem] mx-auto px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
@@ -165,18 +164,18 @@ export default function VisitStorePage() {
           {/* Main Store - Map Left / Info Right */}
           <StoreBlock 
             title="Main Store"
-            // REPLACE THIS SRC with the actual 'Embed a map' HTML src from Google Maps for the Main Store
-            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.626889759247!2d78.1348!3d8.7642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3ASudhaNovelties!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin"
-            addressUrl="https://maps.google.com/?q=Sudha+Novelties+Main+Store"
+            // Updated with your specific Main Store Map Link
+            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d492.8500497625455!2d78.148129!3d8.8048144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef98fd8c85a7%3A0x8e37c310bb684eec!2sSudha%20Novelties!5e0!3m2!1sen!2sin!4v1769959828885!5m2!1sen!2sin"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
             isReversed={false}
           />
 
           {/* Branch Store - Info Left / Map Right */}
           <StoreBlock 
             title="Branch Store"
-            // REPLACE THIS SRC with the actual 'Embed a map' HTML src from Google Maps for the Branch Store
-            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.626889759247!2d78.1348!3d8.7642!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3ASudhaNoveltiesBranch!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin"
-            addressUrl="https://maps.google.com/?q=Sudha+Novelties+Branch+Store"
+            // Updated with your specific Branch Store Map Link
+            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1971.4105504926988!2d78.1368176!3d8.8028719!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03efdee738034b%3A0x94a6c5a233714cdc!2sSudha%20Novelties%20New%20Corporation%20branch!5e0!3m2!1sen!2sin!4v1769959842560!5m2!1sen!2sin"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
             isReversed={true}
           />
 
