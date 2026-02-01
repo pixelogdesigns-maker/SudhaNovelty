@@ -1,4 +1,4 @@
-// HPI 3.7-V (Updated Hero Images)
+// HPI 3.8-V (Mobile Aspect Ratio Fix)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -78,7 +78,7 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel
+// 1. Hero Carousel (Fixed Mobile Ratio)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -91,7 +91,10 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    <section className="relative w-full h-[500px] md:h-[800px] lg:h-[950px] overflow-hidden bg-gray-900">
+    // FIX APPLIED HERE:
+    // 1. 'aspect-[16/9]' on mobile ensures the container matches the image ratio (no zooming).
+    // 2. 'md:aspect-auto md:h-[800px]' switches back to immersive height on Desktop.
+    <section className="relative w-full aspect-[16/9] md:aspect-auto md:h-[800px] lg:h-[950px] overflow-hidden bg-gray-900">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
@@ -114,8 +117,8 @@ const HeroCarousel = () => {
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={goToPrev} className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronLeft size={28} /></button>
-      <button onClick={goToNext} className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronRight size={28} /></button>
+      <button onClick={goToPrev} className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronLeft size={20} className="md:w-7 md:h-7" /></button>
+      <button onClick={goToNext} className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronRight size={20} className="md:w-7 md:h-7" /></button>
     </section>
   );
 };
@@ -349,9 +352,30 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 
 // 6. Video Marquee Component
 const MarqueeVideo = ({ video }: { video: VideoReel }) => {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(error => {
+        console.log("Autoplay prevented:", error);
+      });
+    }
+  }, []);
+
   return (
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-      <video src={video.videoUrl} poster={video.thumbnailUrl} autoPlay loop muted playsInline className="w-full h-full object-cover pointer-events-none" />
+      <video
+        ref={videoRef}
+        src={video.videoUrl} 
+        poster={video.thumbnailUrl}
+        autoPlay
+        loop
+        muted
+        playsInline 
+        className="w-full h-full object-cover pointer-events-none"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
     </div>
   );
