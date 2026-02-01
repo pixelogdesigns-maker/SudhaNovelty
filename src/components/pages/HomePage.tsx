@@ -1,4 +1,4 @@
-// HPI 3.3-V (Fixed Hero Carousel Aspect Ratio)
+// HPI 3.4-V (Themed ShopByAge + Marquee + No-Jump Loading)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -35,26 +35,10 @@ interface VideoReel {
 // --- Data Configuration ---
 
 const HERO_SLIDES = [
-  {
-    id: 1,
-    title: "Playtime Reimagined",
-    image: "https://static.wixstatic.com/media/b9ec8c_0bf6641d2ffe4a469b7e47889ed0860e~mv2.png",
-  },
-  {
-    id: 2,
-    title: "Little Explorers",
-    image: "https://static.wixstatic.com/media/b9ec8c_889d8c41c39d4e95904f7dbb748ef7cc~mv2.png",
-  },
-  {
-    id: 3,
-    title: "Cozy Companions",
-    image: "https://static.wixstatic.com/media/b9ec8c_7cb2d19df58846f39a9bf4f901549a93~mv2.png",
-  },
-  {
-    id: 4,
-    title: "Joy & Wonder",
-    image: "https://static.wixstatic.com/media/b9ec8c_350dac52b3f94ede98efce2b8b046a8e~mv2.png",
-  }
+  { id: 1, title: "Playtime Reimagined", image: "https://static.wixstatic.com/media/b9ec8c_0bf6641d2ffe4a469b7e47889ed0860e~mv2.png" },
+  { id: 2, title: "Little Explorers", image: "https://static.wixstatic.com/media/b9ec8c_889d8c41c39d4e95904f7dbb748ef7cc~mv2.png" },
+  { id: 3, title: "Cozy Companions", image: "https://static.wixstatic.com/media/b9ec8c_7cb2d19df58846f39a9bf4f901549a93~mv2.png" },
+  { id: 4, title: "Joy & Wonder", image: "https://static.wixstatic.com/media/b9ec8c_350dac52b3f94ede98efce2b8b046a8e~mv2.png" }
 ];
 
 const VIDEO_REELS: VideoReel[] = [
@@ -74,42 +58,23 @@ const AGE_GROUPS = [
   { label: "12+ Years", range: "12+", color: "bg-orange-100 text-orange-600", icon: "🎮" },
 ];
 
-// Color palette for categories (will be applied to CMS categories)
-const CATEGORY_COLORS = [
-  "bg-purple-100",
-  "bg-blue-100",
-  "bg-orange-100",
-  "bg-green-100",
-  "bg-yellow-100",
-  "bg-red-100",
-  "bg-pink-100",
-  "bg-indigo-100",
-];
+const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (FIXED: Responsive Aspect Ratio + Object Contain)
+// 1. Hero Carousel (Stable)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 20000);
+    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 20000);
     return () => clearInterval(timer);
   }, []);
 
-  const goToPrev = () => {
-    setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  };
-
-  const goToNext = () => {
-    setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-  };
+  const goToPrev = () => setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // CHANGED: Use aspect ratio instead of fixed height so it scales perfectly with width.
-    // bg-[#FDF6F0] adds a nice cream background if the image doesn't fill the space perfectly.
     <section className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:max-h-[800px] overflow-hidden bg-[#FDF6F0]">
       <AnimatePresence mode='wait'>
         <motion.div
@@ -126,105 +91,87 @@ const HeroCarousel = () => {
               alt={HERO_SLIDES[current].title}
               width={1920} 
               height={1080}
-              // CHANGED: object-contain ensures the entire image is visible without cropping
               className="w-full h-full object-contain"
             />
           </Link>
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={goToPrev} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all">
-        <ChevronLeft size={24} />
-      </button>
-
-      <button onClick={goToNext} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all">
-        <ChevronRight size={24} />
-      </button>
-
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-        {HERO_SLIDES.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setCurrent(idx)}
-            className={`h-2 rounded-full transition-all duration-500 shadow-sm ${idx === current ? 'bg-primary w-8' : 'bg-gray-300 w-2 hover:bg-gray-400'}`}
-          />
-        ))}
-      </div>
+      <button onClick={goToPrev} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all"><ChevronLeft size={24} /></button>
+      <button onClick={goToNext} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all"><ChevronRight size={24} /></button>
     </section>
   );
 };
 
-// 2. Shop By Age Component (Updated to match "Baybee" style)
-const ShopByAge = () => {
-  const getAgeGroupId = (range: string) => {
-    const ageMap: { [key: string]: string } = {
-      '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+'
-    };
-    return ageMap[range] || range;
-  };
-
-  // Custom colors to match the reference image's pastel circles
-  const PASTEL_COLORS = [
-    "bg-[#A7F3D0]", // Soft Green
-    "bg-[#BFDBFE]", // Soft Blue
-    "bg-[#FECACA]", // Soft Red/Pink
-    "bg-[#FDE68A]", // Soft Yellow
-    "bg-[#DDD6FE]", // Soft Purple
-    "bg-[#FDBA74]", // Soft Orange
+// 2. Text Marquee (New - Matches Image Reference)
+const TextMarquee = () => {
+  const marqueeItems = [
+    "EDUCATIONAL TOYS", "ACTION FIGURES", "BOARD GAMES", "PLUSHIES",
+    "OUTDOOR FUN", "BEST SELLERS", "NEW ARRIVALS", "PUZZLES"
   ];
 
   return (
-    <section className="relative py-32 bg-[#7C3AED] overflow-hidden">
-      {/* --- Top Wavy Divider --- */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg className="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#FFFFFF"></path>
-        </svg>
+    <div className="w-full bg-[#EC4899] py-3 overflow-hidden"> {/* Pink background */}
+      <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
+        {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
+          <div key={index} className="flex items-center mx-4">
+            <span className="text-white font-bold text-sm md:text-base tracking-widest uppercase">
+              {item}
+            </span>
+            <span className="text-white/60 mx-4">•</span>
+          </div>
+        ))}
       </div>
+      <style>{`
+        .animate-marquee-fast {
+          animation: marquee 20s linear infinite; /* Faster speed */
+        }
+      `}</style>
+    </div>
+  );
+};
 
-      <div className="max-w-[120rem] mx-auto px-6 relative z-10">
-        {/* Header - White Text to match Purple bg */}
+// 3. Shop By Age (Themed + Circular)
+const ShopByAge = () => {
+  const getAgeGroupId = (range: string) => {
+    const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
+    return ageMap[range] || range;
+  };
+
+  // Pastel colors for the circles
+  const PASTEL_COLORS = ["bg-[#A7F3D0]", "bg-[#BFDBFE]", "bg-[#FECACA]", "bg-[#FDE68A]", "bg-[#DDD6FE]", "bg-[#FDBA74]"];
+
+  return (
+    <section className="py-20 bg-white"> {/* Themed: White background instead of purple */}
+      <div className="max-w-[120rem] mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl md:text-6xl text-white mb-2 tracking-wide uppercase drop-shadow-md">
-            Shop by Age
-          </h2>
-          <div className="w-24 h-1 bg-white/50 mx-auto rounded-full" />
+          <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4">Shop by Age</h2>
+          <p className="text-gray-500 text-lg">Curated collections for every milestone.</p>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
           {AGE_GROUPS.map((group, index) => (
-            <Link 
-              key={index} 
-              to={`/toys?age=${getAgeGroupId(group.range)}`} 
-              className="group flex flex-col items-center"
-            >
+            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center">
               {/* Circular Image Container */}
               <div className={`
                 relative w-36 h-36 md:w-44 md:h-44 rounded-full 
                 ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
                 flex flex-col items-center justify-center 
-                border-4 border-white/30 shadow-lg 
-                transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3
+                shadow-sm border-4 border-white
+                transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl
               `}>
-                {/* NOTE: If you have specific vector images (like the baby, toddler, skater in your image),
-                   replace this <span> with an <Image src="..." /> component.
-                   For now, I've scaled up the icons to act as the illustrations.
-                */}
                 <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:-translate-y-2">
                   {group.icon}
                 </span>
-                
-                {/* Glossy Reflection Effect */}
-                <div className="absolute top-0 left-0 w-full h-full rounded-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none opacity-50" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
 
-              {/* Text Label - Bold & White */}
-              <div className="text-center mt-6">
-                <h3 className="font-heading text-3xl md:text-4xl text-white font-bold leading-none mb-1 shadow-black drop-shadow-md">
+              {/* Text Label - Themed (Dark text) */}
+              <div className="text-center mt-4">
+                <h3 className="font-heading text-2xl md:text-3xl text-foreground font-bold leading-none mb-1">
                   {group.range}
                 </h3>
-                <p className="text-white/90 text-sm md:text-base font-bold tracking-widest uppercase">
+                <p className="text-gray-500 text-xs md:text-sm font-bold tracking-widest uppercase">
                   {group.label.includes('Months') ? 'Months' : 'Years'}
                 </p>
               </div>
@@ -232,25 +179,15 @@ const ShopByAge = () => {
           ))}
         </div>
       </div>
-
-      {/* --- Bottom Wavy Divider --- */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg className="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#FFF8F3"></path>
-        </svg>
-      </div>
     </section>
   );
 };
 
-// 3. Best Sellers Component
+// 4. Best Sellers (With Loading Skeleton to prevent jumping)
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
-
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
@@ -264,12 +201,26 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  const bestSellers = toys.slice(0, 8); // Showing top 8
+  const bestSellers = toys.slice(0, 8);
 
-  if (bestSellers.length === 0) return null;
+  // SKELETON LOADING STATE: Renders if no toys are loaded yet
+  if (toys.length === 0) {
+    return (
+      <section className="py-24 bg-[#FFF8F3] overflow-hidden min-h-[600px]">
+         <div className="max-w-[120rem] mx-auto px-6">
+            <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-12"></div>
+            <div className="flex gap-6 overflow-hidden">
+               {[1,2,3,4].map(i => (
+                 <div key={i} className="flex-shrink-0 w-72 h-96 bg-white rounded-3xl animate-pulse"></div>
+               ))}
+            </div>
+         </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden">
+    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px]">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
@@ -281,12 +232,8 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
             <h2 className="font-heading text-4xl md:text-5xl text-foreground">Best Sellers</h2>
           </div>
           <div className="flex gap-2">
-            <button onClick={scrollPrev} disabled={!canScrollPrev} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}>
-              <ChevronLeft size={24} />
-            </button>
-            <button onClick={scrollNext} disabled={!canScrollNext} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}>
-              <ChevronRight size={24} />
-            </button>
+            <button onClick={() => emblaApi && emblaApi.scrollPrev()} disabled={!canScrollPrev} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronLeft size={24} /></button>
+            <button onClick={() => emblaApi && emblaApi.scrollNext()} disabled={!canScrollNext} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronRight size={24} /></button>
           </div>
         </div>
 
@@ -299,24 +246,10 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
                      {(() => {
                       let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
-                      // Priority 1: Product Gallery
-                      if (product.productGallery && Array.isArray(product.productGallery) && product.productGallery.length > 0) {
-                        const firstImage = product.productGallery[0];
-                        imageUrl = firstImage.src || firstImage.url || firstImage;
-                      }
-                      // Priority 2: Media Gallery
-                      else if (product.productImages1 && Array.isArray(product.productImages1) && product.productImages1.length > 0) {
-                        const firstImage = product.productImages1[0];
-                        imageUrl = firstImage.src || firstImage.url || firstImage;
-                      }
-                      // Priority 3: Single image field
-                      else if (product.productImages && typeof product.productImages === 'string') {
-                        imageUrl = product.productImages;
-                      }
-                      // Priority 4: Legacy image field
-                      else if (product.image && typeof product.image === 'string') {
-                        imageUrl = product.image;
-                      }
+                      if (product.productGallery?.[0]) imageUrl = product.productGallery[0].src || product.productGallery[0].url || product.productGallery[0];
+                      else if (product.productImages1?.[0]) imageUrl = product.productImages1[0].src || product.productImages1[0].url || product.productImages1[0];
+                      else if (typeof product.productImages === 'string') imageUrl = product.productImages;
+                      else if (typeof product.image === 'string') imageUrl = product.image;
                       return (
                         <Image src={imageUrl} alt={product.name || 'Product'} width={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       );
@@ -337,48 +270,48 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 4. Shop By Category (Dynamically from CMS)
+// 5. Shop By Category (With Loading Skeleton)
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
-  if (categories.length === 0) return null;
+  // SKELETON LOADING STATE: Keeps section height stable
+  if (categories.length === 0) {
+    return (
+      <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
+        <div className="max-w-[120rem] mx-auto px-6">
+           <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+              {[1,2,3,4,5,6].map(i => (
+                 <div key={i} className="flex flex-col items-center gap-5">
+                    <div className="w-40 h-40 rounded-full bg-gray-200 animate-pulse"></div>
+                    <div className="w-24 h-6 bg-gray-200 rounded animate-pulse"></div>
+                 </div>
+              ))}
+           </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
-    <section className="py-24 bg-[#FFFDF9]">
+    <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
       <div className="max-w-[120rem] mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground">
-            Shop By Category
-          </h2>
-          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">
-            All Products
-          </Link>
+          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
+          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
           {categories.map((cat, index) => (
-            <Link 
-              key={cat._id} 
-              to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`}
-              className="group flex flex-col items-center gap-5"
-            >
+            <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
               <div className={`
                 relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
-                flex items-center justify-center 
-                shadow-sm transition-all duration-500 
-                group-hover:scale-105 group-hover:shadow-xl
+                flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
               `}>
                 {cat.categoryImage ? (
                   <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
-                    <Image 
-                      src={cat.categoryImage} 
-                      alt={cat.categoryName || 'Category'} 
-                      width={200} 
-                      className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" 
-                    />
+                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
                   </div>
                 ) : (
-                  <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">
-                    {cat.categoryName?.charAt(0) || '?'}
-                  </div>
+                  <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">{cat.categoryName?.charAt(0) || '?'}</div>
                 )}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
@@ -393,19 +326,11 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   );
 };
 
-// 5. Video Marquee Component
+// 6. Video Marquee Component
 const MarqueeVideo = ({ video }: { video: VideoReel }) => {
   return (
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-      <video
-        src={video.videoUrl} 
-        poster={video.thumbnailUrl}
-        autoPlay
-        loop
-        muted
-        playsInline 
-        className="w-full h-full object-cover pointer-events-none"
-      />
+      <video src={video.videoUrl} poster={video.thumbnailUrl} autoPlay loop muted playsInline className="w-full h-full object-cover pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
     </div>
   );
@@ -421,21 +346,14 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (storeItems && storeItems.length > 0) {
-        setStoreInfo(storeItems[0]);
-      }
+      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
       
       const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-      if (toyItems) {
-        setToys(toyItems);
-      }
+      if (toyItems) setToys(toyItems);
 
       const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
       if (categoryItems) {
-        const activeCategories = categoryItems
-          .filter(cat => cat.isActive)
-          .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-        setCategories(activeCategories);
+        setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
       }
     };
     fetchData();
@@ -449,24 +367,23 @@ export default function HomePage() {
       {/* 1. Hero Carousel */}
       <HeroCarousel />
       
-      {/* 2. Shop By Age */}
+      {/* 2. Text Marquee (Added Here) */}
+      <TextMarquee />
+      
+      {/* 3. Shop By Age */}
       <ShopByAge />
 
-      {/* 3. Best Sellers */}
+      {/* 4. Best Sellers (Now has skeleton loading) */}
       <BestSellers toys={toys} />
 
-      {/* 4. Shop By Category */}
+      {/* 5. Shop By Category (Now has skeleton loading) */}
       <ShopByCategory categories={categories} />
 
-      {/* 5. Video Marquee Section */}
+      {/* 6. Video Marquee Section */}
       <section className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              See It In Action
-            </h2>
-            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
-               A peek into the fun world waiting for you at our store.
-            </p>
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>
         </div>
 
         <div className="relative w-full">
@@ -482,7 +399,7 @@ export default function HomePage() {
       </section>
 
       {/* Keep Location Section */}
-      <section className="py-16 bg-light-pink/20">
+      <section className="py-24 bg-light-pink/20">
         <div className="max-w-[120rem] mx-auto px-6 text-center">
              <h2 className="font-heading text-4xl mb-6">Visit Our Store</h2>
              <p className="text-xl text-gray-600 mb-8">{storeInfo?.address || '123 Toy Street'}</p>
@@ -493,13 +410,8 @@ export default function HomePage() {
       <Footer />
 
       <style>{`
-          @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-marquee {
-            animation: marquee 60s linear infinite;
-          }
+          @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          .animate-marquee { animation: marquee 60s linear infinite; }
       `}</style>
     </div>
   );
