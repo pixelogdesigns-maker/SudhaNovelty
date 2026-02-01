@@ -427,7 +427,7 @@ export default function HomePage() {
       </section>
 
       {/* Keep Location Section */}
-      <section className="py-24 bg-light-pink/20">
+      <section className="py-16 bg-light-pink/20">
         <div className="max-w-[120rem] mx-auto px-6 text-center">
              <h2 className="font-heading text-4xl mb-6">Visit Our Store</h2>
              <p className="text-xl text-gray-600 mb-8">{storeInfo?.address || '123 Toy Street'}</p>
