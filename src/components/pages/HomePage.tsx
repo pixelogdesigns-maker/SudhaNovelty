@@ -1,4 +1,4 @@
-// HPI 3.4-V (Themed ShopByAge + Marquee + No-Jump Loading)
+// HPI 3.5-V (Best Sellers Logic Update)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +21,7 @@ interface Product {
   price: number;
   image: string;
   category?: string;
-  isBestSellerText?: string;
+  isBestSellingNow?: boolean | number; // Added to interface for type safety
 }
 
 interface VideoReel {
@@ -62,7 +62,7 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Stable)
+// 1. Hero Carousel
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -103,7 +103,7 @@ const HeroCarousel = () => {
   );
 };
 
-// 2. Text Marquee (New - Matches Image Reference)
+// 2. Text Marquee
 const TextMarquee = () => {
   const marqueeItems = [
     "EDUCATIONAL TOYS", "ACTION FIGURES", "BOARD GAMES", "PLUSHIES",
@@ -111,7 +111,7 @@ const TextMarquee = () => {
   ];
 
   return (
-    <div className="w-full bg-[#EC4899] py-3 overflow-hidden"> {/* Pink background */}
+    <div className="w-full bg-[#EC4899] py-3 overflow-hidden">
       <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
         {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
           <div key={index} className="flex items-center mx-4">
@@ -124,25 +124,24 @@ const TextMarquee = () => {
       </div>
       <style>{`
         .animate-marquee-fast {
-          animation: marquee 20s linear infinite; /* Faster speed */
+          animation: marquee 20s linear infinite;
         }
       `}</style>
     </div>
   );
 };
 
-// 3. Shop By Age (Themed + Circular)
+// 3. Shop By Age
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
     return ageMap[range] || range;
   };
 
-  // Pastel colors for the circles
   const PASTEL_COLORS = ["bg-[#A7F3D0]", "bg-[#BFDBFE]", "bg-[#FECACA]", "bg-[#FDE68A]", "bg-[#DDD6FE]", "bg-[#FDBA74]"];
 
   return (
-    <section className="py-20 bg-white"> {/* Themed: White background instead of purple */}
+    <section className="py-20 bg-white">
       <div className="max-w-[120rem] mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4">Shop by Age</h2>
@@ -152,7 +151,6 @@ const ShopByAge = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
           {AGE_GROUPS.map((group, index) => (
             <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center">
-              {/* Circular Image Container */}
               <div className={`
                 relative w-36 h-36 md:w-44 md:h-44 rounded-full 
                 ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
@@ -165,8 +163,6 @@ const ShopByAge = () => {
                 </span>
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
-
-              {/* Text Label - Themed (Dark text) */}
               <div className="text-center mt-4">
                 <h3 className="font-heading text-2xl md:text-3xl text-foreground font-bold leading-none mb-1">
                   {group.range}
@@ -183,7 +179,7 @@ const ShopByAge = () => {
   );
 };
 
-// 4. Best Sellers (With Loading Skeleton to prevent jumping)
+// 4. Best Sellers (Updated Logic)
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -201,9 +197,12 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  const bestSellers = toys.slice(0, 8);
+  // --- LOGIC UPDATE: Filter for isBestSellingNow == true/1 and Limit to 4 ---
+  const bestSellers = toys
+    .filter((toy: any) => toy.isBestSellingNow) // Filter strictly for flagged items
+    .slice(0, 4); // Limit to maximum 4 items
 
-  // SKELETON LOADING STATE: Renders if no toys are loaded yet
+  // Skeleton Loading (Shows only while fetching initial data)
   if (toys.length === 0) {
     return (
       <section className="py-24 bg-[#FFF8F3] overflow-hidden min-h-[600px]">
@@ -217,6 +216,11 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
          </div>
       </section>
     );
+  }
+
+  // If data is loaded but NO items are marked as best sellers, hide the section
+  if (bestSellers.length === 0) {
+    return null; 
   }
 
   return (
@@ -270,9 +274,8 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 5. Shop By Category (With Loading Skeleton)
+// 5. Shop By Category
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
-  // SKELETON LOADING STATE: Keeps section height stable
   if (categories.length === 0) {
     return (
       <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
@@ -367,16 +370,16 @@ export default function HomePage() {
       {/* 1. Hero Carousel */}
       <HeroCarousel />
       
-      {/* 2. Text Marquee (Added Here) */}
+      {/* 2. Text Marquee */}
       <TextMarquee />
       
       {/* 3. Shop By Age */}
       <ShopByAge />
 
-      {/* 4. Best Sellers (Now has skeleton loading) */}
+      {/* 4. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 5. Shop By Category (Now has skeleton loading) */}
+      {/* 5. Shop By Category */}
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
