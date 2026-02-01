@@ -10,14 +10,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 
-// --- IMPORTS FOR CAROUSEL ---
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, FreeMode, Navigation, Pagination, EffectFade } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
-
 // --- Utility Components ---
 const AnimatedReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
   return (
@@ -38,7 +30,7 @@ const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960", // Replace with landscape banners
+      image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960",
       title: "Play, Learn, Grow",
       subtitle: "Premium educational toys for curious minds.",
       cta: "Shop Collection",
@@ -54,76 +46,93 @@ const HeroSlider = () => {
     }
   ];
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const slide = slides[currentSlide];
+
   return (
     <section className="relative h-[600px] md:h-[700px] w-full overflow-hidden">
-      <Swiper
-        modules={[Autoplay, Pagination, EffectFade]}
-        effect="fade"
-        loop={true}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        pagination={{ clickable: true }}
-        className="h-full w-full"
+      <motion.div
+        key={currentSlide}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.8 }}
+        className={`${slide.color} absolute inset-0`}
       >
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.id} className={`${slide.color} relative`}>
-            {/* Background Image Layer */}
-            <div className="absolute inset-0">
-               <Image 
-                 src={slide.image} 
-                 alt={slide.title} 
-                 className="w-full h-full object-cover opacity-80" 
-                 width={1920}
-               />
-               <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
-            </div>
+        {/* Background Image Layer */}
+        <div className="absolute inset-0">
+          <Image 
+            src={slide.image} 
+            alt={slide.title} 
+            className="w-full h-full object-cover opacity-80" 
+            width={1920}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
+        </div>
 
-            {/* Content Layer */}
-            <div className="relative z-10 h-full max-w-[120rem] mx-auto px-6 flex items-center">
-              <div className="max-w-2xl pt-20">
-                <motion.span 
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-bold uppercase tracking-wider mb-6"
-                >
-                  Welcome to Our World
-                </motion.span>
-                <motion.h1 
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="font-heading text-6xl md:text-8xl text-foreground mb-6 leading-tight"
-                >
-                  {slide.title}
-                </motion.h1>
-                <motion.p 
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="font-paragraph text-xl text-gray-600 mb-10 max-w-lg"
-                >
-                  {slide.subtitle}
-                </motion.p>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <Link to="/toys" className="bg-primary text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2">
-                    {slide.cta} <ArrowRight size={20} />
-                  </Link>
-                </motion.div>
-              </div>
-            </div>
-          </SwiperSlide>
+        {/* Content Layer */}
+        <div className="relative z-10 h-full max-w-[120rem] mx-auto px-6 flex items-center">
+          <div className="max-w-2xl pt-20">
+            <motion.span 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-bold uppercase tracking-wider mb-6"
+            >
+              Welcome to Our World
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="font-heading text-6xl md:text-8xl text-foreground mb-6 leading-tight"
+            >
+              {slide.title}
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="font-paragraph text-xl text-gray-600 mb-10 max-w-lg"
+            >
+              {slide.subtitle}
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <Link to="/toys" className="bg-primary text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2">
+                {slide.cta} <ArrowRight size={20} />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Pagination Dots */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`transition-all duration-300 ${
+              idx === currentSlide
+                ? 'w-8 h-3 bg-primary rounded-full'
+                : 'w-3 h-3 bg-gray-300 rounded-full hover:bg-gray-400'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
         ))}
-      </Swiper>
-      
-      {/* Custom CSS for Pagination Dots */}
-      <style>{`
-        .swiper-pagination-bullet { width: 12px; height: 12px; background: #cbd5e1; opacity: 1; }
-        .swiper-pagination-bullet-active { background: #FF5A5F; width: 30px; border-radius: 6px; transition: all 0.3s ease; }
-      `}</style>
+      </div>
     </section>
   );
 };
@@ -304,26 +313,15 @@ export default function HomePage() {
           </AnimatedReveal>
         </div>
 
-        <div className="relative w-full px-4 md:px-0">
-          <Swiper
-            modules={[Autoplay, FreeMode]}
-            loop={true}
-            freeMode={true}
-            spaceBetween={20}
-            slidesPerView={'auto'}
-            centeredSlides={true}
-            speed={4000}
-            autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
-            className="w-full"
-            style={{ transitionTimingFunction: 'linear' }}
-          >
-            {videoReels.map((video) => (
-              <SwiperSlide key={video.id} style={{ width: 'auto' }}>
-                 <MarqueeVideo video={video} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        <div className="relative w-full px-4 md:px-0 overflow-x-auto">
+           <div className="flex gap-5 pb-4 justify-center">
+             {videoReels.map((video) => (
+               <div key={video.id} className="flex-shrink-0">
+                  <MarqueeVideo video={video} />
+               </div>
+             ))}
+           </div>
+         </div>
       </section>
 
       {/* --- SECTION 5: FEATURES --- */}
@@ -331,7 +329,7 @@ export default function HomePage() {
         <div className="max-w-[120rem] mx-auto px-6">
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {features.map((feature, index) => (
-                  <AnimatedReveal key={index} delay={index * 100} direction="up">
+                  <AnimatedReveal key={index} delay={index * 100}>
                     <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-pink-100 h-full text-center">
                       <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-6 mx-auto`}>
                         <feature.icon size={32} />
