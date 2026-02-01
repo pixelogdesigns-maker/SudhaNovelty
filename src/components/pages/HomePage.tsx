@@ -1,2082 +1,393 @@
-// HPI 2.8-V (Infinite Video Carousel Update)
-
-
-
+// HPI 3.0-V (Aegle-Inspired Layout: Hero Slider + Shop By Age + Best Sellers)
 import React, { useEffect, useState, useRef } from 'react';
-
-
-
 import { Link } from 'react-router-dom';
-
-
-
 import { motion } from 'framer-motion';
-
-
-
 import { BaseCrudService } from '@/integrations';
-
-
-
 import { ToyCategories, StoreInformation } from '@/entities';
-
-
-
 import { Image } from '@/components/ui/image';
-
-
-
-import { MessageCircle, Award, Shield, Heart, Store, Star, Sparkles, MapPin, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
-
-
-
+import { MessageCircle, Award, Shield, Heart, Store, Star, Sparkles, MapPin, Clock, ArrowRight, CheckCircle2, ShoppingBag, ChevronRight, ChevronLeft } from 'lucide-react';
 import Header from '@/components/layout/Header';
-
-
-
 import Footer from '@/components/layout/Footer';
-
-
-
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 
-
-
-
-
-
+// --- IMPORTS FOR CAROUSEL ---
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, FreeMode, Navigation, Pagination, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
 
 // --- Utility Components ---
-
-
-
-
-
-
-
-type AnimatedElementProps = {
-
-
-
-  children: React.ReactNode;
-
-
-
-  className?: string;
-
-
-
-  delay?: number;
-
-
-
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
-
-
-
+const AnimatedReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: delay * 0.001 }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
 };
 
-
-
-
-
-
-
-const AnimatedReveal: React.FC<AnimatedElementProps> = ({ 
-
-
-
-  children, 
-
-
-
-  className = '', 
-
-
-
-  delay = 0,
-
-
-
-  direction = 'up' 
-
-
-
-}) => {
-
-
-
-  const ref = useRef<HTMLDivElement>(null);
-
-
-
-  const [isVisible, setIsVisible] = useState(false);
-
-
-
-
-
-
-
-  useEffect(() => {
-
-
-
-    const element = ref.current;
-
-
-
-    if (!element) return;
-
-
-
-
-
-
-
-    const observer = new IntersectionObserver(([entry]) => {
-
-
-
-      if (entry.isIntersecting) {
-
-
-
-        setIsVisible(true);
-
-
-
-        observer.unobserve(element);
-
-
-
-      }
-
-
-
-    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
-
-
-
-
-
-
-
-    observer.observe(element);
-
-
-
-    return () => observer.disconnect();
-
-
-
-  }, []);
-
-
-
-
-
-
-
-  const getTransform = () => {
-
-
-
-    if (!isVisible) {
-
-
-
-      switch (direction) {
-
-
-
-        case 'up': return 'translateY(40px)';
-
-
-
-        case 'down': return 'translateY(-40px)';
-
-
-
-        case 'left': return 'translateX(40px)';
-
-
-
-        case 'right': return 'translateX(-40px)';
-
-
-
-        default: return 'none';
-
-
-
-      }
-
-
-
+// --- SUB-COMPONENT: Hero Slider (Section 1) ---
+const HeroSlider = () => {
+  const slides = [
+    {
+      id: 1,
+      image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960", // Replace with landscape banners
+      title: "Play, Learn, Grow",
+      subtitle: "Premium educational toys for curious minds.",
+      cta: "Shop Collection",
+      color: "bg-blue-50"
+    },
+    {
+      id: 2,
+      image: "https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384",
+      title: "New Arrivals",
+      subtitle: "The latest fun has just landed in store.",
+      cta: "Discover More",
+      color: "bg-pink-50"
     }
-
-
-
-    return 'translate(0)';
-
-
-
-  };
-
-
-
-
-
-
+  ];
 
   return (
+    <section className="relative h-[600px] md:h-[700px] w-full overflow-hidden">
+      <Swiper
+        modules={[Autoplay, Pagination, EffectFade]}
+        effect="fade"
+        loop={true}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        pagination={{ clickable: true }}
+        className="h-full w-full"
+      >
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.id} className={`${slide.color} relative`}>
+            {/* Background Image Layer */}
+            <div className="absolute inset-0">
+               <Image 
+                 src={slide.image} 
+                 alt={slide.title} 
+                 className="w-full h-full object-cover opacity-80" 
+                 width={1920}
+               />
+               <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
+            </div>
 
-
-
-    <div 
-
-
-
-      ref={ref} 
-
-
-
-      className={`${className} transition-all duration-1000 ease-out will-change-transform`}
-
-
-
-      style={{
-
-
-
-        opacity: isVisible ? 1 : 0,
-
-
-
-        transform: getTransform(),
-
-
-
-        transitionDelay: `${delay}ms`
-
-
-
-      }}
-
-
-
-    >
-
-
-
-      {children}
-
-
-
-    </div>
-
-
-
+            {/* Content Layer */}
+            <div className="relative z-10 h-full max-w-[120rem] mx-auto px-6 flex items-center">
+              <div className="max-w-2xl pt-20">
+                <motion.span 
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-bold uppercase tracking-wider mb-6"
+                >
+                  Welcome to Our World
+                </motion.span>
+                <motion.h1 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                  className="font-heading text-6xl md:text-8xl text-foreground mb-6 leading-tight"
+                >
+                  {slide.title}
+                </motion.h1>
+                <motion.p 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
+                  className="font-paragraph text-xl text-gray-600 mb-10 max-w-lg"
+                >
+                  {slide.subtitle}
+                </motion.p>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  <Link to="/toys" className="bg-primary text-white px-10 py-5 rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg hover:shadow-xl inline-flex items-center gap-2">
+                    {slide.cta} <ArrowRight size={20} />
+                  </Link>
+                </motion.div>
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      
+      {/* Custom CSS for Pagination Dots */}
+      <style>{`
+        .swiper-pagination-bullet { width: 12px; height: 12px; background: #cbd5e1; opacity: 1; }
+        .swiper-pagination-bullet-active { background: #FF5A5F; width: 30px; border-radius: 6px; transition: all 0.3s ease; }
+      `}</style>
+    </section>
   );
-
-
-
 };
 
+// --- SUB-COMPONENT: Shop By Age (Section 2) ---
+const ShopByAge = () => {
+  const ages = [
+    { label: "0-12 Months", range: "0-1", image: "https://placehold.co/200x200/FFB6C1/white?text=Baby" },
+    { label: "1-2 Years", range: "1-2", image: "https://placehold.co/200x200/ADD8E6/white?text=Toddler" },
+    { label: "3-5 Years", range: "3-5", image: "https://placehold.co/200x200/90EE90/white?text=Preschool" },
+    { label: "6-9 Years", range: "6-9", image: "https://placehold.co/200x200/FFD700/white?text=School" },
+    { label: "10+ Years", range: "10-99", image: "https://placehold.co/200x200/D3D3D3/white?text=Teen" },
+    { label: "Grown Ups", range: "18-99", image: "https://placehold.co/200x200/E6E6FA/white?text=Adult" },
+  ];
 
+  return (
+    <section className="py-20 bg-white">
+      <div className="max-w-[120rem] mx-auto px-6">
+        <div className="text-center mb-16">
+           <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4">Shop By Age</h2>
+           <p className="text-gray-500">Find the perfect gift for every stage of development</p>
+        </div>
+        
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {ages.map((age, idx) => (
+            <Link key={idx} to={`/toys?age=${age.range}`} className="group flex flex-col items-center">
+              <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-transparent group-hover:border-primary transition-all duration-300 shadow-md group-hover:shadow-xl relative mb-4">
+                <Image src={age.image} alt={age.label} width={200} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
+              </div>
+              <h3 className="font-heading text-xl text-gray-800 group-hover:text-primary transition-colors">{age.label}</h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
 
+// --- SUB-COMPONENT: Best Sellers (Section 3) ---
+const BestSellers = () => {
+  // MOCK DATA - Replace with actual data fetch if available
+  const products = [
+    { id: 1, name: "Wooden Stacking Rainbow", price: "₹1,299", image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768" },
+    { id: 2, name: "Educational Clock", price: "₹899", image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960" },
+    { id: 3, name: "Soft Plush Bunny", price: "₹1,499", image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png?originWidth=768&originHeight=960" },
+    { id: 4, name: "Magnetic Building Blocks", price: "₹2,499", image: "https://static.wixstatic.com/media/b9ec8c_ad478e8adee9487ca1f530a14053e8b2~mv2.png?originWidth=768&originHeight=960" },
+  ];
 
+  return (
+    <section className="py-24 bg-gray-50">
+      <div className="max-w-[120rem] mx-auto px-6">
+        <div className="flex justify-between items-end mb-12">
+           <h2 className="font-heading text-4xl md:text-5xl text-foreground">Best Sellers</h2>
+           <Link to="/toys" className="hidden md:flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors">
+             View All <ArrowRight size={20} />
+           </Link>
+        </div>
 
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {products.map((product) => (
+            <div key={product.id} className="bg-white rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 group">
+              <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4">
+                <Image src={product.image} alt={product.name} width={400} className="w-full h-full object-cover" />
+                
+                {/* Quick Action Overlay */}
+                <div className="absolute inset-x-4 bottom-4 translate-y-[150%] group-hover:translate-y-0 transition-transform duration-300">
+                  <button className="w-full bg-white text-foreground font-bold py-3 rounded-xl shadow-lg hover:bg-primary hover:text-white transition-colors flex items-center justify-center gap-2">
+                    <ShoppingBag size={18} /> Add to Cart
+                  </button>
+                </div>
+              </div>
+              
+              <div className="px-2 pb-2">
+                <h3 className="font-bold text-lg text-gray-800 mb-1 truncate">{product.name}</h3>
+                <p className="text-primary font-bold text-xl">{product.price}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="mt-12 text-center md:hidden">
+          <Link to="/toys" className="inline-flex items-center gap-2 font-bold text-primary">
+             View All Products <ArrowRight size={20} />
+           </Link>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-
-// --- HELPER: Marquee Video Component (Simplified for "Vibe" Look) ---
-
-
-
+// --- HELPER: Marquee Video (Section 4 - Existing) ---
 interface VideoReel {
-
-
-
   id: string;
-
-
-
-  title: string;
-
-
-
   videoUrl: string;
-
-
-
   thumbnailUrl?: string;
-
-
-
-  description?: string;
-
-
-
 }
-
-
-
-
-
-
 
 const MarqueeVideo = ({ video }: { video: VideoReel }) => {
-
-
-
-  return (
-
-
-
-    <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-
-
-
-      {/* NOTE: 'muted' and 'playsInline' are critical for autoplay to work 
-
-
-
-         on modern browsers and mobile devices without user interaction.
-
-
-
-      */}
-
-
-
-      <video
-
-
-
-        src={video.videoUrl} 
-
-
-
-        poster={video.thumbnailUrl}
-
-
-
-        autoPlay
-
-
-
-        loop
-
-
-
-        muted
-
-
-
-        playsInline 
-
-
-
-        className="w-full h-full object-cover pointer-events-none" // pointer-events-none prevents clicking/pausing
-
-
-
-      />
-
-
-
-      {/* Optional: Dark gradient at bottom for style */}
-
-
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-
-
-
-    </div>
-
-
-
-  );
-
-
-
-};
-
-
-
-
-
-
-
-// --- Main Component ---
-
-
-
-
-
-
-
-export default function HomePage() {
-
-
-
-  const [categories, setCategories] = useState<ToyCategories[]>([]);
-
-
-
-  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
-
-
-
-
-
-
-
-  // --- 1. WIX VIDEO REELS DATA ---
-
-
-
-  const videoReels: VideoReel[] = [
-
-
-
-    {
-
-
-
-      id: 'video-1',
-
-
-
-      title: '',
-
-
-
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
-
-
-
-      thumbnailUrl: '',
-
-
-
-    },
-
-
-
-    {
-
-
-
-      id: 'video-2',
-
-
-
-      title: '',
-
-
-
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001',
-
-
-
-      thumbnailUrl: '',
-
-
-
-    },
-
-
-
-    {
-
-
-
-      id: 'video-3',
-
-
-
-      title: '',
-
-
-
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001',
-
-
-
-      thumbnailUrl: '',
-
-
-
-    },
-
-
-
-    {
-
-
-
-      id: 'video-4',
-
-
-
-      title: '',
-
-
-
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001',
-
-
-
-      thumbnailUrl: '',
-
-
-
-    },
-
-
-
-    {
-
-
-
-      id: 'video-5',
-
-
-
-      title: '',
-
-
-
-      videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001',
-
-
-
-      thumbnailUrl: '',
-
-
-
-    },
-
-
-
-  ];
-
-
-
-
-
-
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-
-
-
-    const fetchData = async () => {
-
-
-
-      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-
-
-
-      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-
-
-
-      
-
-
-
-      if (categoryItems) {
-
-
-
-        const activeCategories = categoryItems
-
-
-
-          .filter(cat => cat.isActive)
-
-
-
-          .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-
-
-
-        setCategories(activeCategories);
-
-
-
-      }
-
-
-
-      if (storeItems && storeItems.length > 0) {
-
-
-
-        setStoreInfo(storeItems[0]);
-
-
-
-      }
-
-
-
-    };
-
-
-
-    fetchData();
-
-
-
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(e => console.log("Autoplay blocked", e));
+    }
   }, []);
 
+  return (
+    <div className="relative h-[400px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200">
+      <video
+        ref={videoRef}
+        src={video.videoUrl} 
+        poster={video.thumbnailUrl}
+        loop
+        muted
+        playsInline
+        webkit-playsinline="true"
+        className="w-full h-full object-cover pointer-events-none" 
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+    </div>
+  );
+};
 
+// --- MAIN COMPONENT ---
 
+export default function HomePage() {
+  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
 
-
-
-
-  const features = [
-
-
-
-    { icon: Award, title: '10+ Years of Joy', description: 'A decade of trusted service bringing smiles to families.', color: 'bg-blue-100 text-blue-600' },
-
-
-
-    { icon: Shield, title: 'Safety First', description: 'Every toy is certified safe and non-toxic for your little ones.', color: 'bg-green-100 text-green-600' },
-
-
-
-    { icon: Heart, title: 'Curated with Love', description: 'Hand-picked selection focusing on development and fun.', color: 'bg-pink-100 text-pink-600' },
-
-
-
-    { icon: Store, title: 'Visit Our Store', description: 'Experience the magic in person at our physical location.', color: 'bg-yellow-100 text-yellow-600' },
-
-
-
+  // --- WIX VIDEO DATA ---
+  const videoReels: VideoReel[] = [
+    { id: 'v1', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001', thumbnailUrl: 'https://placehold.co/400x700/pink/white?text=Video1' },
+    { id: 'v2', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001', thumbnailUrl: 'https://placehold.co/400x700/blue/white?text=Video2' },
+    { id: 'v3', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001', thumbnailUrl: 'https://placehold.co/400x700/green/white?text=Video3' },
+    { id: 'v4', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001', thumbnailUrl: 'https://placehold.co/400x700/yellow/white?text=Video4' },
+    { id: 'v5', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001', thumbnailUrl: 'https://placehold.co/400x700/purple/white?text=Video5' },
   ];
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+    };
+    fetchData();
+  }, []);
 
-
-
-
-
+  const features = [
+    { icon: Award, title: 'Premium Quality', description: 'Certified safe and built to last generations.', color: 'bg-blue-100 text-blue-600' },
+    { icon: Shield, title: 'Non-Toxic', description: '100% child-safe materials for worry-free play.', color: 'bg-green-100 text-green-600' },
+    { icon: Heart, title: 'Curated Selection', description: 'Toys selected for developmental value.', color: 'bg-pink-100 text-pink-600' },
+    { icon: Store, title: 'Visit Us', description: 'Experience the magic at our local store.', color: 'bg-yellow-100 text-yellow-600' },
+  ];
 
   return (
-
-
-
     <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
-
-
-
       <Header />
-
-
-
       <WhatsAppFloatingButton />
 
+      {/* --- SECTION 1: HERO SLIDER --- */}
+      <HeroSlider />
 
+      {/* --- SECTION 2: SHOP BY AGE --- */}
+      <ShopByAge />
 
-      
+      {/* --- SECTION 3: BEST SELLERS --- */}
+      <BestSellers />
 
-
-
-      {/* --- Hero Section --- */}
-
-
-
-      <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-light-pink/50 to-white pt-20 lg:pt-0">
-
-
-
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-
-
-
-          <div className="absolute top-[-10%] right-[-5%] w-[50vw] h-[50vw] bg-primary/10 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '8s' }} />
-
-
-
-          <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-secondary/20 rounded-full blur-[80px] animate-pulse" style={{ animationDuration: '10s' }} />
-
-
-
-        </div>
-
-
-
-
-
-
-
-        <div className="max-w-[120rem] w-full mx-auto px-6 relative z-10">
-
-
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-
-
-
-            
-
-
-
-            <div className="lg:col-span-6 flex flex-col gap-8 text-center lg:text-left">
-
-
-
-              <AnimatedReveal direction="right">
-
-
-
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-pink-100 w-fit mx-auto lg:mx-0">
-
-
-
-                  <Sparkles size={16} className="text-secondary" />
-
-
-
-                  <span className="text-sm font-bold text-primary tracking-wide uppercase">Where Imagination Grows</span>
-
-
-
-                </div>
-
-
-
-              </AnimatedReveal>
-
-
-
-
-
-
-
-              <AnimatedReveal delay={200}>
-
-
-
-                <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground leading-[1.1] tracking-tight">
-
-
-
-                  Bringing <span className="text-primary relative inline-block">
-
-
-
-                    Smiles
-
-
-
-                    <svg className="absolute w-full h-3 -bottom-1 left-0 text-secondary opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none">
-
-
-
-                      <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="8" fill="none" />
-
-
-
-                    </svg>
-
-
-
-                  </span> <br />
-
-
-
-                  One Toy at a Time
-
-
-
-                </h1>
-
-
-
-              </AnimatedReveal>
-
-
-
-
-
-
-
-              <AnimatedReveal delay={400}>
-
-
-
-                <p className="text-lg md:text-xl text-gray-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-
-
-
-                  Discover a curated world of joy, learning, and wonder. With over 10 years of experience, we help you find the perfect companion for your child's journey.
-
-
-
-                </p>
-
-
-
-              </AnimatedReveal>
-
-
-
-
-
-
-
-              <AnimatedReveal delay={600}> 
-
-
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"> 
-
-
-
-                  <a href="https://wa.me/+919025398147" className="group relative overflow-hidden bg-whatsapp-green text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex items-center gap-3">
-
-
-
-                    <span className="relative z-10 flex items-center gap-2">
-
-
-
-                      <MessageCircle className="w-6 h-6" />
-
-
-
-                      Chat to Order
-
-
-
-                    </span>
-
-
-
-                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-
-
-
-                  </a>
-
-
-
-                  
-
-
-
-                  <Link
-
-
-
-                    to="/toys"
-
-
-
-                    className="px-8 py-4 rounded-2xl font-bold text-lg text-foreground bg-white border-2 border-gray-100 hover:border-primary hover:text-primary transition-all duration-300 shadow-sm hover:shadow-md"
-
-
-
-                  >
-
-
-
-                    Browse Collection
-
-
-
-                  </Link>
-
-
-
-                </div>
-
-
-
-              </AnimatedReveal>
-
-
-
-
-
-
-
-              <AnimatedReveal delay={800}>
-
-
-
-                <div className="flex items-center justify-center lg:justify-start gap-6 pt-4 text-sm font-medium text-gray-500">
-
-
-
-                  <div className="flex items-center gap-2">
-
-
-
-                    <CheckCircle2 size={18} className="text-primary" />
-
-
-
-                    <span>Safe & Non-Toxic</span>
-
-
-
-                  </div>
-
-
-
-                  <div className="flex items-center gap-2">
-
-
-
-                    <CheckCircle2 size={18} className="text-primary" />
-
-
-
-                    <span>10+ Years Trust</span>
-
-
-
-                  </div>
-
-
-
-                </div>
-
-
-
-              </AnimatedReveal>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <div className="lg:col-span-6 relative">
-
-
-
-              <AnimatedReveal direction="left" delay={300} className="relative z-10">
-
-
-
-                <div className="relative aspect-[4/5] md:aspect-square lg:aspect-[4/5] w-full max-w-2xl mx-auto">
-
-
-
-                  <div className="absolute inset-0 rounded-[3rem] overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-700">
-
-
-
-                    <Image
-
-
-
-                      src="https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960"
-
-
-
-                      alt="Happy child playing with educational toys"
-
-
-
-                      width={800}
-
-
-
-                      className="w-full h-full object-cover"
-
-
-
-                    />
-
-
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-
-
-
-                  </div>
-
-
-
-                  
-
-
-
-                  {/* Floating Bubbles */}
-
-
-
-                  <motion.div 
-
-
-
-                    animate={{ y: [0, -20, 0] }}
-
-
-
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-
-
-
-                    className="absolute top-4 -right-8 bg-white p-4 rounded-2xl shadow-xl max-w-[180px] hidden md:block z-20"
-
-
-
-                  >
-
-
-
-                    <div className="flex items-center gap-2 mb-2">
-
-
-
-                      <div className="flex -space-x-2">
-
-
-
-                        {[1,2,3].map(i => (
-
-
-
-                          <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white overflow-hidden">
-
-
-
-                             <Image src={'https://static.wixstatic.com/media/b9ec8c_e6fdaf35f0924b37b24f0ccb83c15896~mv2.png?originWidth=768&originHeight=960'} alt="User" width={32} className="w-full h-full object-cover" />
-
-
-
-                          </div>
-
-
-
-                        ))}
-
-
-
-                      </div>
-
-
-
-                    </div>
-
-
-
-                    <p className="text-xs font-bold text-gray-800">"Best toy store ever!"</p>
-
-
-
-                    <div className="flex text-yellow-400 mt-1">
-
-
-
-                      {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="currentColor" />)}
-
-
-
-                    </div>
-
-
-
-                  </motion.div>
-
-
-
-
-
-
-
-                  <motion.div 
-
-
-
-                    animate={{ y: [0, 20, 0] }}
-
-
-
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-
-
-
-                    className="absolute bottom-4 -left-4 bg-white p-4 rounded-2xl shadow-xl flex items-center gap-4 hidden md:flex z-20"
-
-
-
-                  >
-
-
-
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-
-
-
-                      <Store size={24} />
-
-
-
-                    </div>
-
-
-
-                    <div>
-
-
-
-                      <p className="text-sm font-bold text-gray-800">Visit Our Store</p>
-
-
-
-                      <p className="text-xs text-gray-500">Open 7 Days a Week</p>
-
-
-
-                    </div>
-
-
-
-                  </motion.div>
-
-
-
-                </div>
-
-
-
-              </AnimatedReveal>
-
-
-
-            </div>
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-
-
-
-
-      <div className="w-full bg-primary py-4 overflow-hidden">
-
-
-
-        <div className="flex whitespace-nowrap animate-marquee">
-
-
-
-          {[...Array(10)].map((_, i) => (
-
-
-
-            <div key={i} className="flex items-center mx-8 text-white font-heading text-xl md:text-2xl font-bold uppercase tracking-wider opacity-90">
-
-
-
-              <span className="mx-4">•</span> Educational Toys
-
-
-
-              <span className="mx-4">•</span> Action Figures
-
-
-
-              <span className="mx-4">•</span> Board Games
-
-
-
-              <span className="mx-4">•</span> Plushies
-
-
-
-            </div>
-
-
-
-          ))}
-
-
-
-        </div>
-
-
-
-      </div>
-
-
-
-
-
-
-
-      {/* --- Categories Section --- */}
-
-
-
-      <section className="py-24 lg:py-32 bg-white relative">
-
-
-
-        <div className="max-w-[120rem] mx-auto px-6">
-
-
-
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-
-
-
-            <AnimatedReveal>
-
-
-
-              <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground text-center uppercase m-0.5">
-
-
-
-                Explore Our <br />
-
-
-
-                <span className="text-primary font-heading">Magical World</span>
-
-
-
-              </h2>
-
-
-
-            </AnimatedReveal>
-
-
-
-            <AnimatedReveal delay={200}>
-
-
-
-              <p className="text-lg text-gray-600 max-w-md mb-4 md:mb-0">
-
-
-
-                From brain-teasing puzzles to cuddly friends, find the perfect playmate for every age and interest.
-
-
-
-              </p>
-
-
-
-            </AnimatedReveal>
-
-
-
-          </div>
-
-
-
-
-
-
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-
-
-
-            {categories.map((category, index) => (
-
-
-
-              <AnimatedReveal 
-
-
-
-                key={category._id} 
-
-
-
-                delay={index * 100} 
-
-
-
-                className={`${index % 3 === 1 ? 'lg:mt-16' : ''}`}
-
-
-
-              >
-
-
-
-                <Link to={`/toys?category=${encodeURIComponent(category.categoryName || '')}`} className="group block relative">
-
-
-
-                  <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden bg-gray-100 shadow-lg transition-transform duration-500 group-hover:-translate-y-2">
-
-
-
-                    <Image
-
-
-
-                      src={category.categoryImage || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768'}
-
-
-
-                      alt={category.categoryName || 'Category'}
-
-
-
-                      width={600}
-
-
-
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-
-
-
-                    />
-
-
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
-
-
-
-                    
-
-
-
-                    <div className="absolute bottom-0 left-0 w-full p-8">
-
-
-
-                      <div className="bg-white/90 backdrop-blur-sm p-6 rounded-2xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-
-
-
-                        <h3 className="font-heading text-2xl text-foreground mb-2 group-hover:text-primary transition-colors">
-
-
-
-                          {category.categoryName}
-
-
-
-                        </h3>
-
-
-
-                        <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-
-
-
-                          {category.description}
-
-
-
-                        </p>
-
-
-
-                        <div className="flex items-center text-primary font-bold text-sm uppercase tracking-wider">
-
-
-
-                          Explore <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
-
-
-
-                        </div>
-
-
-
-                      </div>
-
-
-
-                    </div>
-
-
-
-                  </div>
-
-
-
-                </Link>
-
-
-
-              </AnimatedReveal>
-
-
-
-            ))}
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-
-
-
-
-      {/* --- Features Section --- */}
-
-
-
-      <section className="relative bg-light-pink/30 py-24 lg:py-32 overflow-hidden">
-
-
-
-        <div className="max-w-[120rem] mx-auto px-6">
-
-
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-
-
-
-            <div className="lg:col-span-4 relative">
-
-
-
-              <div className="lg:sticky lg:top-32">
-
-
-
-                <AnimatedReveal>
-
-
-
-                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-primary shadow-md mb-8">
-
-
-
-                    <Heart size={32} fill="currentColor" />
-
-
-
-                  </div>
-
-
-
-                  <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-6">
-
-
-
-                    Why Parents <br />
-
-
-
-                    <span className="text-primary">Love Us</span>
-
-
-
-                  </h2>
-
-
-
-                  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-
-
-
-                    We don't just sell toys; we curate experiences that help your children grow, learn, and create memories that last a lifetime.
-
-
-
-                  </p>
-
-
-
-                  <a href="https://wa.me/+919025398147"
-
-
-
-                    className="inline-flex items-center gap-2 font-bold text-primary hover:text-primary/80 transition-colors text-lg group"
-
-
-
-                  >
-
-
-
-                    Ask us anything
-
-
-
-                    <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-
-
-
-                  </a>
-
-
-
-                </AnimatedReveal>
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-
-
-
-
-            <div className="lg:col-span-8">
-
-
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-
-
-                {features.map((feature, index) => (
-
-
-
-                  <AnimatedReveal key={index} delay={index * 100} direction="up">
-
-
-
-                    <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-pink-100 h-full">
-
-
-
-                      <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mb-6`}>
-
-
-
-                        <feature.icon size={28} />
-
-
-
-                      </div>
-
-
-
-                      <h3 className="font-heading text-xl text-foreground mb-3">
-
-
-
-                        {feature.title}
-
-
-
-                      </h3>
-
-
-
-                      <p className="text-gray-600 leading-relaxed">
-
-
-
-                        {feature.description}
-
-
-
-                      </p>
-
-
-
-                    </div>
-
-
-
-                  </AnimatedReveal>
-
-
-
-                ))}
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-
-
-
-
-      {/* --- Location Section --- */}
-
-
-
-      <section className="py-24 lg:py-32 bg-white">
-
-
-
-        <div className="max-w-[120rem] mx-auto px-6">
-
-
-
-          <div className="bg-foreground rounded-[3rem] overflow-hidden text-white relative">
-
-
-
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-
-
-
-            
-
-
-
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-
-
-
-              <div className="p-12 lg:p-24 flex flex-col justify-center relative z-10">
-
-
-
-                <AnimatedReveal>
-
-
-
-                  <h2 className="font-heading text-4xl md:text-5xl mb-6">
-
-
-
-                    Come Play With Us!
-
-
-
-                  </h2>
-
-
-
-                  <p className="text-gray-300 text-lg mb-12 max-w-md">
-
-
-
-                    Visit our physical store to see, touch, and try our toys before you buy. Our friendly staff is ready to help you find the perfect gift.
-
-
-
-                  </p>
-
-
-
-                  
-
-
-
-                  <div className="space-y-6 mb-12">
-
-
-
-                    <div className="flex items-start gap-4">
-
-
-
-                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center shrink-0">
-
-
-
-                        <MapPin className="text-primary" />
-
-
-
-                      </div>
-
-
-
-                      <div>
-
-
-
-                        <h4 className="font-bold text-lg mb-1">Location</h4>
-
-
-
-                        <p className="text-gray-400">{storeInfo?.address || '123 Toy Street, Fun City'}</p>
-
-
-
-                      </div>
-
-
-
-                    </div>
-
-
-
-                    
-
-
-
-                    <div className="flex items-start gap-4">
-
-
-
-                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center shrink-0">
-
-
-
-                        <Clock className="text-primary" />
-
-
-
-                      </div>
-
-
-
-                      <div>
-
-
-
-                        <h4 className="font-bold text-lg mb-1">Working Hours</h4>
-
-
-
-                        <p className="text-gray-400">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
-
-
-
-                      </div>
-
-
-
-                    </div>
-
-
-
-                  </div>
-
-
-
-
-
-
-
-                  <Link 
-
-
-
-                    to="/visit"
-
-
-
-                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-foreground font-bold rounded-xl hover:bg-primary hover:text-white transition-all duration-300 w-fit"
-
-
-
-                  >
-
-
-
-                    Get Directions
-
-
-
-                  </Link>
-
-
-
-                </AnimatedReveal>
-
-
-
-              </div>
-
-
-
-
-
-
-
-              <div className="relative h-[400px] lg:h-auto">
-
-
-
-                <Image
-
-
-
-                  src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384"
-
-
-
-                  alt="Inside our toy store"
-
-
-
-                  width={800}
-
-
-
-                  className="w-full h-full object-cover"
-
-
-
-                />
-
-
-
-                <div className="absolute inset-0 bg-gradient-to-r from-foreground via-transparent to-transparent lg:bg-gradient-to-l" />
-
-
-
-              </div>
-
-
-
-            </div>
-
-
-
-          </div>
-
-
-
-        </div>
-
-
-
-      </section>
-
-
-
-
-
-
-
-      {/* --- NEW Infinite Marquee Video Section --- */}
-
-
-
+      {/* --- SECTION 4: INFINITE VIDEO REEL (Moved Down) --- */}
       <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-
-
-
         <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
-
-
-
           <AnimatedReveal>
-
-
-
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-
-
-
-              See It In Action
-
-
-
-            </h2>
-
-
-
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
-
-
-
                A peek into the fun world waiting for you at our store.
-
-
-
             </p>
-
-
-
           </AnimatedReveal>
-
-
-
         </div>
 
-
-
-
-
-
-
-        {/* Carousel Container */}
-
-
-
-        <div className="relative w-full">
-
-
-
-          {/* Side Gradients for Fade Effect */}
-
-
-
-          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-
-
-
-          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-
-
-
-
-
-
-          {/* Marquee Track */}
-
-
-
-          <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-
-
-
-            {/* We duplicate the list twice to ensure seamless scrolling.
-
-
-
-              If you have very few videos, you might want to map it 3-4 times.
-
-
-
-            */}
-
-
-
-            {[...videoReels, ...videoReels, ...videoReels].map((video, index) => (
-
-
-
-              <MarqueeVideo key={`${video.id}-${index}`} video={video} />
-
-
-
+        <div className="relative w-full px-4 md:px-0">
+          <Swiper
+            modules={[Autoplay, FreeMode]}
+            loop={true}
+            freeMode={true}
+            spaceBetween={20}
+            slidesPerView={'auto'}
+            centeredSlides={true}
+            speed={4000}
+            autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
+            className="w-full"
+            style={{ transitionTimingFunction: 'linear' }}
+          >
+            {videoReels.map((video) => (
+              <SwiperSlide key={video.id} style={{ width: 'auto' }}>
+                 <MarqueeVideo video={video} />
+              </SwiperSlide>
             ))}
-
-
-
-          </div>
-
-
-
+          </Swiper>
         </div>
-
-
-
-
-
-
-
-        {/* CSS for infinite scroll */}
-
-
-
-        <style>{`
-
-
-
-          @keyframes marquee {
-
-
-
-            0% { transform: translateX(0); }
-
-
-
-            100% { transform: translateX(-50%); }
-
-
-
-          }
-
-
-
-          .animate-marquee {
-
-
-
-            animation: marquee 60s linear infinite;
-
-
-
-          }
-
-
-
-        `}</style>
-
-
-
       </section>
 
+      {/* --- SECTION 5: FEATURES --- */}
+      <section className="py-24 bg-white">
+        <div className="max-w-[120rem] mx-auto px-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {features.map((feature, index) => (
+                  <AnimatedReveal key={index} delay={index * 100} direction="up">
+                    <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-pink-100 h-full text-center">
+                      <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-6 mx-auto`}>
+                        <feature.icon size={32} />
+                      </div>
+                      <h3 className="font-heading text-xl text-foreground mb-3">{feature.title}</h3>
+                      <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                    </div>
+                  </AnimatedReveal>
+                ))}
+           </div>
+        </div>
+      </section>
 
-
-
-
-
+      {/* --- SECTION 6: LOCATION --- */}
+      <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
+         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px] pointer-events-none" />
+         <div className="max-w-[120rem] mx-auto px-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+               <div className="order-2 lg:order-1">
+                  <AnimatedReveal>
+                    <h2 className="font-heading text-4xl md:text-5xl mb-8">Visit Our Wonderland</h2>
+                    <p className="text-gray-300 text-lg mb-12 max-w-md">
+                      Touch, feel, and play before you buy. Our store is a safe haven for imagination.
+                    </p>
+                    <div className="space-y-8">
+                       <div className="flex gap-6">
+                          <MapPin className="text-primary shrink-0" size={32} />
+                          <div>
+                             <h4 className="font-bold text-xl mb-2">Location</h4>
+                             <p className="text-gray-400">{storeInfo?.address || '123 Toy Street, Fun City, India'}</p>
+                          </div>
+                       </div>
+                       <div className="flex gap-6">
+                          <Clock className="text-primary shrink-0" size={32} />
+                          <div>
+                             <h4 className="font-bold text-xl mb-2">Opening Hours</h4>
+                             <p className="text-gray-400">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
+                          </div>
+                       </div>
+                    </div>
+                    <div className="mt-12">
+                       <Link to="/visit" className="bg-white text-gray-900 px-8 py-4 rounded-xl font-bold hover:bg-primary hover:text-white transition-all">
+                          Get Directions
+                       </Link>
+                    </div>
+                  </AnimatedReveal>
+               </div>
+               <div className="order-1 lg:order-2 h-[400px] lg:h-[600px] rounded-[3rem] overflow-hidden relative">
+                  <Image src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png" width={800} className="w-full h-full object-cover" alt="Store Interior" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
+               </div>
+            </div>
+         </div>
+      </section>
 
       <Footer />
-
-
-
     </div>
-
-
-
   );
-
-
-
 }
-
