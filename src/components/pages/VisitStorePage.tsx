@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { StoreInformation } from '@/entities';
-import { MapPin, Phone, Clock, MessageCircle, Navigation } from 'lucide-react';
+import { MapPin, Phone, Clock, MessageCircle, Navigation, ExternalLink } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -26,316 +26,173 @@ export default function VisitStorePage() {
     window.open(whatsAppUrl, '_blank');
   };
 
-  const handleMainStoreDirections = () => {
-    window.open('https://maps.app.goo.gl/t4mHdnPEn57Vu1HZA?g_st=ic', '_blank');
-  };
+  // --- Sub-Component for Store Block ---
+  const StoreBlock = ({ 
+    title, 
+    mapSrc, 
+    addressUrl, 
+    isReversed = false 
+  }: { 
+    title: string; 
+    mapSrc: string; 
+    addressUrl: string; 
+    isReversed?: boolean; 
+  }) => (
+    <motion.div 
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 items-stretch mb-20`}
+    >
+      {/* Map Embed Section */}
+      <div className="w-full lg:w-1/2 min-h-[400px] lg:min-h-auto relative">
+        <div className="absolute inset-0 bg-gray-200 rounded-[2rem] overflow-hidden shadow-lg border-4 border-white">
+          <iframe 
+            src={mapSrc}
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            title={`${title} Map`}
+            className="w-full h-full grayscale-[20%] hover:grayscale-0 transition-all duration-500"
+          ></iframe>
+        </div>
+      </div>
 
-  const handleBranchStoreDirections = () => {
-    window.open('https://maps.app.goo.gl/7CUkrrQkLh9pvtF18?g_st=ic', '_blank');
-  };
+      {/* Details Card Section */}
+      <div className="w-full lg:w-1/2 flex flex-col justify-center">
+        <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-xl border border-gray-100 h-full flex flex-col justify-center relative overflow-hidden group">
+          {/* Decorative Background Blob */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-light-pink/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-light-pink/50 transition-colors duration-500" />
+
+          <div className="relative z-10">
+            <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6 border-b-2 border-light-pink pb-4 inline-block">
+              {title}
+            </h3>
+
+            <div className="space-y-6">
+              {/* Location */}
+              <div className="flex items-start gap-4 group/item">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-lg">Address</h4>
+                  <p className="text-gray-600 mb-2">{storeInfo?.address || '123 Toy Street, Fun City, India'}</p>
+                  <a 
+                    href={addressUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm font-bold text-primary flex items-center gap-1 hover:underline"
+                  >
+                    Get Directions <ExternalLink size={14} />
+                  </a>
+                </div>
+              </div>
+
+              {/* Phone */}
+              <div className="flex items-start gap-4 group/item">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-lg">Contact</h4>
+                  <a href={`tel:${storeInfo?.phoneNumber}`} className="text-gray-600 hover:text-primary transition-colors">
+                    {storeInfo?.phoneNumber || '+91 90253 98147'}
+                  </a>
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div className="flex items-start gap-4 group/item">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <Clock size={20} />
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 text-lg">Working Hours</h4>
+                  <p className="text-gray-600">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-4">
+              <a 
+                href={addressUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-white border-2 border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2"
+              >
+                <Navigation size={18} /> Navigate
+              </a>
+              <button 
+                onClick={handleWhatsAppClick}
+                className="flex-1 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+              >
+                <MessageCircle size={18} /> WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <WhatsAppFloatingButton />
 
-      {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-20">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <h1 className="font-heading text-5xl md:text-6xl text-primary mb-6">
-              Visit Our Store
-            </h1>
-            <p className="font-paragraph text-xl text-foreground max-w-3xl mx-auto">
-              Come experience the joy of toy shopping in person. See, touch, and explore our collection with your child.
+      {/* Hero */}
+      <section className="relative w-full bg-white py-16 border-b border-gray-100">
+        <div className="max-w-[120rem] mx-auto px-6 text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+            <h1 className="font-heading text-4xl md:text-5xl text-primary mb-4">Visit Sudha Novelties</h1>
+            <p className="font-paragraph text-lg text-gray-500 max-w-2xl mx-auto">
+              Drop by our stores to explore the full collection. We can't wait to see you!
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Multiple Stores Section */}
-      <section className="py-20 bg-white">
+      {/* Store Locations Section */}
+      <section className="py-20">
         <div className="max-w-[120rem] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              Our Store Locations
-            </h2>
-            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">
-              Visit us at any of our convenient locations to explore our complete toy collection
-            </p>
-          </motion.div>
+          
+          {/* Main Store - Map Left / Info Right */}
+          <StoreBlock 
+            title="Main Store"
+            // Updated with your specific Main Store Map Link
+            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d492.8500497625455!2d78.148129!3d8.8048144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef98fd8c85a7%3A0x8e37c310bb684eec!2sSudha%20Novelties!5e0!3m2!1sen!2sin!4v1769959828885!5m2!1sen!2sin"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
+            isReversed={false}
+          />
 
-          {/* Store 1 - Main Store */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="mb-12"
-          >
-            <div className="bg-light-pink/20 rounded-3xl p-10 max-w-4xl mx-auto">
-              <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6">
-                MAIN STORE
-              </h3>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <MapPin className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Location</h4>
-                    <a
-                      href="https://maps.app.goo.gl/t4mHdnPEn57Vu1HZA?g_st=ic"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors underline"
-                    >
-                      <Navigation size={18} />
-                      View on Google Maps
-                    </a>
-                  </div>
-                </div>
+          {/* Branch Store - Info Left / Map Right */}
+          <StoreBlock 
+            title="Branch Store"
+            // Updated with your specific Branch Store Map Link
+            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1971.4105504926988!2d78.1368176!3d8.8028719!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03efdee738034b%3A0x94a6c5a233714cdc!2sSudha%20Novelties%20New%20Corporation%20branch!5e0!3m2!1sen!2sin!4v1769959842560!5m2!1sen!2sin"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
+            isReversed={true}
+          />
 
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <Phone className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Phone</h4>
-                    <a
-                      href={`tel:${storeInfo?.phoneNumber || '919025398147'}`}
-                      className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                    >
-                      {storeInfo?.phoneNumber || '+91 9025398147'}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <Clock className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Hours</h4>
-                    <p className="font-paragraph text-base text-foreground">
-                      {storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={handleWhatsAppClick}
-                className="w-full bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={20} />
-                Chat on WhatsApp
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Store 2 - Branch Store */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className="bg-light-pink/20 rounded-3xl p-10 max-w-4xl mx-auto">
-              <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6">
-                BRANCH STORE
-              </h3>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <MapPin className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Location</h4>
-                    <a
-                      href="https://maps.app.goo.gl/7CUkrrQkLh9pvtF18?g_st=ic"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors underline"
-                    >
-                      <Navigation size={18} />
-                      View on Google Maps
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <Phone className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Phone</h4>
-                    <a
-                      href={`tel:${storeInfo?.phoneNumber || '919025398147'}`}
-                      className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                    >
-                      {storeInfo?.phoneNumber || '+91 9025398147'}
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                    <Clock className="text-primary" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-heading text-lg text-primary mb-2">Hours</h4>
-                    <p className="font-paragraph text-base text-foreground">
-                      {storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                onClick={handleWhatsAppClick}
-                className="w-full bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-              >
-                <MessageCircle size={20} />
-                Chat on WhatsApp
-              </button>
-            </div>
-          </motion.div>
         </div>
       </section>
 
-      {/* Why Visit Section */}
-      <section className="py-20 bg-gradient-to-br from-light-pink to-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+      {/* Simple CTA */}
+      <section className="py-16 bg-primary text-white text-center">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="font-heading text-3xl mb-4">Need help finding us?</h2>
+          <p className="mb-8 opacity-90">Call us or message on WhatsApp for live location sharing.</p>
+          <button 
+            onClick={handleWhatsAppClick}
+            className="bg-white text-primary font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
           >
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
-              Why Visit Our Stores?
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl p-6 shadow-md"
-            >
-              <h3 className="font-heading text-xl text-primary mb-3">
-                Hands-On Experience
-              </h3>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                Let your child see, touch, and play with toys before making a decision.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-md"
-            >
-              <h3 className="font-heading text-xl text-primary mb-3">
-                Expert Guidance
-              </h3>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                Our knowledgeable staff helps you find the perfect toy for any age.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-white rounded-2xl p-6 shadow-md"
-            >
-              <h3 className="font-heading text-xl text-primary mb-3">
-                Immediate Availability
-              </h3>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                Take your purchase home immediately. No waiting for delivery.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-md"
-            >
-              <h3 className="font-heading text-xl text-primary mb-3">
-                Family-Friendly
-              </h3>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                Our stores are designed to be welcoming for both parents and children.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-primary">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center"
-          >
-            <h2 className="font-heading text-4xl md:text-5xl text-white mb-6">
-              Plan Your Visit Today
-            </h2>
-            <p className="font-paragraph text-lg text-white/90 mb-8 max-w-2xl mx-auto">
-              Have questions before you visit? Chat with us on WhatsApp for store hours, directions, or product availability.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button
-                onClick={handleMainStoreDirections}
-                className="inline-flex items-center justify-center gap-3 bg-white text-primary font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                <Navigation size={24} />
-                Main Store Directions
-              </button>
-              <button
-                onClick={handleBranchStoreDirections}
-                className="inline-flex items-center justify-center gap-3 bg-white text-primary font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-white/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                <Navigation size={24} />
-                Branch Store Directions
-              </button>
-              <button
-                onClick={handleWhatsAppClick}
-                className="inline-flex items-center justify-center gap-3 bg-whatsapp-green text-white font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-              >
-                <MessageCircle size={24} />
-                Chat on WhatsApp
-              </button>
-            </div>
-          </motion.div>
+            <MessageCircle size={20} /> Contact Support
+          </button>
         </div>
       </section>
 
