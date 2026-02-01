@@ -21,9 +21,8 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
       <div className="max-w-[160rem] mx-auto px-6">
-        {/* Container Height: h-20 (80px) mobile, h-24 (96px) desktop. 
-            This is the standard size for e-commerce headers. */}
-        <div className="flex items-center justify-between h-20 md:h-24 transition-all duration-300">
+        {/* Container Height: h-16 (64px) mobile, h-20 (80px) tablet, h-24 (96px) desktop. */}
+        <div className="flex items-center justify-between h-16 sm:h-20 md:h-24 transition-all duration-300">
           
           {/* Logo Section */}
           <Link to="/" className="flex items-center h-full">
@@ -32,11 +31,12 @@ export default function Header() {
               // Provide large dimensions for sharpness, but CSS controls the display size
               width={220} 
               height={100}
-              // FIX APPLIED HERE:
-              // 1. h-[85%]: Forces the image to be only 85% of the bar's height.
-              //    This leaves whitespace at top/bottom automatically.
-              // 2. object-contain: Ensures the image scales down to fit, never cropping.
-              className="h-[85%] w-auto object-contain"
+              // Responsive logo sizing:
+              // 1. h-[70%]: Mobile - 70% of header height for compact appearance
+              // 2. sm:h-[75%]: Tablet - 75% of header height
+              // 3. md:h-[80%]: Desktop - 80% of header height
+              // 4. object-contain: Ensures the image scales down to fit, never cropping.
+              className="h-[70%] sm:h-[75%] md:h-[80%] w-auto object-contain"
               originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
