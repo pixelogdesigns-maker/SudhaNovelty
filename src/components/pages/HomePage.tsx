@@ -69,12 +69,7 @@ const HeroSlider = () => {
       >
         {/* Background Image Layer */}
         <div className="absolute inset-0">
-          <Image 
-            src={slide.image} 
-            alt={slide.title} 
-            className="w-full h-full object-cover opacity-80" 
-            width={1920}
-          />
+          <Image src={slide.image} alt={slide.title} className="w-full h-full object-cover opacity-80" />
           <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/50 to-transparent" />
         </div>
 
@@ -160,7 +155,7 @@ const ShopByAge = () => {
           {ages.map((age, idx) => (
             <Link key={idx} to={`/toys?age=${age.range}`} className="group flex flex-col items-center">
               <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-transparent group-hover:border-primary transition-all duration-300 shadow-md group-hover:shadow-xl relative mb-4">
-                <Image src={age.image} alt={age.label} width={200} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                <Image src={age.image} alt={age.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
               </div>
               <h3 className="font-heading text-xl text-gray-800 group-hover:text-primary transition-colors">{age.label}</h3>
@@ -196,7 +191,7 @@ const BestSellers = () => {
           {products.map((product) => (
             <div key={product.id} className="bg-white rounded-3xl p-4 shadow-sm hover:shadow-xl transition-all duration-300 group">
               <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 mb-4">
-                <Image src={product.image} alt={product.name} width={400} className="w-full h-full object-cover" />
+                <Image src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 
                 {/* Quick Action Overlay */}
                 <div className="absolute inset-x-4 bottom-4 translate-y-[150%] group-hover:translate-y-0 transition-transform duration-300">
@@ -263,6 +258,7 @@ const MarqueeVideo = ({ video }: { video: VideoReel }) => {
 
 export default function HomePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // --- WIX VIDEO DATA ---
   const videoReels: VideoReel[] = [
@@ -275,8 +271,14 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+      try {
+        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+      } catch (error) {
+        console.error('Error fetching store information:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -378,7 +380,7 @@ export default function HomePage() {
                   </AnimatedReveal>
                </div>
                <div className="order-1 lg:order-2 h-[400px] lg:h-[600px] rounded-[3rem] overflow-hidden relative">
-                  <Image src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png" width={800} className="w-full h-full object-cover" alt="Store Interior" />
+                  <Image src="https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png" className="w-full h-full object-cover" alt="Store Interior" />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
                </div>
             </div>
