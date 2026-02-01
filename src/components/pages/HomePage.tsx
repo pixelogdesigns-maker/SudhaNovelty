@@ -67,7 +67,7 @@ const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 20000);
+    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 5000);
     return () => clearInterval(timer);
   }, []);
 
@@ -380,7 +380,7 @@ export default function HomePage() {
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
-      <section className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>

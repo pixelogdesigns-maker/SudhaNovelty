@@ -19,7 +19,7 @@ export default function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-sm">
+    <header className="sticky top-0 z-50 bg-white shadow-md border-b-2 border-primary">
       <div className="max-w-[160rem] mx-auto px-6">
         {/* Container Height: h-20 (80px) mobile, h-24 (96px) desktop. 
             This is the standard size for e-commerce headers. */}
@@ -49,9 +49,9 @@ export default function Header() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`font-paragraph text-base transition-colors ${
+                className={`font-paragraph text-base font-semibold transition-colors ${
                   isActive(link.path)
-                    ? 'text-primary font-semibold'
+                    ? 'text-primary'
                     : 'text-foreground hover:text-primary'
                 }`}
               >

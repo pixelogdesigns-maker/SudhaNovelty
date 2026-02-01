@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check } from 'lucide-react';
+import { MessageCircle, Filter, ChevronDown, Check, Palette } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -17,8 +17,11 @@ export default function ToysPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
+  const [selectedColor, setSelectedColor] = useState<string>('all');
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
+  const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
+  const [availableColors, setAvailableColors] = useState<string[]>([]);
 
   // Define age groups for filtering
   const ageGroups = [
@@ -38,6 +41,19 @@ export default function ToysPage() {
       if (toyItems) {
         setToys(toyItems);
         setFilteredToys(toyItems);
+        
+        // Extract unique colors from toys
+        const colors = new Set<string>();
+        toyItems.forEach(toy => {
+          if (toy.color) {
+            // Split by comma and trim each color
+            toy.color.split(',').forEach(c => {
+              const trimmed = c.trim();
+              if (trimmed) colors.add(trimmed);
+            });
+          }
+        });
+        setAvailableColors(Array.from(colors).sort());
       }
 
       if (categoryItems) {
@@ -134,8 +150,16 @@ export default function ToysPage() {
     // Apply age group filter
     filtered = filtered.filter(matchesAgeGroup);
 
+    // Apply color filter
+    if (selectedColor !== 'all') {
+      filtered = filtered.filter(toy => {
+        if (!toy.color) return false;
+        return toy.color.split(',').map(c => c.trim()).includes(selectedColor);
+      });
+    }
+
     setFilteredToys(filtered);
-  }, [selectedCategory, selectedAgeGroup, toys]);
+  }, [selectedCategory, selectedAgeGroup, selectedColor, toys]);
 
  // --- 1. Smart Helper: Converts Wix link to a WhatsApp-friendly Thumbnail ---
   const getPublicImageUrl = (wixUrl: string | undefined) => {
@@ -303,6 +327,74 @@ export default function ToysPage() {
                 </div>
               )}
             </div>
+
+            {/* Color Filter Dropdown */}
+            {availableColors.length > 0 && (
+              <div className="w-full md:w-auto relative z-50">
+                {isColorDropdownOpen && (
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setIsColorDropdownOpen(false)}
+                  />
+                )}
+
+                <button
+                  onClick={() => setIsColorDropdownOpen(!isColorDropdownOpen)}
+                  className={`w-full md:w-48 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${isColorDropdownOpen
+                      ? 'border-primary ring-2 ring-primary/10 shadow-lg'
+                      : 'border-gray-200 hover:border-primary/50 hover:shadow-md'
+                    }`}
+                >
+                  <div className="flex flex-col items-start text-left">
+                    <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold flex items-center gap-1">
+                      <Palette size={12} /> Color
+                    </span>
+                    <span className="font-bold text-gray-800 text-sm">
+                      {selectedColor === 'all' ? 'All Colors' : selectedColor}
+                    </span>
+                  </div>
+                  <ChevronDown
+                    size={18}
+                    className={`text-gray-400 transition-transform duration-300 ${isColorDropdownOpen ? 'rotate-180 text-primary' : ''}`}
+                  />
+                </button>
+
+                {isColorDropdownOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                    <div className="py-1 max-h-64 overflow-y-auto">
+                      <button
+                        onClick={() => {
+                          setSelectedColor('all');
+                          setIsColorDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors"
+                      >
+                        <span className={`text-sm font-medium ${selectedColor === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>
+                          All Colors
+                        </span>
+                        {selectedColor === 'all' && <Check size={16} className="text-primary" />}
+                      </button>
+
+                      {availableColors.map((color) => (
+                        <button
+                          key={color}
+                          onClick={() => {
+                            setSelectedColor(color);
+                            setIsColorDropdownOpen(false);
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors"
+                        >
+                          <span className={`text-sm font-medium ${selectedColor === color ? 'text-primary font-bold' : 'text-gray-600'}`}>
+                            {color}
+                          </span>
+                          {selectedColor === color && <Check size={16} className="text-primary" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
         </div>
