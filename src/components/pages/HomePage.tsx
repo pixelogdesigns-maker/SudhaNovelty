@@ -154,7 +154,7 @@ const HeroCarousel = () => {
   );
 };
 
-// 2. Shop By Age Component
+// 2. Shop By Age Component (Updated to match "Baybee" style)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = {
@@ -163,26 +163,81 @@ const ShopByAge = () => {
     return ageMap[range] || range;
   };
 
+  // Custom colors to match the reference image's pastel circles
+  const PASTEL_COLORS = [
+    "bg-[#A7F3D0]", // Soft Green
+    "bg-[#BFDBFE]", // Soft Blue
+    "bg-[#FECACA]", // Soft Red/Pink
+    "bg-[#FDE68A]", // Soft Yellow
+    "bg-[#DDD6FE]", // Soft Purple
+    "bg-[#FDBA74]", // Soft Orange
+  ];
+
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-[120rem] mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4">Shop by Age</h2>
-          <p className="text-gray-500 text-lg">Curated collections for every milestone.</p>
+    <section className="relative py-32 bg-[#7C3AED] overflow-hidden">
+      {/* --- Top Wavy Divider --- */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg className="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#FFFFFF"></path>
+        </svg>
+      </div>
+
+      <div className="max-w-[120rem] mx-auto px-6 relative z-10">
+        {/* Header - White Text to match Purple bg */}
+        <div className="text-center mb-16">
+          <h2 className="font-heading text-4xl md:text-6xl text-white mb-2 tracking-wide uppercase drop-shadow-md">
+            Shop by Age
+          </h2>
+          <div className="w-24 h-1 bg-white/50 mx-auto rounded-full" />
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
           {AGE_GROUPS.map((group, index) => (
-            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center">
-              <div className={`w-full aspect-square rounded-[2rem] ${group.color} flex flex-col items-center justify-center mb-4 transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-lg`}>
-                <span className="text-4xl mb-2 filter drop-shadow-sm">{group.icon}</span>
-                <span className="font-heading text-xl font-bold">{group.range}</span>
-                <span className="text-xs font-bold uppercase opacity-60">Years</span>
+            <Link 
+              key={index} 
+              to={`/toys?age=${getAgeGroupId(group.range)}`} 
+              className="group flex flex-col items-center"
+            >
+              {/* Circular Image Container */}
+              <div className={`
+                relative w-36 h-36 md:w-44 md:h-44 rounded-full 
+                ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
+                flex flex-col items-center justify-center 
+                border-4 border-white/30 shadow-lg 
+                transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3
+              `}>
+                {/* NOTE: If you have specific vector images (like the baby, toddler, skater in your image),
+                   replace this <span> with an <Image src="..." /> component.
+                   For now, I've scaled up the icons to act as the illustrations.
+                */}
+                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:-translate-y-2">
+                  {group.icon}
+                </span>
+                
+                {/* Glossy Reflection Effect */}
+                <div className="absolute top-0 left-0 w-full h-full rounded-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none opacity-50" />
               </div>
-              <h3 className="font-bold text-gray-700 group-hover:text-primary transition-colors">{group.label}</h3>
+
+              {/* Text Label - Bold & White */}
+              <div className="text-center mt-6">
+                <h3 className="font-heading text-3xl md:text-4xl text-white font-bold leading-none mb-1 shadow-black drop-shadow-md">
+                  {group.range}
+                </h3>
+                <p className="text-white/90 text-sm md:text-base font-bold tracking-widest uppercase">
+                  {group.label.includes('Months') ? 'Months' : 'Years'}
+                </p>
+              </div>
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* --- Bottom Wavy Divider --- */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg className="relative block w-[calc(100%+1.3px)] h-[50px] md:h-[100px]" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" fill="#FFF8F3"></path>
+        </svg>
       </div>
     </section>
   );
