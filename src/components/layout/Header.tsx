@@ -20,19 +20,27 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="max-w-[160rem] mx-auto px-6 py-2">
-        {/* Increased height to h-20 (mobile) and h-24 (desktop) to fit the logo */}
-        <div className="flex items-center justify-between h-20 md:h-24">
+      <div className="max-w-[160rem] mx-auto px-6">
+        {/* h-20 (80px) is the sweet spot. 
+           It is standard size but big enough for logos with top/bottom details.
+        */}
+        <div className="flex items-center justify-between h-20">
           
           {/* Logo Section */}
-          <Link to="/" className="flex items-center h-full py-2">
+          <Link to="/" className="flex items-center h-full">
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
-              // We increase the width/height container constraints to let object-contain do its work
-              width={180} 
-              height={90}
-              className="h-full w-auto object-contain"
-              originWidth={233}
+              // These props help the loader calculate aspect ratio, 
+              // but CSS below controls the actual size.
+              width={200} 
+              height={80}
+              // FIX: 
+              // 1. w-auto: width adjusts based on height.
+              // 2. h-12 md:h-14: Fixed height (48px mobile, 56px desktop).
+              //    This leaves space inside the h-20 (80px) container so it never touches edges.
+              // 3. object-contain: Ensures no cropping happens.
+              className="w-auto h-12 md:h-14 object-contain"
+              originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
             />
@@ -67,7 +75,7 @@ export default function Header() {
 
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
-          <nav className="md:hidden mt-2 pb-4 flex flex-col gap-4 border-t border-gray-100 pt-4">
+          <nav className="md:hidden pb-4 flex flex-col gap-4 border-t border-gray-100 pt-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
