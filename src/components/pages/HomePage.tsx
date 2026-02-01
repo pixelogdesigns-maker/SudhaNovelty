@@ -1,4 +1,4 @@
-// HPI 3.5-V (Best Sellers Logic Update)
+// HPI 3.6-V (Hero Reverted + ShopByAge Glow)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -21,7 +21,7 @@ interface Product {
   price: number;
   image: string;
   category?: string;
-  isBestSellingNow?: boolean | number; // Added to interface for type safety
+  isBestSellingNow?: boolean | number;
 }
 
 interface VideoReel {
@@ -62,7 +62,7 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel
+// 1. Hero Carousel (REVERTED: Full Screen Cover)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -75,15 +75,16 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    <section className="relative w-full aspect-[16/9] md:aspect-[21/9] lg:max-h-[800px] overflow-hidden bg-[#FDF6F0]">
+    // CHANGED: Reverted to Fixed Heights (h-[...]) and 'object-cover' for full immersion
+    <section className="relative w-full h-[500px] md:h-[800px] lg:h-[950px] overflow-hidden bg-gray-900">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 w-full h-full flex items-center justify-center"
+          transition={{ duration: 1.2, ease: "easeOut" }}
+          className="absolute inset-0 w-full h-full"
         >
           <Link to="/toys" className="block w-full h-full cursor-pointer">
             <Image 
@@ -91,14 +92,17 @@ const HeroCarousel = () => {
               alt={HERO_SLIDES[current].title}
               width={1920} 
               height={1080}
-              className="w-full h-full object-contain"
+              // CHANGED: object-cover ensures it fills the screen (no whitespace)
+              className="w-full h-full object-cover"
             />
           </Link>
+          {/* Subtle gradient at bottom for text readability if needed */}
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={goToPrev} className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all"><ChevronLeft size={24} /></button>
-      <button onClick={goToNext} className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-white/30 hover:bg-white/50 backdrop-blur-md rounded-full text-gray-800 transition-all"><ChevronRight size={24} /></button>
+      <button onClick={goToPrev} className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronLeft size={28} /></button>
+      <button onClick={goToNext} className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronRight size={28} /></button>
     </section>
   );
 };
@@ -131,7 +135,7 @@ const TextMarquee = () => {
   );
 };
 
-// 3. Shop By Age
+// 3. Shop By Age (UPDATED: Added Glow/Button Effect)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
@@ -150,21 +154,29 @@ const ShopByAge = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
           {AGE_GROUPS.map((group, index) => (
-            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center">
+            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center cursor-pointer">
+              {/* Circular Image Container - MODIFIED for "Button Look" */}
               <div className={`
                 relative w-36 h-36 md:w-44 md:h-44 rounded-full 
                 ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
                 flex flex-col items-center justify-center 
-                shadow-sm border-4 border-white
-                transition-transform duration-300 group-hover:scale-105 group-hover:shadow-xl
+                shadow-md border-4 border-white
+                transition-all duration-300 ease-out
+                /* HOVER EFFECTS: Scale up + GLOW shadow + Ring */
+                group-hover:scale-110 
+                group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]
+                group-hover:ring-4 group-hover:ring-primary/20
+                group-hover:-translate-y-2
               `}>
-                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:-translate-y-2">
+                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300">
                   {group.icon}
                 </span>
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
-              <div className="text-center mt-4">
-                <h3 className="font-heading text-2xl md:text-3xl text-foreground font-bold leading-none mb-1">
+
+              {/* Text Label */}
+              <div className="text-center mt-6 transition-colors duration-300 group-hover:text-primary">
+                <h3 className="font-heading text-2xl md:text-3xl text-foreground font-bold leading-none mb-1 group-hover:text-primary">
                   {group.range}
                 </h3>
                 <p className="text-gray-500 text-xs md:text-sm font-bold tracking-widest uppercase">
@@ -179,7 +191,7 @@ const ShopByAge = () => {
   );
 };
 
-// 4. Best Sellers (Updated Logic)
+// 4. Best Sellers
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -197,12 +209,10 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  // --- LOGIC UPDATE: Filter for isBestSellingNow == true/1 and Limit to 4 ---
   const bestSellers = toys
-    .filter((toy: any) => toy.isBestSellingNow) // Filter strictly for flagged items
-    .slice(0, 4); // Limit to maximum 4 items
+    .filter((toy: any) => toy.isBestSellingNow) 
+    .slice(0, 4); 
 
-  // Skeleton Loading (Shows only while fetching initial data)
   if (toys.length === 0) {
     return (
       <section className="py-24 bg-[#FFF8F3] overflow-hidden min-h-[600px]">
@@ -218,7 +228,6 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
     );
   }
 
-  // If data is loaded but NO items are marked as best sellers, hide the section
   if (bestSellers.length === 0) {
     return null; 
   }
