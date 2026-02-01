@@ -111,4 +111,6 @@ export interface Toys {
   productGallery?: any;
   /** @wixFieldType text */
   isBestSellingNow?: string;
+  /** @wixFieldType number */
+  number?: number;
 }
