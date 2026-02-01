@@ -28,7 +28,7 @@ export default function Header() {
           {/* Logo Section */}
           <Link to="/" className="flex items-center h-full">
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
+              src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
               // Provide large dimensions for sharpness, but CSS controls the display size
               width={220} 
               height={100}
