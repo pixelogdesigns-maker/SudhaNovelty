@@ -38,17 +38,22 @@ const HERO_SLIDES = [
   {
     id: 1,
     title: "Playtime Reimagined",
-    image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960",
+    image: "https://static.wixstatic.com/media/b9ec8c_0bf6641d2ffe4a469b7e47889ed0860e~mv2.png",
   },
   {
     id: 2,
     title: "Little Explorers",
-    image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768",
+    image: "https://static.wixstatic.com/media/b9ec8c_889d8c41c39d4e95904f7dbb748ef7cc~mv2.png",
   },
   {
     id: 3,
     title: "Cozy Companions",
-    image: "https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384",
+    image: "https://static.wixstatic.com/media/b9ec8c_7cb2d19df58846f39a9bf4f901549a93~mv2.png",
+  },
+  {
+    id: 4,
+    title: "Joy & Wonder",
+    image: "https://static.wixstatic.com/media/b9ec8c_350dac52b3f94ede98efce2b8b046a8e~mv2.png",
   }
 ];
 
@@ -90,7 +95,7 @@ const HeroCarousel = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    }, 5000);
+    }, 20000);
     return () => clearInterval(timer);
   }, []);
 
@@ -235,12 +240,22 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
                      {(() => {
                       let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
-                      if (product.productImages1 && Array.isArray(product.productImages1) && product.productImages1.length > 0) {
+                      // Priority 1: Product Gallery (productGallery - media gallery field)
+                      if (product.productGallery && Array.isArray(product.productGallery) && product.productGallery.length > 0) {
+                        const firstImage = product.productGallery[0];
+                        imageUrl = firstImage.src || firstImage.url || firstImage;
+                      }
+                      // Priority 2: Media Gallery (productImages1)
+                      else if (product.productImages1 && Array.isArray(product.productImages1) && product.productImages1.length > 0) {
                         const firstImage = product.productImages1[0];
                         imageUrl = firstImage.src || firstImage.url || firstImage;
-                      } else if (product.productImages && typeof product.productImages === 'string') {
+                      }
+                      // Priority 3: Single image field (productImages)
+                      else if (product.productImages && typeof product.productImages === 'string') {
                         imageUrl = product.productImages;
-                      } else if (product.image && typeof product.image === 'string') {
+                      }
+                      // Priority 4: Single image field (image)
+                      else if (product.image && typeof product.image === 'string') {
                         imageUrl = product.image;
                       }
                       return (
@@ -251,12 +266,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="px-2 pb-2">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
                     <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-primary">Rs. {product.price?.toFixed(2)}</span>
-                      <div className="flex text-yellow-400 text-xs">
-                        {[1,2,3,4,5].map(i => <Star key={i} size={12} fill="currentColor" />)}
-                      </div>
-                    </div>
+                    <span className="text-lg font-bold text-primary">Rs. {product.price?.toFixed(2)}</span>
                   </div>
                 </Link>
               </div>

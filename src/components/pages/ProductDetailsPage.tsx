@@ -42,12 +42,16 @@ export default function ProductDetailsPage() {
     fetchData();
   }, [toyId]);
 
-  // Get all images - prioritize media gallery, then fall back to single images
+  // Get all images - prioritize product gallery, then fall back to other images
   let images: string[] = [];
   
   if (toy) {
-    // Check productImages1 (MEDIA_GALLERY) first
-    if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
+    // Check productGallery (MEDIA_GALLERY) first
+    if (toy.productGallery && Array.isArray(toy.productGallery) && toy.productGallery.length > 0) {
+      images = toy.productGallery.map((item: any) => item.src || item.url || item);
+    }
+    // Fall back to productImages1 (MEDIA_GALLERY)
+    else if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
       images = toy.productImages1.map((item: any) => item.src || item.url || item);
     }
     // Fall back to productImages (single image field)
