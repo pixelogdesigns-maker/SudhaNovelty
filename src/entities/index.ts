@@ -109,4 +109,6 @@ export interface Toys {
   productImages1?: any;
   /** @wixFieldType media_gallery */
   productGallery?: any;
+  /** @wixFieldType text */
+  isBestSellingNow?: string;
 }
