@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -19,6 +19,8 @@ export default function ProductDetailsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [availableColors, setAvailableColors] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +29,15 @@ export default function ProductDetailsPage() {
       try {
         const toyData = await BaseCrudService.getById<Toys>('toys', toyId);
         setToy(toyData);
+
+        // Extract available colors from toy
+        if (toyData?.color) {
+          const colors = toyData.color.split(',').map(c => c.trim()).filter(c => c);
+          setAvailableColors(colors);
+          if (colors.length > 0) {
+            setSelectedColor(colors[0]);
+          }
+        }
 
         const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
         if (storeItems && storeItems.length > 0) {
@@ -220,6 +231,29 @@ Please provide availability details.`;
                 <div className="mb-4">
                   <p className="text-gray-500 font-paragraph text-sm mb-2">Description</p>
                   <p className="font-paragraph text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>
+                </div>
+              )}
+
+              {/* Color Selection */}
+              {availableColors.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-gray-500 font-paragraph text-sm mb-3">Available Colors</p>
+                  <div className="flex flex-wrap gap-3">
+                    {availableColors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        className={`px-5 py-2.5 rounded-full font-paragraph text-sm font-medium transition-all duration-300 border-2 flex items-center gap-2 ${
+                          selectedColor === color
+                            ? 'bg-primary border-primary text-white shadow-md'
+                            : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
+                        }`}
+                      >
+                        {color}
+                        {selectedColor === color && <Check size={16} />}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
