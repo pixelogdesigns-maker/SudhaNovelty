@@ -2,6 +2,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, FreeMode } from 'swiper/modules';
+import 'swiper/css';
 import { BaseCrudService } from '@/integrations';
 import { ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
@@ -9,14 +12,6 @@ import { MessageCircle, Award, Shield, Heart, Store, Star, Sparkles, MapPin, Clo
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
-
-// --- IMPORTS FOR CAROUSEL ---
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, FreeMode, Navigation, Pagination, EffectFade } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/effect-fade';
 
 // --- Utility Components ---
 const AnimatedReveal = ({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) => {
