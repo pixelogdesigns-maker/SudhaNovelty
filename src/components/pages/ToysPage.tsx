@@ -275,4 +275,179 @@ export default function ToysPage() {
                         {selectedAgeGroup === 'all' && <Check size={16} className="text-primary" />}
                       </button>
                       {ageGroups.map((ageGroup) => (
-                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); updateUrlParams('age', ageGroup.id); setIsAgeDropdownOpen
+                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); updateUrlParams('age', ageGroup.id); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
+                          <span className={`text-sm font-medium ${selectedAgeGroup === ageGroup.id ? 'text-primary font-bold' : 'text-gray-600'}`}>{ageGroup.label}</span>
+                          {selectedAgeGroup === ageGroup.id && <Check size={16} className="text-primary" />}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Color Filter */}
+              {availableColors.length > 0 && (
+                <div className="relative z-50 flex-1 md:flex-none">
+                  {isColorDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsColorDropdownOpen(false)} />}
+                  <button
+                    onClick={() => setIsColorDropdownOpen(!isColorDropdownOpen)}
+                    className={`w-full md:w-48 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${isColorDropdownOpen ? 'border-primary ring-2 ring-primary/10 shadow-lg' : 'border-gray-200 hover:border-primary/50 hover:shadow-md'}`}
+                  >
+                    <div className="flex flex-col items-start text-left">
+                      <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold flex items-center gap-1"><Palette size={12} /> Color</span>
+                      <span className="font-bold text-gray-800 text-sm">{selectedColor === 'all' ? 'All' : selectedColor}</span>
+                    </div>
+                    <ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${isColorDropdownOpen ? 'rotate-180 text-primary' : ''}`} />
+                  </button>
+
+                  {isColorDropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                      <div className="py-1 max-h-64 overflow-y-auto">
+                        <button onClick={() => { setSelectedColor('all'); updateUrlParams('color', 'all'); setIsColorDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
+                          <span className={`text-sm font-medium ${selectedColor === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>All Colors</span>
+                          {selectedColor === 'all' && <Check size={16} className="text-primary" />}
+                        </button>
+                        {availableColors.map((color) => (
+                          <button key={color} onClick={() => { setSelectedColor(color); updateUrlParams('color', color); setIsColorDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
+                            <span className={`text-sm font-medium ${selectedColor === color ? 'text-primary font-bold' : 'text-gray-600'}`}>{color}</span>
+                            {selectedColor === color && <Check size={16} className="text-primary" />}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
+      <section className="py-16 bg-white">
+        <div className="max-w-[120rem] mx-auto px-6">
+          {filteredToys.length === 0 ? (
+            <div className="text-center py-20 bg-gray-50 rounded-3xl">
+              <p className="font-paragraph text-xl text-gray-500 mb-2">No toys found matching your filters.</p>
+              <button onClick={() => {
+                setSelectedCategory('all'); 
+                setSelectedAgeGroup('all'); 
+                setSelectedColor('all');
+                setSearchParams({}); // Clear URL params
+              }} className="text-primary font-bold hover:underline">Clear all filters</button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredToys.map((toy, index) => (
+                <motion.div
+                  key={toy._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.05 }}
+                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
+                >
+                  {/* Link with preserved query params to persist state if needed, though usually product details is standalone */}
+                  <Link to={`/toys/${toy._id}`} className="aspect-square overflow-hidden bg-gray-50 relative group block">
+                    {(() => {
+                      let imageUrl = 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
+                      
+                      if (toy.productGallery && Array.isArray(toy.productGallery) && toy.productGallery.length > 0) {
+                        const first = toy.productGallery[0];
+                        imageUrl = first.src || first.url || first;
+                      } else if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
+                        const first = toy.productImages1[0];
+                        imageUrl = first.src || first.url || first;
+                      } else if (toy.productImages && typeof toy.productImages === 'string') {
+                        imageUrl = toy.productImages;
+                      } else if (toy.image && typeof toy.image === 'string') {
+                        imageUrl = toy.image;
+                      }
+                      
+                      return (
+                        <Image
+                          src={imageUrl}
+                          alt={toy.name || 'Toy product'}
+                          width={400}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      );
+                    })()}
+                  </Link>
+
+                  <div className="p-4 flex flex-col flex-grow">
+                    <h3 className="font-heading text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
+                      {toy.name}
+                    </h3>
+                    {toy.shortDescription && (
+                      <p className="font-paragraph text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
+                        {toy.shortDescription}
+                      </p>
+                    )}
+                    <div className="mt-auto mb-4">
+                      {toy.price && (
+                        <div className="text-primary font-bold text-xl mb-1">
+                          Rs. {toy.price}
+                        </div>
+                      )}
+                      {toy.ageGroup && (
+                        <div className="text-gray-800 text-sm font-medium">
+                          {toy.ageGroup}
+                        </div>
+                      )}
+                    </div>
+                    <div className="space-y-3">
+                      <Link
+                        to={`/toys/${toy._id}`}
+                        className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
+                      >
+                        View Details
+                      </Link>
+                      <div className="text-center">
+                        <button
+                          onClick={() => handleWhatsAppClick(toy)}
+                          className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
+                        >
+                          Need help? <span className="text-whatsapp-green font-semibold flex items-center gap-1"><MessageCircle size={14} /> Chat on WhatsApp</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-gradient-to-br from-light-pink to-white">
+        <div className="max-w-[120rem] mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center bg-white rounded-3xl p-12 shadow-lg"
+          >
+            <h2 className="font-heading text-3xl md:text-4xl text-primary mb-4">
+              Can't Find What You're Looking For?
+            </h2>
+            <p className="font-paragraph text-lg text-foreground mb-8 max-w-2xl mx-auto">
+              Chat with us on WhatsApp and we'll help you find the perfect toy for your child
+            </p>
+            <button
+              onClick={() => handleWhatsAppClick()}
+              className="inline-flex items-center justify-center gap-3 bg-whatsapp-green text-white font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              <MessageCircle size={24} />
+              Chat with Us Now
+            </button>
+          </motion.div>
+        </div>
+      </section>
+      <Footer />
+    </div>
+  );
+}
