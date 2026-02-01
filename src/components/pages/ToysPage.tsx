@@ -11,16 +11,20 @@ import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ToysPage() {
-  const [searchParams] = useSearchParams();
+  // CHANGED: Added setSearchParams to update URL
+  const [searchParams, setSearchParams] = useSearchParams();
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
+  const [selectedColor, setSelectedColor] = useState<string>('all');
   
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
+  const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
+  const [availableColors, setAvailableColors] = useState<string[]>([]);
 
   // Define age groups for filtering
   const ageGroups = [
@@ -31,6 +35,17 @@ export default function ToysPage() {
     { id: '13+', label: '13+ Years', minAge: 13, maxAge: 100 },
   ];
 
+  // --- Helper to update URL params ---
+  const updateUrlParams = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      newParams.delete(key);
+    } else {
+      newParams.set(key, value);
+    }
+    setSearchParams(newParams);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
@@ -40,6 +55,18 @@ export default function ToysPage() {
       if (toyItems) {
         setToys(toyItems);
         setFilteredToys(toyItems);
+        
+        // Extract unique colors from toys
+        const colors = new Set<string>();
+        toyItems.forEach(toy => {
+          if (toy.color) {
+            toy.color.split(',').forEach(c => {
+              const trimmed = c.trim();
+              if (trimmed) colors.add(trimmed);
+            });
+          }
+        });
+        setAvailableColors(Array.from(colors).sort());
       }
 
       if (categoryItems) {
@@ -53,28 +80,26 @@ export default function ToysPage() {
         setStoreInfo(storeItems[0]);
       }
 
-      // Check for category parameter in URL
+      // Sync State with URL Params
       const categoryParam = searchParams.get('category');
-      if (categoryParam) {
-        // Decode URI component to handle spaces (e.g. "RC%20Cars" -> "RC Cars")
-        setSelectedCategory(decodeURIComponent(categoryParam));
-      }
+      if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
 
-      // Check for age parameter in URL
       const ageParam = searchParams.get('age');
-      if (ageParam) {
-        setSelectedAgeGroup(ageParam);
-      }
+      if (ageParam) setSelectedAgeGroup(ageParam);
+
+      // CHANGED: Handle Color Param from URL
+      const colorParam = searchParams.get('color');
+      if (colorParam) setSelectedColor(decodeURIComponent(colorParam));
     };
     fetchData();
-  }, [searchParams]);
+  }, [searchParams]); // Re-run when URL changes
 
   // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
 
     const ageGroup = ageGroups.find(ag => ag.id === selectedAgeGroup);
-    if (!ageGroup || !toy.ageGroup) return true; // If data missing, show it to be safe
+    if (!ageGroup || !toy.ageGroup) return true;
 
     const ageText = toy.ageGroup.toLowerCase().trim();
 
@@ -105,17 +130,15 @@ export default function ToysPage() {
     return true;
   };
 
-  // --- FILTERING LOGIC (Fixed for Robust String Matching) ---
+  // --- FILTERING LOGIC ---
   useEffect(() => {
     let filtered = toys;
 
     // 1. Apply Category Filter
     if (selectedCategory !== 'all') {
       const targetCategory = selectedCategory.trim().toLowerCase();
-      
       filtered = filtered.filter(toy => {
         if (!toy.category) return false;
-        // Compare normalized strings (lowercase + trimmed) to catch "Jeeps " vs "Jeeps"
         return toy.category.trim().toLowerCase() === targetCategory;
       });
     }
@@ -123,28 +146,30 @@ export default function ToysPage() {
     // 2. Apply Age Group Filter
     filtered = filtered.filter(matchesAgeGroup);
 
-    setFilteredToys(filtered);
-  }, [selectedCategory, selectedAgeGroup, toys]);
-
-  // --- Helpers ---
-  const getPublicImageUrl = (wixUrl: string | undefined) => {
-    if (!wixUrl) return 'No Image Available';
-    if (wixUrl.startsWith('http') || wixUrl.startsWith('https')) return wixUrl;
-    if (wixUrl.startsWith('wix:image://')) {
-      const matches = wixUrl.match(/wix:image:\/\/v1\/([^/]+)\//);
-      if (matches && matches[1]) {
-        const cleanId = matches[1].replace('~', '%7E'); 
-        return `https://static.wixstatic.com/media/${cleanId}/v1/fit/w_500,h_500,q_90/file.jpg`;
-      }
+    // 3. Apply Color Filter
+    if (selectedColor !== 'all') {
+      filtered = filtered.filter(toy => {
+        if (!toy.color) return false;
+        return toy.color.split(',').some(c => c.trim().toLowerCase() === selectedColor.toLowerCase());
+      });
     }
-    return wixUrl;
-  };
 
+    setFilteredToys(filtered);
+  }, [selectedCategory, selectedAgeGroup, selectedColor, toys]);
+
+  // --- WhatsApp Handler (Updated) ---
   const handleWhatsAppClick = (toy?: Toys) => {
     let message = '';
     if (toy) {
-      const productPageUrl = `${window.location.origin}/toys/${toy._id}`;
-      message = `Hello! I am interested in this product: ${toy.name}\n\n${productPageUrl}`;
+      // CHANGED: Construct URL object to safely append query params
+      const productPageUrl = new URL(`${window.location.origin}/toys/${toy._id}`);
+      
+      // If a specific color is selected, append it to the link sent to the seller
+      if (selectedColor !== 'all') {
+        productPageUrl.searchParams.set('color', selectedColor);
+      }
+
+      message = `Hello! I am interested in this product: ${toy.name}\n\n${productPageUrl.toString()}`;
     } else {
       message = "Hello! I would like to inquire about your toys.";
     }
@@ -189,7 +214,10 @@ export default function ToysPage() {
                 </span>
 
                 <button
-                  onClick={() => setSelectedCategory('all')}
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    updateUrlParams('category', 'all');
+                  }}
                   className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${selectedCategory === 'all'
                       ? 'bg-primary border-primary text-white shadow-md'
                       : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
@@ -199,13 +227,14 @@ export default function ToysPage() {
                 </button>
 
                 {categories.map((category) => {
-                  // Normalize comparison for active state
                   const isActive = selectedCategory.toLowerCase().trim() === (category.categoryName || '').toLowerCase().trim();
-                  
                   return (
                     <button
                       key={category._id}
-                      onClick={() => setSelectedCategory(category.categoryName || '')}
+                      onClick={() => {
+                        setSelectedCategory(category.categoryName || '');
+                        updateUrlParams('category', category.categoryName || '');
+                      }}
                       className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
                         isActive
                           ? 'bg-primary border-primary text-white shadow-md'
@@ -219,7 +248,7 @@ export default function ToysPage() {
               </div>
             </div>
 
-            {/* Right: Age Filter Dropdown */}
+            {/* Right: Custom Filter Dropdowns */}
             <div className="flex gap-3 w-full md:w-auto">
               
               {/* Age Filter */}
@@ -241,145 +270,9 @@ export default function ToysPage() {
                 {isAgeDropdownOpen && (
                   <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
                     <div className="py-1">
-                      <button onClick={() => { setSelectedAgeGroup('all'); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
+                      <button onClick={() => { setSelectedAgeGroup('all'); updateUrlParams('age', 'all'); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
                         <span className={`text-sm font-medium ${selectedAgeGroup === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>Any Age</span>
                         {selectedAgeGroup === 'all' && <Check size={16} className="text-primary" />}
                       </button>
                       {ageGroups.map((ageGroup) => (
-                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
-                          <span className={`text-sm font-medium ${selectedAgeGroup === ageGroup.id ? 'text-primary font-bold' : 'text-gray-600'}`}>{ageGroup.label}</span>
-                          {selectedAgeGroup === ageGroup.id && <Check size={16} className="text-primary" />}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* Products Grid */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          {filteredToys.length === 0 ? (
-            <div className="text-center py-20 bg-gray-50 rounded-3xl">
-              <p className="font-paragraph text-xl text-gray-500 mb-2">No toys found matching your filters.</p>
-              <button onClick={() => {setSelectedCategory('all'); setSelectedAgeGroup('all');}} className="text-primary font-bold hover:underline">Clear all filters</button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredToys.map((toy, index) => (
-                <motion.div
-                  key={toy._id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
-                >
-                  <Link to={`/toys/${toy._id}`} className="aspect-square overflow-hidden bg-gray-50 relative group block">
-                    {(() => {
-                      let imageUrl = 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
-                      
-                      // Priority Logic: Gallery -> ProductImages1 -> ProductImages -> Image
-                      if (toy.productGallery && Array.isArray(toy.productGallery) && toy.productGallery.length > 0) {
-                        const first = toy.productGallery[0];
-                        imageUrl = first.src || first.url || first;
-                      } else if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
-                        const first = toy.productImages1[0];
-                        imageUrl = first.src || first.url || first;
-                      } else if (toy.productImages && typeof toy.productImages === 'string') {
-                        imageUrl = toy.productImages;
-                      } else if (toy.image && typeof toy.image === 'string') {
-                        imageUrl = toy.image;
-                      }
-                      
-                      return (
-                        <Image
-                          src={imageUrl}
-                          alt={toy.name || 'Toy product'}
-                          width={400}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      );
-                    })()}
-                  </Link>
-
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
-                      {toy.name}
-                    </h3>
-                    {toy.shortDescription && (
-                      <p className="font-paragraph text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
-                        {toy.shortDescription}
-                      </p>
-                    )}
-                    <div className="mt-auto mb-4">
-                      {toy.price && (
-                        <div className="text-primary font-bold text-xl mb-1">
-                          Rs. {toy.price}
-                        </div>
-                      )}
-                      {toy.ageGroup && (
-                        <div className="text-gray-800 text-sm font-medium">
-                          {toy.ageGroup}
-                        </div>
-                      )}
-                    </div>
-                    <div className="space-y-3">
-                      <Link
-                        to={`/toys/${toy._id}`}
-                        className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
-                      >
-                        View Details
-                      </Link>
-                      <div className="text-center">
-                        <button
-                          onClick={() => handleWhatsAppClick(toy)}
-                          className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
-                        >
-                          Need help? <span className="text-whatsapp-green font-semibold flex items-center gap-1"><MessageCircle size={14} /> Chat on WhatsApp</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-br from-light-pink to-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center bg-white rounded-3xl p-12 shadow-lg"
-          >
-            <h2 className="font-heading text-3xl md:text-4xl text-primary mb-4">
-              Can't Find What You're Looking For?
-            </h2>
-            <p className="font-paragraph text-lg text-foreground mb-8 max-w-2xl mx-auto">
-              Chat with us on WhatsApp and we'll help you find the perfect toy for your child
-            </p>
-            <button
-              onClick={() => handleWhatsAppClick()}
-              className="inline-flex items-center justify-center gap-3 bg-whatsapp-green text-white font-paragraph text-lg px-10 py-5 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
-            >
-              <MessageCircle size={24} />
-              Chat with Us Now
-            </button>
-          </motion.div>
-        </div>
-      </section>
-      <Footer />
-    </div>
-  );
-}
+                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); updateUrlParams('age', ageGroup.id); setIsAgeDropdownOpen
