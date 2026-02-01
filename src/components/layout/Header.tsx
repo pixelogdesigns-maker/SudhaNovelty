@@ -26,10 +26,10 @@ export default function Header() {
           <Link to="/" className="flex items-center h-full py-1"> {/* CHANGED: Added py-1 to give breathing room */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
-              width={160} /* Increased width slightly for better resolution */
+              width={260} /* Increased width slightly for better resolution */
               height={80} /* Adjusted height prop */
               className="h-full w-auto object-contain" /* object-contain ensures it never gets cut, just resizes */
-              originWidth={533}
+              originWidth={833}
               originHeight={196}
             />
           </Link>
