@@ -27,7 +27,7 @@ export default function Header() {
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
               width={140}
-              height={62}
+              height={82}
               className="h-full w-auto object-contain"
               originWidth={533}
               originHeight={196} />
