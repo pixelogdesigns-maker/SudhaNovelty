@@ -1,14 +1,14 @@
-// HPI 3.1-V (Aegle Layout + Restored Video Marquee)
+// HPI 3.2-V (Aegle Layout + Shop By Category Update)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import { BaseCrudService } from '@/integrations';
-import { ToyCategories, StoreInformation, Toys } from '@/entities';
+import { StoreInformation, Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { 
-  MessageCircle, Star, ArrowRight, ShoppingBag, 
-  ChevronLeft, ChevronRight, Heart, Sparkles 
+  Star, ShoppingBag, ChevronLeft, ChevronRight, 
+  Heart, Sparkles, ArrowRight 
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -52,33 +52,12 @@ const HERO_SLIDES = [
   }
 ];
 
-// Restored Original Video Links
 const VIDEO_REELS: VideoReel[] = [
-  {
-    id: 'video-1',
-    title: '',
-    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001',
-  },
-  {
-    id: 'video-2',
-    title: '',
-    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001',
-  },
-  {
-    id: 'video-3',
-    title: '',
-    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001',
-  },
-  {
-    id: 'video-4',
-    title: '',
-    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001',
-  },
-  {
-    id: 'video-5',
-    title: '',
-    videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001',
-  },
+  { id: 'video-1', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-2', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-3', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
 ];
 
 const AGE_GROUPS = [
@@ -90,11 +69,20 @@ const AGE_GROUPS = [
   { label: "12+ Years", range: "12+", color: "bg-orange-100 text-orange-600", icon: "🎮" },
 ];
 
-const MOCK_BEST_SELLERS: Product[] = [];
+// Specific Categories requested by user
+// Note: I used placeholders for images. You should replace the 'image' URLs with your specific 3D icons or product shots.
+const SPECIFIC_CATEGORIES = [
+  { name: "KIDS BATTERY JEEP",  color: "bg-purple-100", image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768" },
+  { name: "KIDS BATTERY BIKE",  color: "bg-blue-100",   image: "https://static.wixstatic.com/media/b9ec8c_e6fdaf35f0924b37b24f0ccb83c15896~mv2.png?originWidth=768&originHeight=960" },
+  { name: "RIDEONS",            color: "bg-orange-100", image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960" },
+  { name: "CYCLES",             color: "bg-green-100",  image: "https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384" },
+  { name: "SLIDERS",            color: "bg-yellow-100", image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768" },
+  { name: "RC CARS",            color: "bg-red-100",    image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960" },
+];
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Image Only Version)
+// 1. Hero Carousel (Image Only)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -135,34 +123,20 @@ const HeroCarousel = () => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Previous Button */}
-      <button
-        onClick={goToPrev}
-        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full transition-all duration-300 text-white"
-        aria-label="Previous slide"
-      >
+      <button onClick={goToPrev} className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">
         <ChevronLeft size={28} />
       </button>
 
-      {/* Next Button */}
-      <button
-        onClick={goToNext}
-        className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full transition-all duration-300 text-white"
-        aria-label="Next slide"
-      >
+      <button onClick={goToNext} className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all">
         <ChevronRight size={28} />
       </button>
 
-      {/* Dot Indicators */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         {HERO_SLIDES.map((_, idx) => (
           <button
             key={idx}
             onClick={() => setCurrent(idx)}
-            className={`h-3 rounded-full transition-all duration-500 shadow-sm backdrop-blur-md ${
-              idx === current ? 'bg-white w-10' : 'bg-white/40 w-3 hover:bg-white/70'
-            }`}
-            aria-label={`Go to slide ${idx + 1}`}
+            className={`h-3 rounded-full transition-all duration-500 shadow-sm backdrop-blur-md ${idx === current ? 'bg-white w-10' : 'bg-white/40 w-3 hover:bg-white/70'}`}
           />
         ))}
       </div>
@@ -172,15 +146,9 @@ const HeroCarousel = () => {
 
 // 2. Shop By Age Component
 const ShopByAge = () => {
-  // Map age ranges to the format used in ToysPage
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = {
-      '0-1': '0-2',
-      '1-3': '3-5',
-      '3-5': '3-5',
-      '5-8': '6-8',
-      '8-12': '9-12',
-      '12+': '13+'
+      '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+'
     };
     return ageMap[range] || range;
   };
@@ -195,19 +163,13 @@ const ShopByAge = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {AGE_GROUPS.map((group, index) => (
-            <Link 
-              key={index} 
-              to={`/toys?age=${getAgeGroupId(group.range)}`}
-              className="group flex flex-col items-center"
-            >
+            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center">
               <div className={`w-full aspect-square rounded-[2rem] ${group.color} flex flex-col items-center justify-center mb-4 transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-lg`}>
                 <span className="text-4xl mb-2 filter drop-shadow-sm">{group.icon}</span>
                 <span className="font-heading text-xl font-bold">{group.range}</span>
                 <span className="text-xs font-bold uppercase opacity-60">Years</span>
               </div>
-              <h3 className="font-bold text-gray-700 group-hover:text-primary transition-colors">
-                {group.label}
-              </h3>
+              <h3 className="font-bold text-gray-700 group-hover:text-primary transition-colors">{group.label}</h3>
             </Link>
           ))}
         </div>
@@ -216,7 +178,7 @@ const ShopByAge = () => {
   );
 };
 
-// 3. Best Sellers Component (Carousel)
+// 3. Best Sellers Component
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -237,17 +199,13 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
     emblaApi.on('reInit', onSelect);
   }, [emblaApi, onSelect]);
 
-  // Get first 4 toys as best sellers
-  const bestSellers = toys.slice(0, 4);
+  const bestSellers = toys.slice(0, 8); // Showing top 8
 
-  if (bestSellers.length === 0) {
-    return null;
-  }
+  if (bestSellers.length === 0) return null;
 
   return (
     <section className="py-24 bg-[#FFF8F3] relative overflow-hidden">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-      
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
           <div>
@@ -257,20 +215,11 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
             </div>
             <h2 className="font-heading text-4xl md:text-5xl text-foreground">Best Sellers</h2>
           </div>
-          
           <div className="flex gap-2">
-            <button 
-              onClick={scrollPrev}
-              disabled={!canScrollPrev}
-              className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white hover:border-primary'}`}
-            >
+            <button onClick={scrollPrev} disabled={!canScrollPrev} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}>
               <ChevronLeft size={24} />
             </button>
-            <button 
-              onClick={scrollNext}
-              disabled={!canScrollNext}
-              className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white hover:border-primary'}`}
-            >
+            <button onClick={scrollNext} disabled={!canScrollNext} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}>
               <ChevronRight size={24} />
             </button>
           </div>
@@ -280,41 +229,24 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
           <div className="flex -ml-6 pb-12">
             {bestSellers.map((product) => (
               <div className="pl-6 flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_25%] min-w-0" key={product._id}>
-                <Link 
-                  to={`/toys/${product._id}`}
-                  className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full"
-                >
+                <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full">
                   <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
-
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
-                    {(() => {
-                      let imageUrl = '';
-                      
-                      // Priority 1: Media Gallery (productImages1)
+                     {(() => {
+                      let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
                       if (product.productImages1 && Array.isArray(product.productImages1) && product.productImages1.length > 0) {
                         const firstImage = product.productImages1[0];
                         imageUrl = firstImage.src || firstImage.url || firstImage;
-                      }
-                      // Priority 2: Single image field (productImages)
-                      else if (product.productImages && typeof product.productImages === 'string') {
+                      } else if (product.productImages && typeof product.productImages === 'string') {
                         imageUrl = product.productImages;
-                      }
-                      // Priority 3: Single image field (image)
-                      else if (product.image && typeof product.image === 'string') {
+                      } else if (product.image && typeof product.image === 'string') {
                         imageUrl = product.image;
                       }
-                      
                       return (
-                        <Image
-                          src={imageUrl}
-                          alt={product.name || 'Product'}
-                          width={400}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
+                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       );
                     })()}
                   </div>
-
                   <div className="px-2 pb-2">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
                     <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
@@ -335,7 +267,63 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 4. Helper for Video Marquee (Restored)
+// 4. NEW: Shop By Category (Matches Reference Image) const ShopByCategory = () => {
+  return (
+    <section className="py-24 bg-[#FFFDF9]"> {/* Very light cream background */}
+      <div className="max-w-[120rem] mx-auto px-6">
+        {/* Section Header */}
+        <div className="flex justify-between items-end mb-16">
+          <h2 className="font-heading text-4xl md:text-5xl text-foreground">
+            Shop By Category
+          </h2>
+          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">
+            All Products
+          </Link>
+        </div>
+
+        {/* Categories Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+          {SPECIFIC_CATEGORIES.map((cat, index) => (
+            <Link 
+              key={index} 
+              // Directly links to ToysPage with the category filter active
+              to={`/toys?category=${encodeURIComponent(cat.name)}`}
+              className="group flex flex-col items-center gap-5"
+            >
+              {/* Image Circle Container */}
+              <div className={`
+                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${cat.color} 
+                flex items-center justify-center 
+                shadow-sm transition-all duration-500 
+                group-hover:scale-105 group-hover:shadow-xl
+              `}>
+                {/* 3D-style Image */}
+                <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
+                   <Image 
+                     src={cat.image} 
+                     alt={cat.name} 
+                     width={200} 
+                     className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" 
+                   />
+                </div>
+                
+                {/* Optional: Gloss/Shine effect on circle */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
+              </div>
+
+              {/* Text Label */}
+              <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
+                {cat.name}
+              </h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 5. Video Marquee Component
 const MarqueeVideo = ({ video }: { video: VideoReel }) => {
   return (
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
@@ -365,7 +353,6 @@ export default function HomePage() {
       if (storeItems && storeItems.length > 0) {
         setStoreInfo(storeItems[0]);
       }
-
       const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
       if (toyItems) {
         setToys(toyItems);
@@ -379,7 +366,7 @@ export default function HomePage() {
       <Header />
       <WhatsAppFloatingButton />
       
-      {/* 1. Hero Carousel (Image Only) */}
+      {/* 1. Hero Carousel */}
       <HeroCarousel />
       
       {/* 2. Shop By Age */}
@@ -388,7 +375,10 @@ export default function HomePage() {
       {/* 3. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 4. Restored Video Marquee Section */}
+      {/* 4. NEW: Shop By Category (Reference Image Style) */}
+      <ShopByCategory />
+
+      {/* 5. Video Marquee Section */}
       <section className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
         <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">
@@ -404,7 +394,6 @@ export default function HomePage() {
           <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
 
           <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-            {/* Using the original VIDEO_REELS data */}
             {[...VIDEO_REELS, ...VIDEO_REELS, ...VIDEO_REELS].map((video, index) => (
               <MarqueeVideo key={`${video.id}-${index}`} video={video} />
             ))}
@@ -423,7 +412,6 @@ export default function HomePage() {
 
       <Footer />
 
-      {/* CSS for infinite scroll */}
       <style>{`
           @keyframes marquee {
             0% { transform: translateX(0); }
