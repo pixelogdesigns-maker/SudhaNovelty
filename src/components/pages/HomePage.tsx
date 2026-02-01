@@ -108,7 +108,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <section className="relative w-full h-[500px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gray-900">
+    <section className="relative w-full h-[500px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gray-900 mt-20 md:mt-24">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
