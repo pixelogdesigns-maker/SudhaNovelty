@@ -118,13 +118,15 @@ const HeroCarousel = () => {
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="absolute inset-0 w-full h-full"
         >
-          <Image 
-            src={HERO_SLIDES[current].image} 
-            alt={HERO_SLIDES[current].title}
-            width={1920} 
-            height={1080}
-            className="w-full h-full object-cover"
-          />
+          <Link to="/toys" className="block w-full h-full cursor-pointer">
+            <Image 
+              src={HERO_SLIDES[current].image} 
+              alt={HERO_SLIDES[current].title}
+              width={1920} 
+              height={1080}
+              className="w-full h-full object-cover"
+            />
+          </Link>
           <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
