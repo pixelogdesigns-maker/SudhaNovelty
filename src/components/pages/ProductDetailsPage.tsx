@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'; // Added useSearchParams
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
@@ -172,22 +171,6 @@ Please provide availability details.`;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* --- DYNAMIC META TAGS FOR WHATSAPP PREVIEW --- */}
-      <Helmet>
-        <title>{toy.name} | Sudha Novelties</title>
-        <meta name="description" content={`Buy ${toy.name} at Sudha Novelties. Best quality toys for kids.`} />
-        
-        {/* Open Graph / WhatsApp Tags */}
-        <meta property="og:type" content="product" />
-        <meta property="og:title" content={toy.name} />
-        <meta property="og:description" content={`Price: Rs. ${toy.price} - ${toy.shortDescription || 'Check it out!'}`} />
-        <meta property="og:image" content={publicMetaImage} />
-        <meta property="og:image:width" content="600" />
-        <meta property="og:image:height" content="600" />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content="Sudha Novelties" />
-      </Helmet>
-
       <Header />
       <WhatsAppFloatingButton />
 
