@@ -67,7 +67,7 @@ const MOCK_BEST_SELLERS: Product[] = [
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel Component
+// 1. Hero Carousel Component with Text
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -146,6 +146,64 @@ const HeroCarousel = () => {
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
               idx === current ? 'bg-foreground w-10' : 'bg-gray-300 hover:bg-gray-400'
             }`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
+// 1. Hero Carousel Component with image only
+// 1. Hero Carousel Component (Image Only Update)
+const HeroCarouselImageonly = () => {
+  const [current, setCurrent] = useState(0);
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000); // Change slides every 5 seconds
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    // Adjusted heights for a more cinematic feel
+    <section className="relative w-full h-[500px] md:h-[700px] lg:h-[850px] overflow-hidden bg-gray-900">
+      <AnimatePresence mode='wait'>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0, scale: 1.05 }} // Start slightly zoomed in
+          animate={{ opacity: 1, scale: 1 }} // Fade in and scale down slowly to normal
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.2, ease: "easeOut" }} // Slower, smoother transition for big images
+          className="absolute inset-0 w-full h-full"
+        >
+          <Image 
+            src={HERO_SLIDES[current].image} 
+            alt={HERO_SLIDES[current].title}
+            // Use a large width value to ensure high-res loading
+            width={1920} 
+            height={1080}
+            // IMPORTANT: 'object-cover' makes the image fill the container without distorting, cropping if necessary.
+            className="w-full h-full object-cover"
+          />
+          
+          {/* Optional subtle overlay gradient so navigation dots are always visible at the bottom */}
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Dots Navigation - Updated to White for better contrast on images */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+        {HERO_SLIDES.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrent(idx)}
+            // Changed colors to white/transparent white for visibility against photos
+            className={`h-3 rounded-full transition-all duration-500 shadow-sm backdrop-blur-md ${
+              idx === current ? 'bg-white w-10' : 'bg-white/40 w-3 hover:bg-white/70'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
@@ -317,6 +375,7 @@ export default function HomePage() {
       
       {/* 1. Hero Carousel */}
       <HeroCarousel />
+      <HeroCarouselImageonly />
       
       {/* 2. Shop By Age */}
       <ShopByAge />
