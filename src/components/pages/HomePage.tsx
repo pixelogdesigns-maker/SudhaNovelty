@@ -35,10 +35,10 @@ interface VideoReel {
 // --- Data Configuration ---
 
 const HERO_SLIDES = [
-  { id: 1, title: "Playtime Reimagined", image: "https://static.wixstatic.com/media/b9ec8c_0bf6641d2ffe4a469b7e47889ed0860e~mv2.png" },
-  { id: 2, title: "Little Explorers", image: "https://static.wixstatic.com/media/b9ec8c_889d8c41c39d4e95904f7dbb748ef7cc~mv2.png" },
-  { id: 3, title: "Cozy Companions", image: "https://static.wixstatic.com/media/b9ec8c_7cb2d19df58846f39a9bf4f901549a93~mv2.png" },
-  { id: 4, title: "Joy & Wonder", image: "https://static.wixstatic.com/media/b9ec8c_350dac52b3f94ede98efce2b8b046a8e~mv2.png" }
+  { id: 1, title: "Playtime Reimagined", image: "https://static.wixstatic.com/media/b9ec8c_4de64ab7991c426493871d39afd3f14b~mv2.webp" },
+  { id: 2, title: "Little Explorers", image: "https://static.wixstatic.com/media/b9ec8c_4de64ab7991c426493871d39afd3f14b~mv2.webp" },
+  { id: 3, title: "Cozy Companions", image: "https://static.wixstatic.com/media/b9ec8c_4de64ab7991c426493871d39afd3f14b~mv2.webp" },
+  { id: 4, title: "Joy & Wonder", image: "https://static.wixstatic.com/media/b9ec8c_c0d459de579b445da2a4aa0fbc64d3d7~mv2.webp" }
 ];
 
 const VIDEO_REELS: VideoReel[] = [
