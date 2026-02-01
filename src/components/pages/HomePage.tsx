@@ -2,9 +2,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, FreeMode } from 'swiper/modules';
-import 'swiper/css';
 import { BaseCrudService } from '@/integrations';
 import { ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
@@ -316,26 +313,15 @@ export default function HomePage() {
           </AnimatedReveal>
         </div>
 
-        <div className="relative w-full px-4 md:px-0">
-          <Swiper
-            modules={[Autoplay, FreeMode]}
-            loop={true}
-            freeMode={true}
-            spaceBetween={20}
-            slidesPerView={'auto'}
-            centeredSlides={true}
-            speed={4000}
-            autoplay={{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }}
-            className="w-full"
-            style={{ transitionTimingFunction: 'linear' }}
-          >
-            {videoReels.map((video) => (
-              <SwiperSlide key={video.id} style={{ width: 'auto' }}>
-                 <MarqueeVideo video={video} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        <div className="relative w-full px-4 md:px-0 overflow-x-auto">
+           <div className="flex gap-5 pb-4 justify-center">
+             {videoReels.map((video) => (
+               <div key={video.id} className="flex-shrink-0">
+                  <MarqueeVideo video={video} />
+               </div>
+             ))}
+           </div>
+         </div>
       </section>
 
       {/* --- SECTION 5: FEATURES --- */}
@@ -343,7 +329,7 @@ export default function HomePage() {
         <div className="max-w-[120rem] mx-auto px-6">
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {features.map((feature, index) => (
-                  <AnimatedReveal key={index} delay={index * 100} direction="up">
+                  <AnimatedReveal key={index} delay={index * 100}>
                     <div className="bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-pink-100 h-full text-center">
                       <div className={`w-16 h-16 ${feature.color} rounded-full flex items-center justify-center mb-6 mx-auto`}>
                         <feature.icon size={32} />
