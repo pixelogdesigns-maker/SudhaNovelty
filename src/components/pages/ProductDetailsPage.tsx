@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'; // Added useSearchParams
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -12,15 +13,20 @@ import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
+  const [searchParams] = useSearchParams(); // Hook to read URL params
   const navigate = useNavigate();
+  
   const [toy, setToy] = useState<Toys | null>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // Swipe gestures state
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const [selectedColor, setSelectedColor] = useState<string>('');
-  const [availableColors, setAvailableColors] = useState<string[]>([]);
+
+  // Get the color requested from the URL (e.g., ?color=Red)
+  const requestedColor = searchParams.get('color');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,15 +35,6 @@ export default function ProductDetailsPage() {
       try {
         const toyData = await BaseCrudService.getById<Toys>('toys', toyId);
         setToy(toyData);
-
-        // Extract available colors from toy
-        if (toyData?.color) {
-          const colors = toyData.color.split(',').map(c => c.trim()).filter(c => c);
-          setAvailableColors(colors);
-          if (colors.length > 0) {
-            setSelectedColor(colors[0]);
-          }
-        }
 
         const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
         if (storeItems && storeItems.length > 0) {
@@ -67,36 +64,51 @@ export default function ProductDetailsPage() {
     }
   }
 
+  // --- SMART IMAGE SELECTION ---
+  // If a color is in the URL, try to find an image that matches that color name
+  useEffect(() => {
+    if (toy && images.length > 0 && requestedColor) {
+      const colorLower = requestedColor.toLowerCase().trim();
+      // Look for the color string inside the image URL/Filename
+      const matchingIndex = images.findIndex(img => img.toLowerCase().includes(colorLower));
+      
+      if (matchingIndex !== -1) {
+        setSelectedImageIndex(matchingIndex);
+      }
+    }
+  }, [toy, requestedColor]); // Only run when toy loads or color changes
+
   const mainImage = images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
 
   // --- HELPER: Convert Wix Image ID to Public URL for WhatsApp Meta Tags ---
   const getPublicImageUrl = (url: string) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    // Handle wix:image:// protocol
     if (url.startsWith('wix:image://')) {
       const match = url.match(/wix:image:\/\/v1\/([^/]+)\//);
       if (match && match[1]) {
-        // Construct a standard Wix Static URL (resized to 600x600 for WhatsApp)
         return `https://static.wixstatic.com/media/${match[1]}/v1/fit/w_600,h_600,q_90/file.jpg`;
       }
     }
     return url;
   };
 
-  const publicMetaImage = getPublicImageUrl(images[0]); // Primary image for preview
+  const publicMetaImage = getPublicImageUrl(images[0]);
 
-  // --- HANDLER: WhatsApp Click (Updated Format) ---
+  // --- HANDLER: WhatsApp Click (Updated with Color) ---
   const handleWhatsAppClick = () => {
     if (!toy) return;
 
-    // We use window.location.href to send the *Link* to this page.
-    // When the seller clicks this link, they will see the page + the meta tag preview.
     const currentUrl = window.location.href;
+    
+    // Determine the color to display in the text message
+    // Priority: URL Param > Toy's Database Color > "Standard"
+    const displayColor = requestedColor || toy.color || 'Standard';
 
     const message = `Hello! I am interested in buying this product:
 *${toy.name}*
 Price: Rs. ${toy.price || 'N/A'}
+Selected Color: ${displayColor}
 
 Link: ${currentUrl}
 
@@ -160,6 +172,22 @@ Please provide availability details.`;
 
   return (
     <div className="min-h-screen bg-white">
+      {/* --- DYNAMIC META TAGS FOR WHATSAPP PREVIEW --- */}
+      <Helmet>
+        <title>{toy.name} | Sudha Novelties</title>
+        <meta name="description" content={`Buy ${toy.name} at Sudha Novelties. Best quality toys for kids.`} />
+        
+        {/* Open Graph / WhatsApp Tags */}
+        <meta property="og:type" content="product" />
+        <meta property="og:title" content={toy.name} />
+        <meta property="og:description" content={`Price: Rs. ${toy.price} - ${toy.shortDescription || 'Check it out!'}`} />
+        <meta property="og:image" content={publicMetaImage} />
+        <meta property="og:image:width" content="600" />
+        <meta property="og:image:height" content="600" />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:site_name" content="Sudha Novelties" />
+      </Helmet>
+
       <Header />
       <WhatsAppFloatingButton />
 
@@ -218,6 +246,13 @@ Please provide availability details.`;
               <div className="flex flex-wrap gap-3 mb-6">
                 {toy.category && <span className="px-4 py-2 bg-light-pink rounded-full text-primary font-paragraph text-sm font-medium">{toy.category}</span>}
                 {toy.ageGroup && <span className="px-4 py-2 bg-secondary/20 rounded-full text-foreground font-paragraph text-sm font-medium">Age: {toy.ageGroup}</span>}
+                
+                {/* Visual Indicator of Selected Color from URL */}
+                {requestedColor && (
+                   <span className="px-4 py-2 border-2 border-primary rounded-full text-primary font-paragraph text-sm font-bold flex items-center gap-2">
+                     Color: {requestedColor}
+                   </span>
+                )}
               </div>
 
               {toy.price && (
@@ -231,29 +266,6 @@ Please provide availability details.`;
                 <div className="mb-4">
                   <p className="text-gray-500 font-paragraph text-sm mb-2">Description</p>
                   <p className="font-paragraph text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>
-                </div>
-              )}
-
-              {/* Color Selection */}
-              {availableColors.length > 0 && (
-                <div className="mb-6">
-                  <p className="text-gray-500 font-paragraph text-sm mb-3">Available Colors</p>
-                  <div className="flex flex-wrap gap-3">
-                    {availableColors.map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => setSelectedColor(color)}
-                        className={`px-5 py-2.5 rounded-full font-paragraph text-sm font-medium transition-all duration-300 border-2 flex items-center gap-2 ${
-                          selectedColor === color
-                            ? 'bg-primary border-primary text-white shadow-md'
-                            : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
-                        }`}
-                      >
-                        {color}
-                        {selectedColor === color && <Check size={16} />}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               )}
 
