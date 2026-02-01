@@ -100,4 +100,6 @@ export interface Toys {
   price?: number;
   /** @wixFieldType media_gallery */
   productImages1?: any;
+  /** @wixFieldType media_gallery */
+  productGallery?: any;
 }

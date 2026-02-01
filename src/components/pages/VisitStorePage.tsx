@@ -27,11 +27,11 @@ export default function VisitStorePage() {
   };
 
   const handleMainStoreDirections = () => {
-    window.open('https://maps.app.goo.gl/t4mHdnPEn57Vu1HZA?g_st=ic', '_blank');
+    window.open('https://maps.app.goo.gl/SkctmDA54hRMS6sH7', '_blank');
   };
 
   const handleBranchStoreDirections = () => {
-    window.open('https://maps.app.goo.gl/7CUkrrQkLh9pvtF18?g_st=ic', '_blank');
+    window.open('https://maps.app.goo.gl/CZHVgMUS3oCnNofF8', '_blank');
   };
 
   return (
@@ -97,7 +97,7 @@ export default function VisitStorePage() {
                   <div>
                     <h4 className="font-heading text-lg text-primary mb-2">Location</h4>
                     <a
-                      href="https://maps.app.goo.gl/t4mHdnPEn57Vu1HZA?g_st=ic"
+                      href="https://maps.app.goo.gl/SkctmDA54hRMS6sH7"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors underline"
@@ -166,7 +166,7 @@ export default function VisitStorePage() {
                   <div>
                     <h4 className="font-heading text-lg text-primary mb-2">Location</h4>
                     <a
-                      href="https://maps.app.goo.gl/7CUkrrQkLh9pvtF18?g_st=ic"
+                      href="https://maps.app.goo.gl/CZHVgMUS3oCnNofF8"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors underline"
