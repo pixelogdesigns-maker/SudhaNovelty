@@ -56,6 +56,12 @@ export default function ToysPage() {
       if (categoryParam) {
         setSelectedCategory(categoryParam);
       }
+
+      // Check for age parameter in URL
+      const ageParam = searchParams.get('age');
+      if (ageParam) {
+        setSelectedAgeGroup(ageParam);
+      }
     };
     fetchData();
   }, [searchParams]);
