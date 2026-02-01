@@ -21,7 +21,7 @@ interface Product {
   price: number;
   image: string;
   category?: string;
-  isBestSeller?: boolean;
+  isBestSellerText?: string;
 }
 
 interface VideoReel {

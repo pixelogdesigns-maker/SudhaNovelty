@@ -76,6 +76,7 @@ export interface ToyCategories {
 
 /**
  * Collection ID: toys
+ * @catalog This collection is an eCommerce catalog
  * Interface for Toys
  */
 export interface Toys {
@@ -84,6 +85,8 @@ export interface Toys {
   _updatedDate?: Date;
   /** @wixFieldType text */
   name?: string;
+  /** @wixFieldType text */
+  isBestSellerText?: string;
   /** @wixFieldType boolean */
   isBestSeller?: boolean;
   /** @wixFieldType text */
