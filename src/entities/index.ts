@@ -76,7 +76,6 @@ export interface ToyCategories {
 
 /**
  * Collection ID: toys
- * @catalog This collection is an eCommerce catalog
  * Interface for Toys
  */
 export interface Toys {
@@ -85,12 +84,6 @@ export interface Toys {
   _updatedDate?: Date;
   /** @wixFieldType text */
   name?: string;
-  /** @wixFieldType text */
-  isBestSellerText?: string;
-  /** @wixFieldType boolean */
-  isBestSeller?: boolean;
-  /** @wixFieldType text */
-  color?: string;
   /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
   productImages?: string;
   /** @wixFieldType image - Contains image URL, render with <Image> component, NOT as text */
@@ -107,10 +100,4 @@ export interface Toys {
   price?: number;
   /** @wixFieldType media_gallery */
   productImages1?: any;
-  /** @wixFieldType media_gallery */
-  productGallery?: any;
-  /** @wixFieldType text */
-  isBestSellingNow?: string;
-  /** @wixFieldType number */
-  number?: number;
 }

@@ -19,28 +19,17 @@ export default function Header() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
-      <div className="max-w-[160rem] mx-auto px-6">
-        {/* Container Height: h-20 (80px) mobile, h-24 (96px) desktop. 
-            This is the standard size for e-commerce headers. */}
-        <div className="flex items-center justify-between h-20 md:h-24 transition-all duration-300">
-          
-          {/* Logo Section */}
-          <Link to="/" className="flex items-center h-full">
+    <header className="sticky top-0 z-50 bg-white shadow-sm">
+      <div className="max-w-[160rem] mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
-              // Provide large dimensions for sharpness, but CSS controls the display size
-              width={220} 
-              height={100}
-              // FIX APPLIED HERE:
-              // 1. h-[85%]: Forces the image to be only 85% of the bar's height.
-              //    This leaves whitespace at top/bottom automatically.
-              // 2. object-contain: Ensures the image scales down to fit, never cropping.
-              className="h-[85%] w-auto object-contain"
+              src="https://static.wixstatic.com/media/b9ec8c_56673b00d24740d896ae8ca0c386e3cd~mv2.png"
+              width={50}
+              className="h-12 w-auto"
               originWidth={533}
-              originHeight={196}
-              alt="Sudha Novelties"
-            />
+              originHeight={196} />
           </Link>
 
           {/* Desktop Navigation */}
@@ -49,9 +38,9 @@ export default function Header() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`font-paragraph text-base font-semibold transition-colors ${
+                className={`font-paragraph text-base transition-colors ${
                   isActive(link.path)
-                    ? 'text-primary'
+                    ? 'text-primary font-semibold'
                     : 'text-foreground hover:text-primary'
                 }`}
               >
@@ -70,18 +59,18 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 flex flex-col gap-4 border-t border-gray-100 pt-4">
+          <nav className="md:hidden mt-4 pb-4 flex flex-col gap-4">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`font-paragraph text-base px-2 py-1 rounded-md transition-colors ${
+                className={`font-paragraph text-base transition-colors ${
                   isActive(link.path)
-                    ? 'bg-primary/10 text-primary font-semibold'
-                    : 'text-foreground hover:bg-gray-50 hover:text-primary'
+                    ? 'text-primary font-semibold'
+                    : 'text-foreground hover:text-primary'
                 }`}
               >
                 {link.name}
