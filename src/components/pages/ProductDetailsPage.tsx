@@ -67,7 +67,10 @@ export default function ProductDetailsPage() {
   const handleWhatsAppClick = () => {
     if (!toy) return;
 
-    const message = `Hello! I am interested in this product:\\n--------------------------\\nName: ${toy.name}\\nPrice: Rs. ${toy.price || 'N/A'}\\nCategory: ${toy.category || 'General'}\\n--------------------------\\n\\nPlease provide more details.`;
+    // Get the first image from product gallery
+    const productImage = images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
+
+    const message = `Hello! I am interested in this product:\n--------------------------\nName: ${toy.name}\nPrice: Rs. ${toy.price || 'N/A'}\nCategory: ${toy.category || 'General'}\nImage: ${productImage}\n--------------------------\n\nPlease provide more details.`;
 
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
