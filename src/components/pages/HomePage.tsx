@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
 import { BaseCrudService } from '@/integrations';
-import { StoreInformation, Toys } from '@/entities';
+import { StoreInformation, Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { 
   Star, ShoppingBag, ChevronLeft, ChevronRight, 
@@ -69,15 +69,16 @@ const AGE_GROUPS = [
   { label: "12+ Years", range: "12+", color: "bg-orange-100 text-orange-600", icon: "🎮" },
 ];
 
-// Specific Categories requested by user
-// Note: I used placeholders for images. You should replace the 'image' URLs with your specific 3D icons or product shots.
-const SPECIFIC_CATEGORIES = [
-  { name: "KIDS BATTERY JEEP",  color: "bg-purple-100", image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768" },
-  { name: "KIDS BATTERY BIKE",  color: "bg-blue-100",   image: "https://static.wixstatic.com/media/b9ec8c_e6fdaf35f0924b37b24f0ccb83c15896~mv2.png?originWidth=768&originHeight=960" },
-  { name: "RIDEONS",            color: "bg-orange-100", image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960" },
-  { name: "CYCLES",             color: "bg-green-100",  image: "https://static.wixstatic.com/media/b9ec8c_2ca344a9396c4f04a5d303aa5c79e93c~mv2.png?originWidth=768&originHeight=384" },
-  { name: "SLIDERS",            color: "bg-yellow-100", image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png?originWidth=576&originHeight=768" },
-  { name: "RC CARS",            color: "bg-red-100",    image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png?originWidth=768&originHeight=960" },
+// Color palette for categories (will be applied to CMS categories)
+const CATEGORY_COLORS = [
+  "bg-purple-100",
+  "bg-blue-100",
+  "bg-orange-100",
+  "bg-green-100",
+  "bg-yellow-100",
+  "bg-red-100",
+  "bg-pink-100",
+  "bg-indigo-100",
 ];
 
 // --- Sub-Components ---
@@ -267,10 +268,12 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 4. NEW: Shop By Category (Matches Reference Image)
-const ShopByCategory = () => {
+// 4. NEW: Shop By Category (Dynamically fetched from CMS)
+const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
+  if (categories.length === 0) return null;
+
   return (
-    <section className="py-24 bg-[#FFFDF9]"> {/* Very light cream background */}
+    <section className="py-24 bg-[#FFFDF9]">
       <div className="max-w-[120rem] mx-auto px-6">
         {/* Section Header */}
         <div className="flex justify-between items-end mb-16">
@@ -284,37 +287,42 @@ const ShopByCategory = () => {
 
         {/* Categories Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
-          {SPECIFIC_CATEGORIES.map((cat, index) => (
+          {categories.map((cat, index) => (
             <Link 
-              key={index} 
-              // Directly links to ToysPage with the category filter active
-              to={`/toys?category=${encodeURIComponent(cat.name)}`}
+              key={cat._id} 
+              to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`}
               className="group flex flex-col items-center gap-5"
             >
               {/* Image Circle Container */}
               <div className={`
-                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${cat.color} 
+                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
                 flex items-center justify-center 
                 shadow-sm transition-all duration-500 
                 group-hover:scale-105 group-hover:shadow-xl
               `}>
-                {/* 3D-style Image */}
-                <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
-                   <Image 
-                     src={cat.image} 
-                     alt={cat.name} 
-                     width={200} 
-                     className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" 
-                   />
-                </div>
+                {/* Category Image */}
+                {cat.categoryImage ? (
+                  <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
+                    <Image 
+                      src={cat.categoryImage} 
+                      alt={cat.categoryName || 'Category'} 
+                      width={200} 
+                      className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" 
+                    />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">
+                    {cat.categoryName?.charAt(0) || '?'}
+                  </div>
+                )}
                 
-                {/* Optional: Gloss/Shine effect on circle */}
+                {/* Gloss/Shine effect on circle */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
 
               {/* Text Label */}
               <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
-                {cat.name}
+                {cat.categoryName}
               </h3>
             </Link>
           ))}
@@ -347,6 +355,7 @@ const MarqueeVideo = ({ video }: { video: VideoReel }) => {
 export default function HomePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [toys, setToys] = useState<Toys[]>([]);
+  const [categories, setCategories] = useState<ToyCategories[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -354,9 +363,19 @@ export default function HomePage() {
       if (storeItems && storeItems.length > 0) {
         setStoreInfo(storeItems[0]);
       }
+      
       const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
       if (toyItems) {
         setToys(toyItems);
+      }
+
+      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+      if (categoryItems) {
+        // Filter active categories and sort by displayOrder
+        const activeCategories = categoryItems
+          .filter(cat => cat.isActive)
+          .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+        setCategories(activeCategories);
       }
     };
     fetchData();
@@ -376,8 +395,8 @@ export default function HomePage() {
       {/* 3. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 4. NEW: Shop By Category (Reference Image Style) */}
-      <ShopByCategory />
+      {/* 4. Shop By Category (Dynamically from CMS) */}
+      <ShopByCategory categories={categories} />
 
       {/* 5. Video Marquee Section */}
       <section className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
