@@ -267,7 +267,8 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 4. NEW: Shop By Category (Matches Reference Image) const ShopByCategory = () => {
+// 4. NEW: Shop By Category (Matches Reference Image)
+const ShopByCategory = () => {
   return (
     <section className="py-24 bg-[#FFFDF9]"> {/* Very light cream background */}
       <div className="max-w-[120rem] mx-auto px-6">
