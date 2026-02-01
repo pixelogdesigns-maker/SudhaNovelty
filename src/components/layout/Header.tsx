@@ -21,16 +21,17 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-[160rem] mx-auto px-6 py-3">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20 md:h-24"> {/* CHANGED: Increased height from h-16 to h-20/h-24 */}
           {/* Logo */}
-          <Link to="/" className="flex items-center h-full">
+          <Link to="/" className="flex items-center h-full py-1"> {/* CHANGED: Added py-1 to give breathing room */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
-              width={140}
-              height={52}
-              className="h-full w-auto object-contain"
+              width={160} /* Increased width slightly for better resolution */
+              height={80} /* Adjusted height prop */
+              className="h-full w-auto object-contain" /* object-contain ensures it never gets cut, just resizes */
               originWidth={533}
-              originHeight={296} />
+              originHeight={196}
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -39,11 +40,10 @@ export default function Header() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`font-paragraph text-base transition-colors ${
-                  isActive(link.path)
+                className={`font-paragraph text-base transition-colors ${isActive(link.path)
                     ? 'text-primary font-semibold'
                     : 'text-foreground hover:text-primary'
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
@@ -68,11 +68,10 @@ export default function Header() {
                 key={link.path}
                 to={link.path}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`font-paragraph text-base transition-colors ${
-                  isActive(link.path)
+                className={`font-paragraph text-base transition-colors ${isActive(link.path)
                     ? 'text-primary font-semibold'
                     : 'text-foreground hover:text-primary'
-                }`}
+                  }`}
               >
                 {link.name}
               </Link>
