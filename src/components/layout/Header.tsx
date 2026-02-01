@@ -21,26 +21,23 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="max-w-[160rem] mx-auto px-6">
-        {/* FIX APPLIED: 
-           1. Increased mobile height to h-20 (80px)
-           2. Increased desktop height to h-28 (112px) 
-           This gives your tall logo enough vertical pixels to display fully.
-        */}
-        <div className="flex items-center justify-between h-20 md:h-28 transition-all duration-300">
+        {/* Container Height: h-20 (80px) mobile, h-24 (96px) desktop. 
+            This is the standard size for e-commerce headers. */}
+        <div className="flex items-center justify-between h-20 md:h-24 transition-all duration-300">
           
           {/* Logo Section */}
-          <Link to="/" className="flex items-center h-full py-1"> 
+          <Link to="/" className="flex items-center h-full">
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
-              // Remove fixed pixel props here to let CSS control layout
-              width={250} 
-              height={120}
-              // FIX APPLIED: 
-              // 'h-full' makes it use all available height from the parent container
-              // 'w-auto' maintains aspect ratio
-              // 'object-contain' is critical: prevents cropping
-              className="h-full w-auto object-contain"
-              originWidth={233}
+              // Provide large dimensions for sharpness, but CSS controls the display size
+              width={220} 
+              height={100}
+              // FIX APPLIED HERE:
+              // 1. h-[85%]: Forces the image to be only 85% of the bar's height.
+              //    This leaves whitespace at top/bottom automatically.
+              // 2. object-contain: Ensures the image scales down to fit, never cropping.
+              className="h-[85%] w-auto object-contain"
+              originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
             />
