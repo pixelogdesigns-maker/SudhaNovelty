@@ -370,10 +370,33 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
 
 // 5. Shop By Category
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
+  const PREV_SECTION_BG = "#FFF8F3";
+  const NEXT_SECTION_BG = "#FFFFFF";
+  const CATEGORY_BG = "#E0F7FF";
+
   if (categories.length === 0) {
     return (
-      <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
-        <div className="max-w-[120rem] mx-auto px-6">
+      <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+        {/* Top Brush Stroke */}
+        <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
+          <svg 
+            viewBox="0 0 1200 50" 
+            preserveAspectRatio="none" 
+            className="relative block w-full h-[30px] md:h-[50px]"
+            style={{ transform: 'scaleY(-1)' }}
+          >
+            <path 
+              d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
+              fill={PREV_SECTION_BG} 
+            ></path>
+             <path 
+              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
+              fill={PREV_SECTION_BG}
+           />
+          </svg>
+        </div>
+
+        <div className="relative z-10 max-w-[120rem] mx-auto px-6">
            <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
               {[1,2,3,4,5,6].map(i => (
@@ -384,13 +407,46 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
               ))}
            </div>
         </div>
+
+        {/* Bottom Brush Stroke */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+          <svg 
+            viewBox="0 0 1200 50" 
+            preserveAspectRatio="none" 
+            className="relative block w-full h-[30px] md:h-[50px]"
+          >
+            <path 
+              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
+              fill={NEXT_SECTION_BG} 
+            ></path>
+          </svg>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
-      <div className="max-w-[120rem] mx-auto px-6">
+    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+      {/* Top Brush Stroke */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
+        <svg 
+          viewBox="0 0 1200 50" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[30px] md:h-[50px]"
+          style={{ transform: 'scaleY(-1)' }}
+        >
+          <path 
+            d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
+            fill={PREV_SECTION_BG} 
+          ></path>
+           <path 
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
+            fill={PREV_SECTION_BG}
+         />
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
           <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
@@ -418,6 +474,20 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Bottom Brush Stroke */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+        <svg 
+          viewBox="0 0 1200 50" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[30px] md:h-[50px]"
+        >
+          <path 
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
+            fill={NEXT_SECTION_BG} 
+          ></path>
+        </svg>
       </div>
     </section>
   );
