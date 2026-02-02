@@ -4,14 +4,13 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check, Palette } from 'lucide-react';
+import { MessageCircle, Filter, ChevronDown, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ToysPage() {
-  // CHANGED: Added setSearchParams to update URL
   const [searchParams, setSearchParams] = useSearchParams();
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
@@ -19,12 +18,9 @@ export default function ToysPage() {
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
-  const [selectedColor, setSelectedColor] = useState<string>('all');
   
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
-  const [isColorDropdownOpen, setIsColorDropdownOpen] = useState(false);
-  const [availableColors, setAvailableColors] = useState<string[]>([]);
 
   // Define age groups for filtering
   const ageGroups = [
@@ -55,18 +51,6 @@ export default function ToysPage() {
       if (toyItems) {
         setToys(toyItems);
         setFilteredToys(toyItems);
-        
-        // Extract unique colors from toys
-        const colors = new Set<string>();
-        toyItems.forEach(toy => {
-          if (toy.color) {
-            toy.color.split(',').forEach(c => {
-              const trimmed = c.trim();
-              if (trimmed) colors.add(trimmed);
-            });
-          }
-        });
-        setAvailableColors(Array.from(colors).sort());
       }
 
       if (categoryItems) {
@@ -86,13 +70,9 @@ export default function ToysPage() {
 
       const ageParam = searchParams.get('age');
       if (ageParam) setSelectedAgeGroup(ageParam);
-
-      // CHANGED: Handle Color Param from URL
-      const colorParam = searchParams.get('color');
-      if (colorParam) setSelectedColor(decodeURIComponent(colorParam));
     };
     fetchData();
-  }, [searchParams]); // Re-run when URL changes
+  }, [searchParams]);
 
   // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
@@ -146,29 +126,14 @@ export default function ToysPage() {
     // 2. Apply Age Group Filter
     filtered = filtered.filter(matchesAgeGroup);
 
-    // 3. Apply Color Filter
-    if (selectedColor !== 'all') {
-      filtered = filtered.filter(toy => {
-        if (!toy.color) return false;
-        return toy.color.split(',').some(c => c.trim().toLowerCase() === selectedColor.toLowerCase());
-      });
-    }
-
     setFilteredToys(filtered);
-  }, [selectedCategory, selectedAgeGroup, selectedColor, toys]);
+  }, [selectedCategory, selectedAgeGroup, toys]);
 
-  // --- WhatsApp Handler (Updated) ---
+  // --- WhatsApp Handler ---
   const handleWhatsAppClick = (toy?: Toys) => {
     let message = '';
     if (toy) {
-      // CHANGED: Construct URL object to safely append query params
       const productPageUrl = new URL(`${window.location.origin}/toys/${toy._id}`);
-      
-      // If a specific color is selected, append it to the link sent to the seller
-      if (selectedColor !== 'all') {
-        productPageUrl.searchParams.set('color', selectedColor);
-      }
-
       message = `Hello! I am interested in this product: ${toy.name}\n\n${productPageUrl.toString()}`;
     } else {
       message = "Hello! I would like to inquire about your toys.";
@@ -248,10 +213,8 @@ export default function ToysPage() {
               </div>
             </div>
 
-            {/* Right: Custom Filter Dropdowns */}
+            {/* Right: Age Filter Dropdown */}
             <div className="flex gap-3 w-full md:w-auto">
-              
-              {/* Age Filter */}
               <div className="relative z-50 flex-1 md:flex-none">
                 {isAgeDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsAgeDropdownOpen(false)} />}
                 <button
@@ -284,40 +247,6 @@ export default function ToysPage() {
                   </div>
                 )}
               </div>
-
-              {/* Color Filter */}
-              {availableColors.length > 0 && (
-                <div className="relative z-50 flex-1 md:flex-none">
-                  {isColorDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsColorDropdownOpen(false)} />}
-                  <button
-                    onClick={() => setIsColorDropdownOpen(!isColorDropdownOpen)}
-                    className={`w-full md:w-48 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${isColorDropdownOpen ? 'border-primary ring-2 ring-primary/10 shadow-lg' : 'border-gray-200 hover:border-primary/50 hover:shadow-md'}`}
-                  >
-                    <div className="flex flex-col items-start text-left">
-                      <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold flex items-center gap-1"><Palette size={12} /> Color</span>
-                      <span className="font-bold text-gray-800 text-sm">{selectedColor === 'all' ? 'All' : selectedColor}</span>
-                    </div>
-                    <ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${isColorDropdownOpen ? 'rotate-180 text-primary' : ''}`} />
-                  </button>
-
-                  {isColorDropdownOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
-                      <div className="py-1 max-h-64 overflow-y-auto">
-                        <button onClick={() => { setSelectedColor('all'); updateUrlParams('color', 'all'); setIsColorDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
-                          <span className={`text-sm font-medium ${selectedColor === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>All Colors</span>
-                          {selectedColor === 'all' && <Check size={16} className="text-primary" />}
-                        </button>
-                        {availableColors.map((color) => (
-                          <button key={color} onClick={() => { setSelectedColor(color); updateUrlParams('color', color); setIsColorDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
-                            <span className={`text-sm font-medium ${selectedColor === color ? 'text-primary font-bold' : 'text-gray-600'}`}>{color}</span>
-                            {selectedColor === color && <Check size={16} className="text-primary" />}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
             </div>
 
           </div>
@@ -333,8 +262,7 @@ export default function ToysPage() {
               <button onClick={() => {
                 setSelectedCategory('all'); 
                 setSelectedAgeGroup('all'); 
-                setSelectedColor('all');
-                setSearchParams({}); // Clear URL params
+                setSearchParams({});
               }} className="text-primary font-bold hover:underline">Clear all filters</button>
             </div>
           ) : (
@@ -348,7 +276,6 @@ export default function ToysPage() {
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                 >
-                  {/* Link with preserved query params to persist state if needed, though usually product details is standalone */}
                   <Link to={`/toys/${toy._id}`} className="aspect-square overflow-hidden bg-gray-50 relative group block">
                     {(() => {
                       let imageUrl = 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
