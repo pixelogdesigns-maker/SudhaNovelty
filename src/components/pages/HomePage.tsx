@@ -1,4 +1,4 @@
-// HPI 4.1-V (Carousel Resolution Fix: 1300x190 Aspect Ratio)
+// HPI 4.2-V (Carousel Fix: Original Resolution & No Distortion)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -58,41 +58,19 @@ const HERO_SLIDES = [
   }
 ];
 
-// Video Reels for the marquee section
 const VIDEO_REELS: VideoReel[] = [
-  {
-    id: '1',
-    title: 'Fun Playtime',
-    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video1~mv2.mp4',
-    description: 'Kids having fun with toys'
-  },
-  {
-    id: '2',
-    title: 'Adventure Time',
-    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video2~mv2.mp4',
-    description: 'Exciting toy adventures'
-  },
-  {
-    id: '3',
-    title: 'Learning Play',
-    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video3~mv2.mp4',
-    description: 'Educational toy fun'
-  }
+  { id: 'video-1', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-2', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-3', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
 ];
 
-// Category colors for the shop by category section
-const CATEGORY_COLORS = [
-  'bg-[#A7F3D0]',
-  'bg-[#BFDBFE]',
-  'bg-[#FECACA]',
-  'bg-[#FDE68A]',
-  'bg-[#DDD6FE]',
-  'bg-[#FDBA74]'
-];
+const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Strict 1300x190 Aspect Ratio Fix)
+// 1. Hero Carousel (Corrected for Original Resolution)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -105,11 +83,9 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // THE FIX: 
-    // 1. 'w-full' makes it span the full width of the screen.
-    // 2. 'pb-[14.61%]' is the magic number. (190 / 1300 = 0.1461). 
-    //    This forces the container height to always be exactly proportional to the width.
-    <section className="relative w-full pb-[14.61%] bg-gray-100 overflow-hidden group">
+    // FIX: 'aspect-[1300/190]' creates a box with the EXACT same shape as your image.
+    // 'w-full' makes it stretch to the screen width, and the height adjusts automatically.
+    <section className="relative w-full aspect-[1300/190] overflow-hidden bg-white group">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
@@ -117,33 +93,32 @@ const HeroCarousel = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8 }}
-          // Absolute positioning fills the padding-based container perfectly
           className="absolute inset-0 w-full h-full"
         >
           <Link to="/toys" className="block w-full h-full">
-            {/* object-fill ensures the image stretches exactly to the container bounds. 
-                Since the container is locked to the image ratio, no distortion or cropping occurs. */}
+            {/* FIX: object-cover ensures no squishing/stretching. 
+               It fits the image perfectly into the box we created above. */}
             <Image 
               src={HERO_SLIDES[current].image} 
               alt={HERO_SLIDES[current].title}
               width={1300} 
               height={190}
-              className="w-full h-full object-fill" 
+              className="w-full h-full object-cover" 
             />
           </Link>
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation Arrows (Hidden on mobile to keep view clean, visible on hover for desktop) */}
+      {/* Navigation Arrows - Only visible on hover for a cleaner look */}
       <button 
         onClick={goToPrev} 
-        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
+        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
       >
         <ChevronLeft size={20} className="md:w-8 md:h-8" />
       </button>
       <button 
         onClick={goToNext} 
-        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
+        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
       >
         <ChevronRight size={20} className="md:w-8 md:h-8" />
       </button>
@@ -179,7 +154,7 @@ const TextMarquee = () => {
   );
 };
 
-// 3. Shop By Age (Color Blended Brush Strokes)
+// 3. Shop By Age (Lavender Brush Stroke Design)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = { 
@@ -198,15 +173,14 @@ const ShopByAge = () => {
     { label: "YEARS", range: "12+", color: "bg-[#FDBA74]", icon: "🎮" },
   ];
 
-  // COLORS FOR BLENDING
-  const NEXT_SECTION_BG = "#FFF8F3"; // Cream color of the 'Best Sellers' section
-  const PREV_SECTION_BG = "#ffffff"; // White (or use "#EC4899" to blend with Marquee)
+  // Colors for blending the brush strokes
+  const NEXT_SECTION_BG = "#FFF8F3"; 
+  const PREV_SECTION_BG = "#EC4899"; // Blends with the pink marquee above
 
   return (
     <section className="relative pt-28 pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       
-      {/* --- TOP BRUSH STROKE --- */}
-      {/* Blends with the section ABOVE */}
+      {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
           viewBox="0 0 1200 50" 
@@ -214,7 +188,6 @@ const ShopByAge = () => {
           className="relative block w-full h-[35px] md:h-[50px]"
           style={{ transform: 'scaleY(-1)' }}
         >
-          {/* Changed fill to PREV_SECTION_BG */}
           <path 
             d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
             fill={PREV_SECTION_BG} 
@@ -270,15 +243,13 @@ const ShopByAge = () => {
         </div>
       </div>
 
-      {/* --- BOTTOM BRUSH STROKE --- */}
-      {/* Blends with the section BELOW */}
+      {/* Bottom Brush Stroke */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
           viewBox="0 0 1200 50" 
           preserveAspectRatio="none" 
           className="relative block w-full h-[35px] md:h-[50px]"
         >
-          {/* Changed fill to NEXT_SECTION_BG (#FFF8F3) */}
           <path 
             d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
             fill={NEXT_SECTION_BG} 
@@ -352,198 +323,4 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
           <div className="flex -ml-6 pb-12">
             {bestSellers.map((product) => (
               <div className="pl-6 flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_25%] min-w-0" key={product._id}>
-                <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full">
-                  <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
-                  <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
-                      {(() => {
-                      let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
-                      if (product.productGallery?.[0]) imageUrl = product.productGallery[0].src || product.productGallery[0].url || product.productGallery[0];
-                      else if (product.productImages1?.[0]) imageUrl = product.productImages1[0].src || product.productImages1[0].url || product.productImages1[0];
-                      else if (typeof product.productImages === 'string') imageUrl = product.productImages;
-                      else if (typeof product.image === 'string') imageUrl = product.image;
-                      return (
-                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                      );
-                    })()}
-                  </div>
-                  <div className="px-2 pb-2">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
-                    <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
-                    <span className="text-lg font-bold text-primary">Rs. {product.price?.toFixed(2)}</span>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 5. Shop By Category
-const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
-  if (categories.length === 0) {
-    return (
-      <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
-        <div className="max-w-[120rem] mx-auto px-6">
-           <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
-           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
-              {[1,2,3,4,5,6].map(i => (
-                 <div key={i} className="flex flex-col items-center gap-5">
-                    <div className="w-40 h-40 rounded-full bg-gray-200 animate-pulse"></div>
-                    <div className="w-24 h-6 bg-gray-200 rounded animate-pulse"></div>
-                 </div>
-              ))}
-           </div>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
-      <div className="max-w-[120rem] mx-auto px-6">
-        <div className="flex justify-between items-end mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
-          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
-          {categories.map((cat, index) => (
-            <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
-              <div className={`
-                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
-                flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
-              `}>
-                {cat.categoryImage ? (
-                  <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
-                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
-                  </div>
-                ) : (
-                  <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">{cat.categoryName?.charAt(0) || '?'}</div>
-                )}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
-              </div>
-              <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
-                {cat.categoryName}
-              </h3>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-// 6. Video Marquee Component
-const MarqueeVideo = ({ video }: { video: VideoReel }) => {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(error => {
-        console.log("Autoplay prevented:", error);
-      });
-    }
-  }, []);
-
-  return (
-    <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-      <video
-        ref={videoRef}
-        src={video.videoUrl} 
-        poster={video.thumbnailUrl}
-        autoPlay
-        loop
-        muted
-        playsInline 
-        className="w-full h-full object-cover pointer-events-none"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-    </div>
-  );
-};
-
-// --- Main Page Integration ---
-
-export default function HomePage() {
-  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
-  const [toys, setToys] = useState<Toys[]>([]);
-  const [categories, setCategories] = useState<ToyCategories[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
-      
-      const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-      if (toyItems) setToys(toyItems);
-
-      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-      if (categoryItems) {
-        setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
-      }
-    };
-    fetchData();
-  }, []);
-
-  return (
-    <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
-      <Header />
-      <WhatsAppFloatingButton />
-      
-      {/* 1. Hero Carousel */}
-      <HeroCarousel />
-      
-      {/* 2. Text Marquee */}
-      <TextMarquee />
-      
-      {/* 3. Shop By Age */}
-      <ShopByAge />
-
-      {/* 4. Best Sellers */}
-      <BestSellers toys={toys} />
-
-      {/* 5. Shop By Category */}
-      <ShopByCategory categories={categories} />
-
-      {/* 6. Video Marquee Section */}
-      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-        <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
-            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>
-        </div>
-
-        <div className="relative w-full">
-          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-
-          <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
-            {[...VIDEO_REELS, ...VIDEO_REELS, ...VIDEO_REELS].map((video, index) => (
-              <MarqueeVideo key={`${video.id}-${index}`} video={video} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Keep Location Section */}
-      <section className="py-24 bg-light-pink/20">
-        <div className="max-w-[120rem] mx-auto px-6 text-center">
-             <h2 className="font-heading text-4xl mb-6">Visit Our Store</h2>
-             <p className="text-xl text-gray-600 mb-8">{storeInfo?.address || '123 Toy Street'}</p>
-             <Link to="/visit" className="inline-block px-8 py-4 bg-foreground text-white rounded-xl font-bold">Get Directions</Link>
-        </div>
-      </section>
-
-      <Footer />
-
-      <style>{`
-          @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-          .animate-marquee { animation: marquee 60s linear infinite; }
-      `}</style>
-    </div>
-  );
-}
+                <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-
