@@ -154,8 +154,8 @@ Please provide availability details.`;
         <Header />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="font-paragraph text-foreground">Loading product details...</p>
+            <div className="w-10 h-10 md:w-12 md:h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="font-paragraph text-foreground text-sm md:text-base">Loading product details...</p>
           </div>
         </div>
         <Footer />
@@ -169,9 +169,9 @@ Please provide availability details.`;
         <Header />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <p className="font-paragraph text-xl text-foreground mb-6">Product not found</p>
-            <button onClick={() => navigate('/toys')} className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl hover:bg-primary/90 transition-all">
-              <ArrowLeft size={18} /> Back to Toys
+            <p className="font-paragraph text-lg md:text-xl text-foreground mb-6">Product not found</p>
+            <button onClick={() => navigate('/toys')} className="inline-flex items-center gap-2 bg-primary text-white px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all text-sm md:text-base">
+              <ArrowLeft size={16} className="md:w-5 md:h-5" /> Back to Toys
             </button>
           </div>
         </div>
@@ -186,23 +186,23 @@ Please provide availability details.`;
       <WhatsAppFloatingButton />
 
       {/* Breadcrumb */}
-      <section className="bg-light-pink/30 py-4">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <button onClick={() => navigate('/toys')} className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-base transition-colors">
-            <ArrowLeft size={18} /> Back to Toys
+      <section className="bg-light-pink/30 py-3 md:py-4">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
+          <button onClick={() => navigate('/toys')} className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-paragraph text-sm md:text-base transition-colors">
+            <ArrowLeft size={16} className="md:w-5 md:h-5" /> Back to Toys
           </button>
         </div>
       </section>
 
       {/* Product Details Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <section className="py-8 md:py-16 bg-white">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
             {/* Product Images Gallery */}
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              <div className="space-y-4">
+              <div className="space-y-3 md:space-y-4">
                 {/* Main Image */}
-                <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
+                <div className="relative aspect-square rounded-lg md:rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
                   <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} className="w-full h-full">
                     <AnimatePresence mode="wait">
                       <motion.div key={selectedImageIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="w-full h-full">
@@ -213,16 +213,16 @@ Please provide availability details.`;
 
                   {images.length > 1 && (
                     <>
-                      <button onClick={handlePrevImage} className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"><ChevronLeft size={24} className="text-foreground" /></button>
-                      <button onClick={handleNextImage} className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"><ChevronRight size={24} className="text-foreground" /></button>
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-3 py-1 rounded-full text-sm font-paragraph">{selectedImageIndex + 1} / {images.length}</div>
+                      <button onClick={handlePrevImage} className="hidden lg:flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-10 md:w-12 h-10 md:h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"><ChevronLeft size={20} className="text-foreground md:w-6 md:h-6" /></button>
+                      <button onClick={handleNextImage} className="hidden lg:flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-10 md:w-12 h-10 md:h-12 items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all hover:scale-110"><ChevronRight size={20} className="text-foreground md:w-6 md:h-6" /></button>
+                      <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-paragraph">{selectedImageIndex + 1} / {images.length}</div>
                     </>
                   )}
                 </div>
 
                 {/* Thumbnail Gallery */}
                 {images.length > 1 && (
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-4 gap-2 md:gap-3">
                     {images.map((image, index) => (
                       <button key={index} onClick={() => setSelectedImageIndex(index)} className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${selectedImageIndex === index ? 'border-primary shadow-md' : 'border-gray-200 hover:border-primary/50'}`}>
                         <Image src={image} alt={`view ${index}`} width={150} className="w-full h-full object-cover" />
@@ -235,25 +235,25 @@ Please provide availability details.`;
 
             {/* Product Information */}
             <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} className="flex flex-col">
-              <h1 className="font-heading text-4xl md:text-5xl text-foreground mb-4">{toy.name}</h1>
+              <h1 className="font-heading text-2xl md:text-5xl text-foreground mb-3 md:mb-4">{toy.name}</h1>
 
-              <div className="flex flex-wrap gap-3 mb-6">
-                {toy.category && <span className="px-4 py-2 bg-light-pink rounded-full text-primary font-paragraph text-sm font-medium">{toy.category}</span>}
-                {toy.ageGroup && <span className="px-4 py-2 bg-secondary/20 rounded-full text-foreground font-paragraph text-sm font-medium">Age: {toy.ageGroup}</span>}
+              <div className="flex flex-wrap gap-2 md:gap-3 mb-4 md:mb-6">
+                {toy.category && <span className="px-3 md:px-4 py-1 md:py-2 bg-light-pink rounded-full text-primary font-paragraph text-xs md:text-sm font-medium">{toy.category}</span>}
+                {toy.ageGroup && <span className="px-3 md:px-4 py-1 md:py-2 bg-secondary/20 rounded-full text-foreground font-paragraph text-xs md:text-sm font-medium">Age: {toy.ageGroup}</span>}
               </div>
 
               {toy.price && (
-                <div className="mb-6">
-                  <p className="text-gray-500 font-paragraph text-sm mb-2">Price</p>
-                  <p className="text-4xl font-bold text-primary">Rs. {toy.price}</p>
+                <div className="mb-4 md:mb-6">
+                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Price</p>
+                  <p className="text-3xl md:text-4xl font-bold text-primary">Rs. {toy.price}</p>
                 </div>
               )}
 
               {/* --- RESTORED COLOR OPTIONS SELECTOR --- */}
               {availableColors.length > 0 && (
-                <div className="mb-8">
-                  <p className="text-gray-500 font-paragraph text-sm mb-3">Available Colors</p>
-                  <div className="flex flex-wrap gap-3">
+                <div className="mb-6 md:mb-8">
+                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-2 md:mb-3">Available Colors</p>
+                  <div className="flex flex-wrap gap-2 md:gap-3">
                     {availableColors.map((color) => {
                        const isSelected = requestedColor === color || (!requestedColor && availableColors[0] === color);
                        
@@ -269,7 +269,7 @@ Please provide availability details.`;
                           key={color}
                           onClick={() => handleColorSelect(color)}
                           className={`
-                            relative px-6 py-2 rounded-full border-2 transition-all duration-300 flex items-center gap-2
+                            relative px-3 md:px-6 py-1 md:py-2 rounded-full border-2 transition-all duration-300 flex items-center gap-2 text-xs md:text-base
                             ${isSelected 
                               ? 'border-primary bg-primary/5 text-primary font-bold shadow-sm' 
                               : 'border-gray-200 hover:border-primary/50 text-gray-600'
@@ -278,11 +278,11 @@ Please provide availability details.`;
                         >
                           {/* Optional: Small color dot */}
                           <span 
-                            className="w-3 h-3 rounded-full border border-black/10" 
+                            className="w-2 md:w-3 h-2 md:h-3 rounded-full border border-black/10" 
                             style={{ backgroundColor: getBgColor(color) }}
                           />
                           {color}
-                          {isSelected && <Check size={14} />}
+                          {isSelected && <Check size={12} className="md:w-4 md:h-4" />}
                         </button>
                       );
                     })}
@@ -291,21 +291,21 @@ Please provide availability details.`;
               )}
 
               {toy.shortDescription && (
-                <div className="mb-4">
-                  <p className="text-gray-500 font-paragraph text-sm mb-2">Description</p>
-                  <p className="font-paragraph text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>
+                <div className="mb-3 md:mb-4">
+                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Description</p>
+                  <p className="font-paragraph text-base md:text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>
                 </div>
               )}
 
-              <div className="space-y-4 mt-auto pt-6">
-                <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-lg px-8 py-4 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-3">
-                  <MessageCircle size={24} /> Order via WhatsApp
+              <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
+                <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
+                  <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
                 </button>
               </div>
 
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <div className="bg-light-pink/30 rounded-xl p-4">
-                  <p className="font-paragraph text-sm text-foreground">
+              <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
+                <div className="bg-light-pink/30 rounded-lg md:rounded-xl p-3 md:p-4">
+                  <p className="font-paragraph text-xs md:text-sm text-foreground">
                     ✓ Quality Assured<br />
                     ✓ Safe & Non-Toxic<br />
                     ✓ In-Store Pickup Available
@@ -318,13 +318,13 @@ Please provide availability details.`;
       </section>
 
       {/* Related/Help Section */}
-      <section className="py-16 bg-gradient-to-br from-light-pink to-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <div className="bg-white rounded-2xl p-8 shadow-md text-center">
-            <h2 className="font-heading text-3xl text-foreground mb-4">Can't find what you need?</h2>
-            <p className="font-paragraph text-lg text-foreground mb-6">Our team is here to help you find the perfect toy.</p>
-            <button onClick={handleWhatsAppClick} className="inline-flex items-center gap-2 bg-whatsapp-green text-white font-paragraph text-base px-8 py-4 rounded-xl hover:bg-whatsapp-green/90 transition-all shadow-md">
-              <MessageCircle size={20} /> Chat with Us
+      <section className="py-8 md:py-16 bg-gradient-to-br from-light-pink to-white">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
+          <div className="bg-white rounded-lg md:rounded-2xl p-6 md:p-8 shadow-md text-center">
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-3 md:mb-4">Can't find what you need?</h2>
+            <p className="font-paragraph text-base md:text-lg text-foreground mb-4 md:mb-6">Our team is here to help you find the perfect toy.</p>
+            <button onClick={handleWhatsAppClick} className="inline-flex items-center gap-2 bg-whatsapp-green text-white font-paragraph text-sm md:text-base px-6 md:px-8 py-2 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all shadow-md">
+              <MessageCircle size={16} className="md:w-5 md:h-5" /> Chat with Us
             </button>
           </div>
         </div>
