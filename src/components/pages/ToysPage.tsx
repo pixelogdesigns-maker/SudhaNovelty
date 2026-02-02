@@ -9,6 +9,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ToysPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -156,6 +157,12 @@ export default function ToysPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="Shop Toys - Premium Toy Collection | Sudha Novelties"
+        description="Browse our extensive collection of premium toys for all ages. Find the perfect toy for kids with quality products and fast delivery at Sudha Novelties."
+        keywords="buy toys online, toy collection, kids toys, premium toys, toys for all ages"
+        canonical="https://sudha-novelties.com/toys"
+      />
       <Header />
       <WhatsAppFloatingButton />
       

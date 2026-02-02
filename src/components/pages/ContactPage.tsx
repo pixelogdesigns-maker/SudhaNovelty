@@ -10,6 +10,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ContactPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -80,6 +81,12 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="Contact Us - Sudha Novelties | Get in Touch"
+        description="Contact Sudha Novelties for questions about our toys and products. Reach out via phone, email, or our contact form. We're here to help!"
+        keywords="contact us, customer service, toy store contact, get in touch"
+        canonical="https://sudha-novelties.com/contact"
+      />
       <Header />
       <WhatsAppFloatingButton />
 

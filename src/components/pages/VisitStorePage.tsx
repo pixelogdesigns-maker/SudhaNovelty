@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function VisitStorePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -142,6 +143,12 @@ export default function VisitStorePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <SEOHelmet 
+        title="Visit Our Store - Sudha Novelties | Store Locations & Hours"
+        description="Visit Sudha Novelties store to explore our full collection of premium toys. Find our location, hours, and directions. We're ready to help you find the perfect toy!"
+        keywords="store location, visit store, toy store near me, store hours, directions"
+        canonical="https://sudha-novelties.com/visit"
+      />
       <Header />
       <WhatsAppFloatingButton />
 

@@ -9,6 +9,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -182,6 +183,13 @@ Please provide availability details.`;
 
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title={`${toy?.name || 'Product'} - Buy Premium Toys | Sudha Novelties`}
+        description={toy?.shortDescription || `Discover ${toy?.name} at Sudha Novelties. Premium quality toy with fast delivery. Shop now!`}
+        keywords={`${toy?.name}, ${toy?.category}, toys, buy toys online`}
+        canonical={`https://sudha-novelties.com/toys/${toyId}`}
+        ogImage={images[0] || toy?.image}
+      />
       <Header />
       <WhatsAppFloatingButton />
 

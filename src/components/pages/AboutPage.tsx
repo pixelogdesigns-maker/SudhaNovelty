@@ -4,10 +4,17 @@ import { Store, Sparkles } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="About Sudha Novelties - Premium Toys Store | Our Story"
+        description="Learn about Sudha Novelties - a trusted toy store with over 10 years of experience bringing quality toys and joy to children. Discover our mission and values."
+        keywords="about us, toy store, quality toys, children's toys, toy shop"
+        canonical="https://sudha-novelties.com/about"
+      />
       <Header />
       <WhatsAppFloatingButton />
 

@@ -13,6 +13,7 @@ import {
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 // --- Types ---
 interface Product {
@@ -478,6 +479,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
+      <SEOHelmet 
+        title="Sudha Novelties - Premium Toys & Novelties Store | Best Toys for All Ages"
+        description="Discover premium toys and novelties at Sudha Novelties. Shop quality toys for kids of all ages with fast delivery. Visit our store or shop online today!"
+        keywords="toys store, premium toys, toys for kids, novelties, best sellers, toy shop"
+        canonical="https://sudha-novelties.com"
+        ogImage="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
+      />
       <Header />
       <WhatsAppFloatingButton />
       
