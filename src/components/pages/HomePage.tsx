@@ -83,9 +83,9 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // FIX: 'aspect-[1300/190]' creates a box with the EXACT same shape as your image.
+    // FIX: Using aspect-video (16/9) for a more natural carousel height that doesn't squish images
     // 'w-full' makes it stretch to the screen width, and the height adjusts automatically.
-    <section className="relative w-full aspect-[1300/190] overflow-hidden bg-white group">
+    <section className="relative w-full aspect-video overflow-hidden bg-white group">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
