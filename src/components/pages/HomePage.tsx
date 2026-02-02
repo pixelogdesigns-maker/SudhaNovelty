@@ -161,7 +161,7 @@ const ShopByAge = () => {
   ];
 
   return (
-    <section className="relative pt-28 pb-32 bg-[#EEEEEE] overflow-hidden font-sans">
+    <section className="relative pt-28 pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       
       {/* --- TOP BRUSH STROKE --- */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
