@@ -34,26 +34,27 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
+// UPDATED: New 1300x190 Resolution Images
 const HERO_SLIDES = [
   { 
     id: 1, 
-    title: "Slide 1", 
-    image: "https://static.wixstatic.com/media/b9ec8c_fae7f2f50f794619a49b1c10557cfa37~mv2.png" 
+    title: "Adventure Ride", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
   },
   { 
     id: 2, 
-    title: "Slide 2", 
-    image: "https://static.wixstatic.com/media/b9ec8c_28663c2318ca48de8dddcce6a16ba99d~mv2.png" 
+    title: "Fun and Thrills", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
   },
   { 
     id: 3, 
-    title: "Slide 3", 
-    image: "https://static.wixstatic.com/media/b9ec8c_20c2736ab8974c9da10dbe4d215f0d2e~mv2.png" 
+    title: "Ride into Fun", 
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" 
   },
   { 
     id: 4, 
-    title: "Slide 4", 
-    image: "https://static.wixstatic.com/media/b9ec8c_d9c6ccebc2e2438887fec2ed43d0d5e2~mv2.png" 
+    title: "Kids Toys", 
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" 
   }
 ];
 
@@ -69,7 +70,7 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (16:9 Aspect Ratio Maintained)
+// 1. Hero Carousel (Corrected for Original Resolution)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -82,28 +83,35 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    <section className="relative w-full aspect-[16/9] overflow-hidden bg-gray-100 group">
-      <AnimatePresence mode='wait'>
-        <motion.div
-          key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 w-full h-full"
-        >
-          <Link to="/toys" className="block w-full h-full">
-            <Image 
-              src={HERO_SLIDES[current].image} 
-              alt={HERO_SLIDES[current].title}
-              width={1920} 
-              height={1080}
-              className="w-full h-full object-cover" 
-            />
-          </Link>
-        </motion.div>
-      </AnimatePresence>
+    // FIX: Full-width responsive carousel with aspect ratio maintained
+    // Using w-full and aspect ratio to scale images without cropping
+    <section className="relative overflow-hidden bg-white group flex justify-center">
+      <div className="w-full aspect-[1300/390] relative flex-shrink-0">
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Link to="/toys" className="block w-full h-full">
+              {/* FIX: object-contain ensures no cropping at top/bottom. 
+                 It scales the image to fit the full width while maintaining aspect ratio. */}
+              <Image 
+                src={HERO_SLIDES[current].image} 
+                alt={HERO_SLIDES[current].title}
+                width={1300} 
+                height={390}
+                className="w-full h-full object-contain" 
+              />
+            </Link>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
+      {/* Navigation Arrows - Only visible on hover for a cleaner look */}
       <button 
         onClick={goToPrev} 
         className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
