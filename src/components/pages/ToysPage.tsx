@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check } from 'lucide-react';
+import { MessageCircle, Filter, ChevronDown, Check, Loader2 } from 'lucide-react'; // Added Loader2
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -21,6 +21,9 @@ export default function ToysPage() {
   
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
+  
+  // FIX: Added loading state to prevent flash of empty content
+  const [isLoading, setIsLoading] = useState(true);
 
   // Define age groups for filtering
   const ageGroups = [
@@ -44,35 +47,44 @@ export default function ToysPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+      try {
+        const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
+        const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
 
-      if (toyItems) {
-        setToys(toyItems);
-        setFilteredToys(toyItems);
+        if (toyItems) {
+          setToys(toyItems);
+          setFilteredToys(toyItems);
+        }
+
+        if (categoryItems) {
+          const activeCategories = categoryItems
+            .filter(cat => cat.isActive)
+            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+          setCategories(activeCategories);
+        }
+
+        if (storeItems && storeItems.length > 0) {
+          setStoreInfo(storeItems[0]);
+        }
+      } catch (error) {
+        console.error("Failed to load toys", error);
+      } finally {
+        // FIX: Only stop loading after data fetch is complete (success or fail)
+        setIsLoading(false);
       }
-
-      if (categoryItems) {
-        const activeCategories = categoryItems
-          .filter(cat => cat.isActive)
-          .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-        setCategories(activeCategories);
-      }
-
-      if (storeItems && storeItems.length > 0) {
-        setStoreInfo(storeItems[0]);
-      }
-
-      // Sync State with URL Params
-      const categoryParam = searchParams.get('category');
-      if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
-
-      const ageParam = searchParams.get('age');
-      if (ageParam) setSelectedAgeGroup(ageParam);
     };
     fetchData();
-  }, [searchParams]);
+  }, []);
+
+  // Sync State with URL Params on mount only
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
+
+    const ageParam = searchParams.get('age');
+    if (ageParam) setSelectedAgeGroup(ageParam);
+  }, []);
 
   // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
@@ -148,18 +160,18 @@ export default function ToysPage() {
       <WhatsAppFloatingButton />
       
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-16">
-        <div className="max-w-[120rem] mx-auto px-6">
+      <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-8 md:py-16">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="font-heading text-5xl md:text-6xl text-primary mb-4">
+            <h1 className="font-heading text-3xl md:text-6xl text-primary mb-2 md:mb-4">
               Our Toy Collection
             </h1>
-            <p className="font-paragraph text-xl text-foreground max-w-3xl mx-auto">
+            <p className="font-paragraph text-base md:text-xl text-foreground max-w-3xl mx-auto">
               Explore our carefully curated selection of quality toys for every age and interest
             </p>
           </motion.div>
@@ -167,15 +179,15 @@ export default function ToysPage() {
       </section>
 
       {/* Filter Section */}
-      <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-4 shadow-sm transition-all">
-        <div className="max-w-[120rem] mx-auto px-6">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+      <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-3 md:py-4 shadow-sm transition-all">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between">
 
             {/* Left: Category Pills */}
             <div className="w-full md:w-auto overflow-hidden">
-              <div className="flex items-center gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mask-fade-right">
-                <span className="flex-shrink-0 text-gray-400 font-medium text-sm flex items-center gap-1 mr-2">
-                  <Filter size={16} /> Categories:
+              <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mask-fade-right">
+                <span className="flex-shrink-0 text-gray-400 font-medium text-xs md:text-sm flex items-center gap-1 mr-1 md:mr-2">
+                  <Filter size={14} className="md:w-4 md:h-4" /> Categories:
                 </span>
 
                 <button
@@ -183,7 +195,7 @@ export default function ToysPage() {
                     setSelectedCategory('all');
                     updateUrlParams('category', 'all');
                   }}
-                  className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${selectedCategory === 'all'
+                  className={`whitespace-nowrap px-3 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 flex-shrink-0 border ${selectedCategory === 'all'
                       ? 'bg-primary border-primary text-white shadow-md'
                       : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
                     }`}
@@ -200,7 +212,7 @@ export default function ToysPage() {
                         setSelectedCategory(category.categoryName || '');
                         updateUrlParams('category', category.categoryName || '');
                       }}
-                      className={`whitespace-nowrap px-5 py-2 rounded-full text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
+                      className={`whitespace-nowrap px-3 md:px-5 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold transition-all duration-300 flex-shrink-0 border ${
                         isActive
                           ? 'bg-primary border-primary text-white shadow-md'
                           : 'bg-white border-gray-200 text-gray-600 hover:border-primary/50 hover:text-primary'
@@ -214,33 +226,33 @@ export default function ToysPage() {
             </div>
 
             {/* Right: Age Filter Dropdown */}
-            <div className="flex gap-3 w-full md:w-auto">
+            <div className="flex gap-2 md:gap-3 w-full md:w-auto">
               <div className="relative z-50 flex-1 md:flex-none">
                 {isAgeDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsAgeDropdownOpen(false)} />}
                 <button
                   onClick={() => setIsAgeDropdownOpen(!isAgeDropdownOpen)}
-                  className={`w-full md:w-56 flex items-center justify-between bg-white border px-4 py-2.5 rounded-xl transition-all duration-300 relative z-50 ${isAgeDropdownOpen ? 'border-primary ring-2 ring-primary/10 shadow-lg' : 'border-gray-200 hover:border-primary/50 hover:shadow-md'}`}
+                  className={`w-full md:w-56 flex items-center justify-between bg-white border px-3 md:px-4 py-2 md:py-2.5 rounded-lg md:rounded-xl transition-all duration-300 relative z-50 text-sm md:text-base ${isAgeDropdownOpen ? 'border-primary ring-2 ring-primary/10 shadow-lg' : 'border-gray-200 hover:border-primary/50 hover:shadow-md'}`}
                 >
                   <div className="flex flex-col items-start text-left">
-                    <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold">Age Group</span>
-                    <span className="font-bold text-gray-800 text-sm">
+                    <span className="text-[9px] md:text-[10px] uppercase tracking-wider text-gray-400 font-bold">Age Group</span>
+                    <span className="font-bold text-gray-800 text-xs md:text-sm">
                       {selectedAgeGroup === 'all' ? 'Any Age' : ageGroups.find(g => g.id === selectedAgeGroup)?.label}
                     </span>
                   </div>
-                  <ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${isAgeDropdownOpen ? 'rotate-180 text-primary' : ''}`} />
+                  <ChevronDown size={16} className={`text-gray-400 transition-transform duration-300 md:w-5 md:h-5 ${isAgeDropdownOpen ? 'rotate-180 text-primary' : ''}`} />
                 </button>
 
                 {isAgeDropdownOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="absolute right-0 top-full mt-2 w-full bg-white border border-gray-100 rounded-lg md:rounded-xl shadow-xl overflow-hidden z-50 animate-in fade-in zoom-in-95 duration-200">
                     <div className="py-1">
-                      <button onClick={() => { setSelectedAgeGroup('all'); updateUrlParams('age', 'all'); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
-                        <span className={`text-sm font-medium ${selectedAgeGroup === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>Any Age</span>
-                        {selectedAgeGroup === 'all' && <Check size={16} className="text-primary" />}
+                      <button onClick={() => { setSelectedAgeGroup('all'); updateUrlParams('age', 'all'); setIsAgeDropdownOpen(false); }} className="w-full px-3 md:px-4 py-2 md:py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors text-sm">
+                        <span className={`font-medium ${selectedAgeGroup === 'all' ? 'text-primary font-bold' : 'text-gray-600'}`}>Any Age</span>
+                        {selectedAgeGroup === 'all' && <Check size={14} className="text-primary md:w-4 md:h-4" />}
                       </button>
                       {ageGroups.map((ageGroup) => (
-                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); updateUrlParams('age', ageGroup.id); setIsAgeDropdownOpen(false); }} className="w-full px-4 py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors">
-                          <span className={`text-sm font-medium ${selectedAgeGroup === ageGroup.id ? 'text-primary font-bold' : 'text-gray-600'}`}>{ageGroup.label}</span>
-                          {selectedAgeGroup === ageGroup.id && <Check size={16} className="text-primary" />}
+                        <button key={ageGroup.id} onClick={() => { setSelectedAgeGroup(ageGroup.id); updateUrlParams('age', ageGroup.id); setIsAgeDropdownOpen(false); }} className="w-full px-3 md:px-4 py-2 md:py-3 text-left hover:bg-light-pink/30 flex items-center justify-between group transition-colors text-sm">
+                          <span className={`font-medium ${selectedAgeGroup === ageGroup.id ? 'text-primary font-bold' : 'text-gray-600'}`}>{ageGroup.label}</span>
+                          {selectedAgeGroup === ageGroup.id && <Check size={14} className="text-primary md:w-4 md:h-4" />}
                         </button>
                       ))}
                     </div>
@@ -254,19 +266,26 @@ export default function ToysPage() {
       </section>
 
       {/* Products Grid */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[120rem] mx-auto px-6">
-          {filteredToys.length === 0 ? (
-            <div className="text-center py-20 bg-gray-50 rounded-3xl">
-              <p className="font-paragraph text-xl text-gray-500 mb-2">No toys found matching your filters.</p>
+      <section className="py-8 md:py-16 bg-white min-h-[50vh]">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
+          
+          {/* FIX: Handle Loading State Explicitly */}
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-20 space-y-4">
+              <Loader2 className="w-10 h-10 text-primary animate-spin" />
+              <p className="text-gray-500 font-medium">Loading collection...</p>
+            </div>
+          ) : filteredToys.length === 0 ? (
+            <div className="text-center py-12 md:py-20 bg-gray-50 rounded-2xl md:rounded-3xl">
+              <p className="font-paragraph text-base md:text-xl text-gray-500 mb-2">No toys found matching your filters.</p>
               <button onClick={() => {
                 setSelectedCategory('all'); 
                 setSelectedAgeGroup('all'); 
                 setSearchParams({});
-              }} className="text-primary font-bold hover:underline">Clear all filters</button>
+              }} className="text-primary font-bold hover:underline text-sm md:text-base">Clear all filters</button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
               {filteredToys.map((toy, index) => (
                 <motion.div
                   key={toy._id}
@@ -274,7 +293,7 @@ export default function ToysPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
+                  className="bg-white rounded-lg md:rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full"
                 >
                   <Link to={`/toys/${toy._id}`} className="aspect-square overflow-hidden bg-gray-50 relative group block">
                     {(() => {
@@ -303,31 +322,31 @@ export default function ToysPage() {
                     })()}
                   </Link>
 
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h3 className="font-heading text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
+                  <div className="p-2 md:p-4 flex flex-col flex-grow">
+                    <h3 className="font-heading text-sm md:text-lg font-bold text-foreground mb-1 line-clamp-1 leading-tight">
                       {toy.name}
                     </h3>
                     {toy.shortDescription && (
-                      <p className="font-paragraph text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed">
+                      <p className="font-paragraph text-xs md:text-sm text-gray-500 mb-2 md:mb-3 line-clamp-2 leading-relaxed">
                         {toy.shortDescription}
                       </p>
                     )}
-                    <div className="mt-auto mb-4">
+                    <div className="mt-auto mb-2 md:mb-4">
                       {toy.price && (
-                        <div className="text-primary font-bold text-xl mb-1">
+                        <div className="text-primary font-bold text-base md:text-xl mb-1">
                           Rs. {toy.price}
                         </div>
                       )}
                       {toy.ageGroup && (
-                        <div className="text-gray-800 text-sm font-medium">
+                        <div className="text-gray-800 text-xs md:text-sm font-medium">
                           {toy.ageGroup}
                         </div>
                       )}
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2 md:space-y-3">
                       <Link
                         to={`/toys/${toy._id}`}
-                        className="w-full bg-primary text-white font-bold text-sm py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
+                        className="w-full bg-primary text-white font-bold text-xs md:text-sm py-2 md:py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
                       >
                         View Details
                       </Link>
@@ -336,7 +355,7 @@ export default function ToysPage() {
                           onClick={() => handleWhatsAppClick(toy)}
                           className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
                         >
-                          Need help? <span className="text-whatsapp-green font-semibold flex items-center gap-1"><MessageCircle size={14} /> Chat on WhatsApp</span>
+                          Need help? <span className="text-whatsapp-green font-semibold flex items-center gap-1"><MessageCircle size={12} className="md:w-4 md:h-4" /> Chat on WhatsApp</span>
                         </button>
                       </div>
                     </div>

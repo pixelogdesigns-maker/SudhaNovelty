@@ -24,9 +24,13 @@ export default function ContactPage() {
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
-      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (items && items.length > 0) {
-        setStoreInfo(items[0]);
+      try {
+        const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (items && items.length > 0) {
+          setStoreInfo(items[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch store info:', error);
       }
     };
     fetchStoreInfo();
@@ -77,18 +81,18 @@ export default function ContactPage() {
       <WhatsAppFloatingButton />
 
       {/* Hero Section */}
-      <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-20">
-        <div className="max-w-[120rem] mx-auto px-6">
+      <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-12 md:py-20">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="font-heading text-5xl md:text-6xl text-primary mb-6">
+            <h1 className="font-heading text-3xl md:text-6xl text-primary mb-3 md:mb-6">
               Get in Touch
             </h1>
-            <p className="font-paragraph text-xl text-foreground max-w-3xl mx-auto">
+            <p className="font-paragraph text-base md:text-xl text-foreground max-w-3xl mx-auto">
               Have questions about our toys? Need help finding the perfect gift? We're here to help!
             </p>
           </motion.div>
@@ -96,46 +100,45 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Methods Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-[120rem] mx-auto px-6">
+      <section className="py-8 md:py-16 bg-white">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-12"
+            className="text-center mb-8 md:mb-12"
           >
-            <h2 className="font-heading text-3xl md:text-4xl text-primary mb-4">
+            <h2 className="font-heading text-2xl md:text-4xl text-primary mb-2 md:mb-4">
               Choose Your Preferred Contact Method
             </h2>
-            <p className="font-paragraph text-lg text-foreground">
+            <p className="font-paragraph text-base md:text-lg text-foreground">
               We offer multiple ways to reach us. Pick the one that works best for you.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
             {storeInfo?.whatsAppNumber && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-2xl p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-whatsapp-green rounded-full mb-6">
-                  <MessageCircle className="text-white" size={32} />
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-whatsapp-green rounded-full mb-3 md:mb-6">
+                  <MessageCircle className="text-white" size={24} className="md:w-8 md:h-8" />
                 </div>
-                <h3 className="font-heading text-2xl text-primary mb-3">
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
                   WhatsApp Chat
                 </h3>
-                <p className="font-paragraph text-base text-foreground mb-6">
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
                   Get instant responses to your questions
                 </p>
                 <button
                   onClick={handleWhatsAppClick}
-                  className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-base px-6 py-3 rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <MessageCircle size={18} />
+                  <MessageCircle size={16} className="md:w-5 md:h-5" />
                   Start Chat
                 </button>
               </motion.div>
@@ -144,25 +147,24 @@ export default function ContactPage() {
             {storeInfo?.phoneNumber && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="bg-light-pink rounded-2xl p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-6">
-                  <Phone className="text-white" size={32} />
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <Phone className="text-white" size={24} className="md:w-8 md:h-8" />
                 </div>
-                <h3 className="font-heading text-2xl text-primary mb-3">
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
                   Phone Call
                 </h3>
-                <p className="font-paragraph text-base text-foreground mb-6">
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
                   Speak directly with our team
                 </p>
                 <a
                   href={`tel:${storeInfo.phoneNumber}`}
-                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-base px-6 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <Phone size={18} />
+                  <Phone size={16} className="md:w-5 md:h-5" />
                   Call Now
                 </a>
               </motion.div>
@@ -171,25 +173,24 @@ export default function ContactPage() {
             {storeInfo?.emailAddress && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-light-pink rounded-2xl p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-6">
-                  <Mail className="text-white" size={32} />
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <Mail className="text-white" size={24} className="md:w-8 md:h-8" />
                 </div>
-                <h3 className="font-heading text-2xl text-primary mb-3">
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
                   Email Us
                 </h3>
-                <p className="font-paragraph text-base text-foreground mb-6">
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
                   Send us a detailed message
                 </p>
                 <a
                   href={`mailto:${storeInfo.emailAddress}`}
-                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-base px-6 py-3 rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <Mail size={18} />
+                  <Mail size={16} className="md:w-5 md:h-5" />
                   Send Email
                 </a>
               </motion.div>

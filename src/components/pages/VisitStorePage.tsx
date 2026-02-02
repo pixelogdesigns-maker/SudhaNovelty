@@ -43,11 +43,11 @@ export default function VisitStorePage() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-8 items-stretch mb-20`}
+      className={`flex flex-col ${isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'} gap-4 md:gap-8 items-stretch mb-12 md:mb-20`}
     >
       {/* Map Embed Section */}
-      <div className="w-full lg:w-1/2 min-h-[400px] lg:min-h-auto relative">
-        <div className="absolute inset-0 bg-gray-200 rounded-[2rem] overflow-hidden shadow-lg border-4 border-white">
+      <div className="w-full lg:w-1/2 min-h-[300px] md:min-h-[400px] lg:min-h-auto relative">
+        <div className="absolute inset-0 bg-gray-200 rounded-lg md:rounded-[2rem] overflow-hidden shadow-lg border-2 md:border-4 border-white">
           <iframe 
             src={mapSrc}
             width="100%" 
@@ -64,74 +64,74 @@ export default function VisitStorePage() {
 
       {/* Details Card Section */}
       <div className="w-full lg:w-1/2 flex flex-col justify-center">
-        <div className="bg-white p-8 md:p-10 rounded-[2rem] shadow-xl border border-gray-100 h-full flex flex-col justify-center relative overflow-hidden group">
+        <div className="bg-white p-4 md:p-8 lg:p-10 rounded-lg md:rounded-[2rem] shadow-xl border border-gray-100 h-full flex flex-col justify-center relative overflow-hidden group">
           {/* Decorative Background Blob */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-light-pink/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-light-pink/50 transition-colors duration-500" />
+          <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-light-pink/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-light-pink/50 transition-colors duration-500" />
 
           <div className="relative z-10">
-            <h3 className="font-heading text-3xl md:text-4xl text-primary mb-6 border-b-2 border-light-pink pb-4 inline-block">
+            <h3 className="font-heading text-2xl md:text-4xl text-primary mb-4 md:mb-6 border-b-2 border-light-pink pb-2 md:pb-4 inline-block">
               {title}
             </h3>
 
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {/* Location */}
-              <div className="flex items-start gap-4 group/item">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
-                  <MapPin size={20} />
+              <div className="flex items-start gap-3 md:gap-4 group/item">
+                <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <MapPin size={16} className="md:w-5 md:h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-800 text-lg">Address</h4>
-                  <p className="text-gray-600 mb-2">{storeInfo?.address || '123 Toy Street, Fun City, India'}</p>
+                  <h4 className="font-bold text-gray-800 text-sm md:text-lg">Address</h4>
+                  <p className="text-gray-600 mb-1 md:mb-2 text-sm md:text-base">{storeInfo?.address || '123 Toy Street, Fun City, India'}</p>
                   <a 
                     href={addressUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-sm font-bold text-primary flex items-center gap-1 hover:underline"
+                    className="text-xs md:text-sm font-bold text-primary flex items-center gap-1 hover:underline"
                   >
-                    Get Directions <ExternalLink size={14} />
+                    Get Directions <ExternalLink size={12} className="md:w-4 md:h-4" />
                   </a>
                 </div>
               </div>
 
               {/* Phone */}
-              <div className="flex items-start gap-4 group/item">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
-                  <Phone size={20} />
+              <div className="flex items-start gap-3 md:gap-4 group/item">
+                <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <Phone size={16} className="md:w-5 md:h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-800 text-lg">Contact</h4>
-                  <a href={`tel:${storeInfo?.phoneNumber}`} className="text-gray-600 hover:text-primary transition-colors">
+                  <h4 className="font-bold text-gray-800 text-sm md:text-lg">Contact</h4>
+                  <a href={`tel:${storeInfo?.phoneNumber}`} className="text-gray-600 hover:text-primary transition-colors text-sm md:text-base">
                     {storeInfo?.phoneNumber || '+91 90253 98147'}
                   </a>
                 </div>
               </div>
 
               {/* Hours */}
-              <div className="flex items-start gap-4 group/item">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
-                  <Clock size={20} />
+              <div className="flex items-start gap-3 md:gap-4 group/item">
+                <div className="w-8 md:w-10 h-8 md:h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover/item:bg-primary group-hover/item:text-white transition-colors">
+                  <Clock size={16} className="md:w-5 md:h-5" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-800 text-lg">Working Hours</h4>
-                  <p className="text-gray-600">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
+                  <h4 className="font-bold text-gray-800 text-sm md:text-lg">Working Hours</h4>
+                  <p className="text-gray-600 text-sm md:text-base">{storeInfo?.workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-4">
+            <div className="mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-100 flex flex-col sm:flex-row gap-3 md:gap-4">
               <a 
                 href={addressUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 bg-white border-2 border-gray-200 text-gray-700 font-bold py-3 px-6 rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-white border-2 border-gray-200 text-gray-700 font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg md:rounded-xl hover:border-primary hover:text-primary transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
               >
-                <Navigation size={18} /> Navigate
+                <Navigation size={16} className="md:w-5 md:h-5" /> Navigate
               </a>
               <button 
                 onClick={handleWhatsAppClick}
-                className="flex-1 bg-whatsapp-green text-white font-bold py-3 px-6 rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                className="flex-1 bg-whatsapp-green text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-lg md:rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-sm md:text-base"
               >
-                <MessageCircle size={18} /> WhatsApp
+                <MessageCircle size={16} className="md:w-5 md:h-5" /> WhatsApp
               </button>
             </div>
           </div>
@@ -146,11 +146,11 @@ export default function VisitStorePage() {
       <WhatsAppFloatingButton />
 
       {/* Hero */}
-      <section className="relative w-full bg-white py-16 border-b border-gray-100">
-        <div className="max-w-[120rem] mx-auto px-6 text-center">
+      <section className="relative w-full bg-white py-8 md:py-16 border-b border-gray-100">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <h1 className="font-heading text-4xl md:text-5xl text-primary mb-4">Visit Sudha Novelties</h1>
-            <p className="font-paragraph text-lg text-gray-500 max-w-2xl mx-auto">
+            <h1 className="font-heading text-2xl md:text-5xl text-primary mb-2 md:mb-4">Visit Sudha Novelties</h1>
+            <p className="font-paragraph text-sm md:text-lg text-gray-500 max-w-2xl mx-auto">
               Drop by our stores to explore the full collection. We can't wait to see you!
             </p>
           </motion.div>
@@ -158,8 +158,8 @@ export default function VisitStorePage() {
       </section>
 
       {/* Store Locations Section */}
-      <section className="py-20">
-        <div className="max-w-[120rem] mx-auto px-6">
+      <section className="py-12 md:py-20">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           
           {/* Main Store - Map Left / Info Right */}
           <StoreBlock 
@@ -183,15 +183,15 @@ export default function VisitStorePage() {
       </section>
 
       {/* Simple CTA */}
-      <section className="py-16 bg-primary text-white text-center">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="font-heading text-3xl mb-4">Need help finding us?</h2>
-          <p className="mb-8 opacity-90">Call us or message on WhatsApp for live location sharing.</p>
+      <section className="py-8 md:py-16 bg-primary text-white text-center">
+        <div className="max-w-4xl mx-auto px-4 md:px-6">
+          <h2 className="font-heading text-2xl md:text-3xl mb-2 md:mb-4">Need help finding us?</h2>
+          <p className="mb-4 md:mb-8 opacity-90 text-sm md:text-base">Call us or message on WhatsApp for live location sharing.</p>
           <button 
             onClick={handleWhatsAppClick}
-            className="bg-white text-primary font-bold py-3 px-8 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+            className="bg-white text-primary font-bold py-2 md:py-3 px-6 md:px-8 rounded-full hover:bg-gray-100 transition-colors inline-flex items-center gap-2 text-sm md:text-base"
           >
-            <MessageCircle size={20} /> Contact Support
+            <MessageCircle size={16} className="md:w-5 md:h-5" /> Contact Support
           </button>
         </div>
       </section>
