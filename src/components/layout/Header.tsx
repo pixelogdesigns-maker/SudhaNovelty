@@ -26,17 +26,22 @@ export default function Header() {
           
           {/* Logo Section */}
           <Link to="/" className="flex items-center h-full">
+            {/* Mobile Logo */}
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
-              // Provide large dimensions for sharpness, but CSS controls the display size
+              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
               width={220} 
               height={100}
-              // Responsive logo sizing:
-              // 1. h-[70%]: Mobile - 70% of header height for compact appearance
-              // 2. sm:h-[75%]: Tablet - 75% of header height
-              // 3. md:h-[80%]: Desktop - 80% of header height
-              // 4. object-contain: Ensures the image scales down to fit, never cropping.
-              className="h-[70%] sm:h-[75%] md:h-[80%] w-auto object-contain"
+              className="h-[70%] sm:h-[75%] md:hidden w-auto object-contain"
+              originWidth={533}
+              originHeight={196}
+              alt="Sudha Novelties"
+            />
+            {/* Desktop Logo */}
+            <Image
+              src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
+              width={220} 
+              height={100}
+              className="hidden md:block h-[80%] w-auto object-contain"
               originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
