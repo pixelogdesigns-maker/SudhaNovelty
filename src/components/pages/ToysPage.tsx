@@ -63,16 +63,18 @@ export default function ToysPage() {
       if (storeItems && storeItems.length > 0) {
         setStoreInfo(storeItems[0]);
       }
-
-      // Sync State with URL Params
-      const categoryParam = searchParams.get('category');
-      if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
-
-      const ageParam = searchParams.get('age');
-      if (ageParam) setSelectedAgeGroup(ageParam);
     };
     fetchData();
-  }, [searchParams]);
+  }, []);
+
+  // Sync State with URL Params on mount only
+  useEffect(() => {
+    const categoryParam = searchParams.get('category');
+    if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
+
+    const ageParam = searchParams.get('age');
+    if (ageParam) setSelectedAgeGroup(ageParam);
+  }, []);
 
   // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
