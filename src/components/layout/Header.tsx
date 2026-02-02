@@ -26,17 +26,20 @@ export default function Header() {
           
           {/* Logo Section */}
           <Link to="/" className="flex items-center h-full">
-            {/* Mobile Logo */}
+            
+            {/* --- MOBILE LOGO (Updated Link) --- */}
+            {/* object-contain prevents the "cut off" issue by ensuring the whole image fits inside the height */}
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
+              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png" 
               width={220} 
               height={100}
-              className="h-[70%] sm:h-[75%] md:hidden w-auto object-contain"
+              className="h-[85%] w-auto md:hidden object-contain" 
               originWidth={533}
-              originHeight={196}
+              originHeight={533} // Assuming square-ish for the new logo based on the upload
               alt="Sudha Novelties"
             />
-            {/* Desktop Logo */}
+
+            {/* --- DESKTOP LOGO (Original) --- */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
               width={220} 
