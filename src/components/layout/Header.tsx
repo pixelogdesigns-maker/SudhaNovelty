@@ -25,7 +25,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16 md:h-20 transition-all duration-300">
           
           {/* Logo Section */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center gap-2">
             
             {/* --- MOBILE LOGO --- */}
             {/* Fixed size prevents resizing when navigating between pages */}
@@ -38,6 +38,11 @@ export default function Header() {
               originHeight={533}
               alt="Sudha Novelties"
             />
+            
+            {/* --- MOBILE BRAND TEXT --- */}
+            <span className="md:hidden font-heading text-sm font-bold text-primary whitespace-nowrap">
+              SUDHA<br />NOVELTIES
+            </span>
 
             {/* --- DESKTOP LOGO --- */}
             <Image
