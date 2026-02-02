@@ -35,7 +35,7 @@ export default function WhatsAppFloatingButton() {
       <Image
         src="https://static.wixstatic.com/media/b9ec8c_93ef4dee7ad0443da2ecd729537b040e~mv2.png"
         alt="WhatsApp"
-        width={56}
+        width={66}
         height={56}
         className="rounded-full"
       />
