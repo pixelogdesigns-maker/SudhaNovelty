@@ -24,9 +24,13 @@ export default function ContactPage() {
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
-      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (items && items.length > 0) {
-        setStoreInfo(items[0]);
+      try {
+        const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (items && items.length > 0) {
+          setStoreInfo(items[0]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch store info:', error);
       }
     };
     fetchStoreInfo();
