@@ -323,4 +323,198 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
           <div className="flex -ml-6 pb-12">
             {bestSellers.map((product) => (
               <div className="pl-6 flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_25%] min-w-0" key={product._id}>
-                <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-
+                <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full">
+                  <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
+                  <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
+                      {(() => {
+                      let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
+                      if (product.productGallery?.[0]) imageUrl = product.productGallery[0].src || product.productGallery[0].url || product.productGallery[0];
+                      else if (product.productImages1?.[0]) imageUrl = product.productImages1[0].src || product.productImages1[0].url || product.productImages1[0];
+                      else if (typeof product.productImages === 'string') imageUrl = product.productImages;
+                      else if (typeof product.image === 'string') imageUrl = product.image;
+                      return (
+                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      );
+                    })()}
+                  </div>
+                  <div className="px-2 pb-2">
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
+                    <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
+                    <span className="text-lg font-bold text-primary">Rs. {product.price?.toFixed(2)}</span>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 5. Shop By Category
+const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
+  if (categories.length === 0) {
+    return (
+      <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
+        <div className="max-w-[120rem] mx-auto px-6">
+           <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
+           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+              {[1,2,3,4,5,6].map(i => (
+                 <div key={i} className="flex flex-col items-center gap-5">
+                    <div className="w-40 h-40 rounded-full bg-gray-200 animate-pulse"></div>
+                    <div className="w-24 h-6 bg-gray-200 rounded animate-pulse"></div>
+                 </div>
+              ))}
+           </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-24 bg-[#FFFDF9] min-h-[500px]">
+      <div className="max-w-[120rem] mx-auto px-6">
+        <div className="flex justify-between items-end mb-16">
+          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
+          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+          {categories.map((cat, index) => (
+            <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
+              <div className={`
+                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
+                flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
+              `}>
+                {cat.categoryImage ? (
+                  <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
+                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">{cat.categoryName?.charAt(0) || '?'}</div>
+                )}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
+              </div>
+              <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
+                {cat.categoryName}
+              </h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 6. Video Marquee Component
+const MarqueeVideo = ({ video }: { video: VideoReel }) => {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(error => {
+        console.log("Autoplay prevented:", error);
+      });
+    }
+  }, []);
+
+  return (
+    <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
+      <video
+        ref={videoRef}
+        src={video.videoUrl} 
+        poster={video.thumbnailUrl}
+        autoPlay
+        loop
+        muted
+        playsInline 
+        className="w-full h-full object-cover pointer-events-none"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+    </div>
+  );
+};
+
+// --- Main Page Integration ---
+
+export default function HomePage() {
+  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
+  const [toys, setToys] = useState<Toys[]>([]);
+  const [categories, setCategories] = useState<ToyCategories[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+      
+      const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
+      if (toyItems) setToys(toyItems);
+
+      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+      if (categoryItems) {
+        setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
+      }
+    };
+    fetchData();
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
+      <Header />
+      <WhatsAppFloatingButton />
+      
+      {/* 1. Hero Carousel */}
+      <HeroCarousel />
+      
+      {/* 2. Text Marquee */}
+      <TextMarquee />
+      
+      {/* 3. Shop By Age */}
+      <ShopByAge />
+
+      {/* 4. Best Sellers */}
+      <BestSellers toys={toys} />
+
+      {/* 5. Shop By Category */}
+      <ShopByCategory categories={categories} />
+
+      {/* 6. Video Marquee Section */}
+      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
+        <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>
+        </div>
+
+        <div className="relative w-full">
+          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+
+          <div className="flex w-max animate-marquee hover:[animation-play-state:paused]">
+            {[...VIDEO_REELS, ...VIDEO_REELS, ...VIDEO_REELS].map((video, index) => (
+              <MarqueeVideo key={`${video.id}-${index}`} video={video} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Keep Location Section */}
+      <section className="py-24 bg-light-pink/20">
+        <div className="max-w-[120rem] mx-auto px-6 text-center">
+             <h2 className="font-heading text-4xl mb-6">Visit Our Store</h2>
+             <p className="text-xl text-gray-600 mb-8">{storeInfo?.address || '123 Toy Street'}</p>
+             <Link to="/visit" className="inline-block px-8 py-4 bg-foreground text-white rounded-xl font-bold">Get Directions</Link>
+        </div>
+      </section>
+
+      <Footer />
+
+      <style>{`
+          @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+          .animate-marquee { animation: marquee 60s linear infinite; }
+      `}</style>
+    </div>
+  );
+}
