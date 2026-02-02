@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { BaseCrudService } from '@/integrations';
-import { StoreInformation } from '@/entities';
 import { MapPin, Phone, Clock, MessageCircle, Navigation, ExternalLink } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -9,7 +6,7 @@ import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
-// --- Sub-Component Moved OUTSIDE to prevent re-renders ---
+// --- Sub-Component (No logic changes, just receiving props) ---
 const StoreBlock = ({ 
   title, 
   mapSrc, 
@@ -24,9 +21,9 @@ const StoreBlock = ({
   mapSrc: string; 
   addressUrl: string; 
   isReversed?: boolean; 
-  address?: string;
-  phone?: string;
-  workingHours?: string;
+  address: string;
+  phone: string;
+  workingHours: string;
   onWhatsAppClick: () => void;
 }) => (
   <motion.div 
@@ -56,7 +53,6 @@ const StoreBlock = ({
     {/* Details Card Section */}
     <div className="w-full lg:w-1/2 flex flex-col justify-center">
       <div className="bg-white p-4 md:p-8 lg:p-10 rounded-lg md:rounded-[2rem] shadow-xl border border-gray-100 h-full flex flex-col justify-center relative overflow-hidden group">
-        {/* Decorative Background Blob */}
         <div className="absolute top-0 right-0 w-48 md:w-64 h-48 md:h-64 bg-light-pink/30 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-light-pink/50 transition-colors duration-500" />
 
         <div className="relative z-10">
@@ -72,7 +68,7 @@ const StoreBlock = ({
               </div>
               <div>
                 <h4 className="font-bold text-gray-800 text-sm md:text-lg">Address</h4>
-                <p className="text-gray-600 mb-1 md:mb-2 text-sm md:text-base">{address || '123 Toy Street, Fun City, India'}</p>
+                <p className="text-gray-600 mb-1 md:mb-2 text-sm md:text-base uppercase">{address}</p>
                 <a 
                   href={addressUrl} 
                   target="_blank" 
@@ -91,8 +87,8 @@ const StoreBlock = ({
               </div>
               <div>
                 <h4 className="font-bold text-gray-800 text-sm md:text-lg">Contact</h4>
-                <a href={`tel:${phone}`} className="text-gray-600 hover:text-primary transition-colors text-sm md:text-base">
-                  {phone || '+91 90253 98147'}
+                <a href={`tel:${phone.replace(/\s/g, '')}`} className="text-gray-600 hover:text-primary transition-colors text-sm md:text-base">
+                  {phone}
                 </a>
               </div>
             </div>
@@ -104,7 +100,7 @@ const StoreBlock = ({
               </div>
               <div>
                 <h4 className="font-bold text-gray-800 text-sm md:text-lg">Working Hours</h4>
-                <p className="text-gray-600 text-sm md:text-base">{workingHours || 'Mon - Sun: 10:00 AM - 9:00 PM'}</p>
+                <p className="text-gray-600 text-sm md:text-base">{workingHours}</p>
               </div>
             </div>
           </div>
@@ -132,20 +128,11 @@ const StoreBlock = ({
 );
 
 export default function VisitStorePage() {
-  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
-
-  useEffect(() => {
-    const fetchStoreInfo = async () => {
-      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (items && items.length > 0) {
-        setStoreInfo(items[0]);
-      }
-    };
-    fetchStoreInfo();
-  }, []);
-
+  
+  // Hardcoded WhatsApp click using the number from the image
   const handleWhatsAppClick = () => {
-    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber);
+    // 99442 34077 -> +919944234077
+    const whatsAppUrl = generateWhatsAppUrl("919944234077");
     window.open(whatsAppUrl, '_blank');
   };
 
@@ -153,8 +140,8 @@ export default function VisitStorePage() {
     <div className="min-h-screen bg-gray-50">
       <SEOHelmet 
         title="Visit Our Store - Sudha Novelties | Store Locations & Hours"
-        description="Visit Sudha Novelties store to explore our full collection of premium toys. Find our location, hours, and directions. We're ready to help you find the perfect toy!"
-        keywords="store location, visit store, toy store near me, store hours, directions"
+        description="Visit Sudha Novelties at WGC Road, Thoothukudi. Explore our full collection of premium toys. Open Mon-Sun, 9AM - 10PM."
+        keywords="store location, visit store, toy store thoothukudi, sudha novelties address, wgc road"
         canonical="https://sudha-novelties.com/visit"
       />
       <Header />
@@ -176,30 +163,32 @@ export default function VisitStorePage() {
       <section className="py-12 md:py-20">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           
-          {/* Main Store - Map Left / Info Right */}
+          {/* Main Store */}
           <StoreBlock 
             title="Main Store"
-            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d492.8500497625455!2d78.148129!3d8.8048144!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef98fd8c85a7%3A0x8e37c310bb684eec!2sSudha%20Novelties!5e0!3m2!1sen!2sin!4v1769959828885!5m2!1sen!2sin"
-            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
+            // Google Map Embed for "WGC Road Thoothukudi"
+            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.6!2d78.1!3d8.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef8000000000%3A0x0!2sWGC%20Rd%2C%20Thoothukudi!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            // Google Map Link for "WGC Road Thoothukudi"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties+WGC+ROAD+THOOTHUKUDI"
             isReversed={false}
-            // Pass dynamic data here
-            address={storeInfo?.address}
-            phone={storeInfo?.phoneNumber}
-            workingHours={storeInfo?.workingHours}
+            // HARDCODED VALUES FROM IMAGE 1
+            address="WGC ROAD , THOOTHUKUDI"
+            phone="99442 34077"
+            workingHours="Mon - Sun : 9:00 AM - 10:00 PM"
             onWhatsAppClick={handleWhatsAppClick}
           />
 
-          {/* Branch Store - Info Left / Map Right */}
+          {/* Branch Store */}
           <StoreBlock 
             title="Branch Store"
-            mapSrc="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1971.4105504926988!2d78.1368176!3d8.8028719!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03efdee738034b%3A0x94a6c5a233714cdc!2sSudha%20Novelties%20New%20Corporation%20branch!5e0!3m2!1sen!2sin!4v1769959842560!5m2!1sen!2sin"
-            addressUrl="https://www.google.com/maps/search/Sudha+Novelties"
+            // You can change this mapSrc to the specific branch location if it differs slightly
+            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.6!2d78.1!3d8.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef8000000000%3A0x0!2sWGC%20Rd%2C%20Thoothukudi!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            addressUrl="https://www.google.com/maps/search/Sudha+Novelties+WGC+ROAD+THOOTHUKUDI"
             isReversed={true}
-            // You can pass different branch details here if available, 
-            // for now using the same storeInfo as a fallback/example
-            address={storeInfo?.address} 
-            phone={storeInfo?.phoneNumber}
-            workingHours={storeInfo?.workingHours}
+            // HARDCODED VALUES FROM IMAGE 2
+            address="WGC ROAD , THOOTHUKUDI" 
+            phone="99442 34077"
+            workingHours="Mon - Sun : 9:00 AM - 10:00 PM"
             onWhatsAppClick={handleWhatsAppClick}
           />
 
