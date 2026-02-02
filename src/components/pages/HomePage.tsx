@@ -120,6 +120,7 @@ const HeroCarousel = () => {
     </section>
   );
 };
+
 // 2. Text Marquee
 const TextMarquee = () => {
   const marqueeItems = [
