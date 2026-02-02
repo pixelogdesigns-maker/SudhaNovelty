@@ -1,4 +1,4 @@
-// HPI 3.8-V (Mobile Aspect Ratio Fix)
+// HPI 4.0-V (Final Polish: Lavender Brush Stroke Shop By Age)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -65,15 +65,6 @@ const VIDEO_REELS: VideoReel[] = [
   { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
 ];
 
-const AGE_GROUPS = [
-  { label: "0-12 Months", range: "0-1", color: "bg-pink-100 text-pink-600", icon: "👶" },
-  { label: "1-3 Years", range: "1-3", color: "bg-blue-100 text-blue-600", icon: "🧸" },
-  { label: "3-5 Years", range: "3-5", color: "bg-green-100 text-green-600", icon: "🎨" },
-  { label: "5-8 Years", range: "5-8", color: "bg-yellow-100 text-yellow-600", icon: "🚀" },
-  { label: "8-12 Years", range: "8-12", color: "bg-purple-100 text-purple-600", icon: "🧩" },
-  { label: "12+ Years", range: "12+", color: "bg-orange-100 text-orange-600", icon: "🎮" },
-];
-
 const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 
 // --- Sub-Components ---
@@ -91,9 +82,6 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // FIX APPLIED HERE:
-    // 1. 'aspect-[16/9]' on mobile ensures the container matches the image ratio (no zooming).
-    // 2. 'md:aspect-auto md:h-[800px]' switches back to immersive height on Desktop.
     <section className="relative w-full aspect-[16/9] md:aspect-auto md:h-[800px] lg:h-[950px] overflow-hidden bg-gray-900">
       <AnimatePresence mode='wait'>
         <motion.div
@@ -151,71 +139,132 @@ const TextMarquee = () => {
   );
 };
 
-// 3. Shop By Age (Updated with Wave Background)
+// 3. Shop By Age (UPDATED: Lavender + Brush Strokes)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
-    const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
+    const ageMap: { [key: string]: string } = { 
+      '0-1': '0-2', '1-2': '1-2', '2-4': '3-5', '4-8': '6-8', '8+': '9-12' 
+    };
     return ageMap[range] || range;
   };
 
-  const PASTEL_COLORS = ["bg-[#A7F3D0]", "bg-[#BFDBFE]", "bg-[#FECACA]", "bg-[#FDE68A]", "bg-[#DDD6FE]", "bg-[#FDBA74]"];
+  const BAYBEE_GROUPS = [
+    { 
+      labelTop: "0-1", labelBottom: "YEAR", 
+      range: "0-1", 
+      color: "bg-[#A3D9C9]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_e6fdaf35f0924b37b24f0ccb83c15896~mv2.png" 
+    },
+    { 
+      labelTop: "1-2", labelBottom: "YEARS", 
+      range: "1-2", 
+      color: "bg-[#B5C7ED]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png" 
+    },
+    { 
+      labelTop: "2-4", labelBottom: "YEARS", 
+      range: "2-4", 
+      color: "bg-[#F7C0C0]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png" 
+    },
+    { 
+      labelTop: "4-8", labelBottom: "YEARS", 
+      range: "4-8", 
+      color: "bg-[#FCCD98]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_ad478e8adee9487ca1f530a14053e8b2~mv2.png" 
+    },
+    { 
+      labelTop: "8+", labelBottom: "YEARS", 
+      range: "8+", 
+      color: "bg-[#FDF4A5]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png" 
+    },
+  ];
 
   return (
-    <section className="relative py-32 bg-[#6D28D9]"> {/* Deep Purple Background */}
+    // Updated Background to Lavender
+    <section className="relative pt-28 pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       
-      {/* Top Wave SVG - Curves downward into the content */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
+      {/* --- TOP BRUSH STROKE (Rough Edge Effect) --- */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
+        <svg 
+          viewBox="0 0 1200 50" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[35px] md:h-[50px]"
+          style={{ transform: 'scaleY(-1)' }} // Flip to point down
+        >
+          {/* Jagged path mimicking the brush stroke in your image */}
+          <path 
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
+            className="fill-white" 
+          ></path>
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
-        <div className="text-center mb-16">
-          {/* Updated Text Colors for Contrast */}
-          <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 drop-shadow-md">Shop By Age</h2>
-          <p className="text-purple-100 text-lg font-medium">Curated collections for every little milestone.</p>
+      <div className="relative z-10 max-w-4xl mx-auto px-4">
+        {/* Title Section - Dark Purple Text for Contrast on Lavender */}
+        <div className="text-center mb-12">
+          <h2 className="font-heading text-4xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">
+            SHOP BY AGE
+          </h2>
+          <p className="text-[#5A4685] font-medium tracking-wide">
+             Curated collections for every little milestone.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
-          {AGE_GROUPS.map((group, index) => (
-            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center cursor-pointer">
+        {/* Pyramid Layout */}
+        <div className="flex flex-wrap justify-center gap-y-12 row-gap-12">
+          {BAYBEE_GROUPS.map((group, index) => (
+            <Link 
+              key={index} 
+              to={`/toys?age=${getAgeGroupId(group.range)}`} 
+              className="group flex flex-col items-center cursor-pointer w-[33%] md:w-[20%]"
+            >
+              {/* Circle - Added White Border to pop against Lavender */}
               <div className={`
-                relative w-36 h-36 md:w-44 md:h-44 rounded-full 
-                ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
-                flex flex-col items-center justify-center 
-                shadow-lg border-4 border-white
-                transition-all duration-300 ease-out
-                group-hover:scale-110 
-                group-hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]
-                group-hover:-translate-y-2
+                relative w-24 h-24 md:w-36 md:h-36 rounded-full 
+                ${group.color}
+                flex items-center justify-center 
+                shadow-lg border-[4px] border-white
+                transition-transform duration-300 ease-out
+                group-hover:scale-105 group-hover:shadow-xl
               `}>
-                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6">
-                  {group.icon}
-                </span>
-                
-                {/* Glossy Reflection Effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent pointer-events-none" />
+                <div className="w-16 h-16 md:w-24 md:h-24 relative">
+                   <Image 
+                     src={group.image} 
+                     alt={group.range} 
+                     width={150} 
+                     className="w-full h-full object-contain drop-shadow-sm" 
+                   />
+                </div>
               </div>
 
-              <div className="text-center mt-6">
-                <h3 className="font-heading text-2xl md:text-3xl text-white font-bold leading-none mb-1 group-hover:text-yellow-300 transition-colors duration-300 drop-shadow-sm">
-                  {group.range}
+              {/* Text Label - Dark Purple */}
+              <div className="text-center mt-4">
+                <h3 className="font-heading text-xl md:text-3xl text-[#3D2C5E] font-bold leading-none">
+                   {group.labelTop}
                 </h3>
-                <p className="text-purple-200 text-xs md:text-sm font-bold tracking-widest uppercase group-hover:text-white transition-colors">
-                  {group.label.includes('Months') ? 'Months' : 'Years'}
-                </p>
+                <span className="block text-xs md:text-sm font-bold text-[#5A4685] uppercase tracking-widest mt-1">
+                   {group.labelBottom}
+                </span>
               </div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Bottom Wave SVG - Curves upward out of the content */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-[#FFF8F3]"></path> 
-          {/* Note: fill-[#FFF8F3] matches the Next Section's background color (Best Sellers) */}
+      {/* --- BOTTOM BRUSH STROKE (Rough Edge Effect) --- */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
+        <svg 
+          viewBox="0 0 1200 50" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[35px] md:h-[50px]"
+        >
+          {/* Jagged path mimicking the brush stroke */}
+          <path 
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
+            fill="white" // Matches the section below (usually white/off-white)
+          ></path>
         </svg>
       </div>
     </section>
@@ -288,7 +337,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                 <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full">
                   <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
-                     {(() => {
+                      {(() => {
                       let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
                       if (product.productGallery?.[0]) imageUrl = product.productGallery[0].src || product.productGallery[0].url || product.productGallery[0];
                       else if (product.productImages1?.[0]) imageUrl = product.productImages1[0].src || product.productImages1[0].url || product.productImages1[0];
