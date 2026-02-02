@@ -1,7 +1,6 @@
 ---
 import { SEO } from '@wix/seo/components';
 import { loadSEOTagsServiceConfig } from '@wix/seo/services';
-import { Head } from "@/components/Head";
 import AppRouter from "@/components/Router";
 import "@wix/wix-vibe-plugins/plugins-vars.css";
 import "@wix/wix-vibe-plugins/plugins-theme.css";
@@ -17,7 +16,6 @@ const seoTagsServiceConfig = await loadSEOTagsServiceConfig({
 
 <html lang="en" class="w-full h-full">
   <head>
-    <Head />
     <SEO.Tags seoTagsServiceConfig={seoTagsServiceConfig} slot="seo-tags" />
   </head>
   <body class="w-full h-full">
