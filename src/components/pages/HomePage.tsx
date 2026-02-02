@@ -151,7 +151,7 @@ const TextMarquee = () => {
   );
 };
 
-// 3. Shop By Age
+// 3. Shop By Age (Updated with Wave Background)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
     const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
@@ -161,11 +161,20 @@ const ShopByAge = () => {
   const PASTEL_COLORS = ["bg-[#A7F3D0]", "bg-[#BFDBFE]", "bg-[#FECACA]", "bg-[#FDE68A]", "bg-[#DDD6FE]", "bg-[#FDBA74]"];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-[120rem] mx-auto px-6">
+    <section className="relative py-32 bg-[#6D28D9]"> {/* Deep Purple Background */}
+      
+      {/* Top Wave SVG - Curves downward into the content */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
+        </svg>
+      </div>
+
+      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-4">Shop by Age</h2>
-          <p className="text-gray-500 text-lg">Curated collections for every milestone.</p>
+          {/* Updated Text Colors for Contrast */}
+          <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 drop-shadow-md">Shop By Age</h2>
+          <p className="text-purple-100 text-lg font-medium">Curated collections for every little milestone.</p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
@@ -175,29 +184,39 @@ const ShopByAge = () => {
                 relative w-36 h-36 md:w-44 md:h-44 rounded-full 
                 ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
                 flex flex-col items-center justify-center 
-                shadow-md border-4 border-white
+                shadow-lg border-4 border-white
                 transition-all duration-300 ease-out
                 group-hover:scale-110 
-                group-hover:shadow-[0_0_30px_rgba(236,72,153,0.3)]
-                group-hover:ring-4 group-hover:ring-primary/20
+                group-hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]
                 group-hover:-translate-y-2
               `}>
-                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300">
+                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6">
                   {group.icon}
                 </span>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
+                
+                {/* Glossy Reflection Effect */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent pointer-events-none" />
               </div>
-              <div className="text-center mt-6 transition-colors duration-300 group-hover:text-primary">
-                <h3 className="font-heading text-2xl md:text-3xl text-foreground font-bold leading-none mb-1 group-hover:text-primary">
+
+              <div className="text-center mt-6">
+                <h3 className="font-heading text-2xl md:text-3xl text-white font-bold leading-none mb-1 group-hover:text-yellow-300 transition-colors duration-300 drop-shadow-sm">
                   {group.range}
                 </h3>
-                <p className="text-gray-500 text-xs md:text-sm font-bold tracking-widest uppercase">
+                <p className="text-purple-200 text-xs md:text-sm font-bold tracking-widest uppercase group-hover:text-white transition-colors">
                   {group.label.includes('Months') ? 'Months' : 'Years'}
                 </p>
               </div>
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* Bottom Wave SVG - Curves upward out of the content */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-[#FFF8F3]"></path> 
+          {/* Note: fill-[#FFF8F3] matches the Next Section's background color (Best Sellers) */}
+        </svg>
       </div>
     </section>
   );
