@@ -128,7 +128,7 @@ const HeroCarousel = () => {
   );
 };
 
-// 2. Text Marquee
+// 2. Text Marquee (Mobile Optimized)
 const TextMarquee = () => {
   const marqueeItems = [
     "EDUCATIONAL TOYS", "ACTION FIGURES", "BOARD GAMES", "PLUSHIES",
@@ -136,14 +136,18 @@ const TextMarquee = () => {
   ];
 
   return (
-    <div className="w-full bg-[#EC4899] py-3 overflow-hidden">
+    // Reduced padding from py-3 to py-2 on mobile
+    <div className="w-full bg-[#EC4899] py-2 md:py-3 overflow-hidden">
       <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
         {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
-          <div key={index} className="flex items-center mx-4">
-            <span className="text-white font-bold text-sm md:text-base tracking-widest uppercase">
+          // Reduced margin from mx-4 to mx-2 on mobile
+          <div key={index} className="flex items-center mx-2 md:mx-4">
+            {/* Reduced text size from text-sm to text-xs on mobile */}
+            <span className="text-white font-bold text-xs md:text-base tracking-widest uppercase">
               {item}
             </span>
-            <span className="text-white/60 mx-4">•</span>
+            {/* Reduced separator spacing */}
+            <span className="text-white/60 mx-2 md:mx-4">•</span>
           </div>
         ))}
       </div>
