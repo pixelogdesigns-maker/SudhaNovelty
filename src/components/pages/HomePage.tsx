@@ -177,7 +177,7 @@ const ShopByAge = () => {
 
   // Colors for blending the brush strokes
   const NEXT_SECTION_BG = "#FFF8F3"; 
-  const PREV_SECTION_BG = "#EC4899"; // Blends with the pink marquee above
+  const PREV_SECTION_BG = "#FFFFFF"; // Blends with the pink marquee above
 
   return (
     <section className="relative pt-28 pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
