@@ -83,10 +83,10 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // FIX: Fixed 1300x390 resolution - no zoom or scaling on any screen size
-    // Using fixed width and height to maintain exact resolution
+    // FIX: Full-width responsive carousel with aspect ratio maintained
+    // Using w-full and aspect ratio to scale images without cropping
     <section className="relative overflow-hidden bg-white group flex justify-center">
-      <div className="w-[1300px] h-[390px] relative flex-shrink-0">
+      <div className="w-full aspect-[1300/390] relative flex-shrink-0">
         <AnimatePresence mode='wait'>
           <motion.div
             key={current}
@@ -97,14 +97,14 @@ const HeroCarousel = () => {
             className="absolute inset-0 w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full">
-              {/* FIX: object-cover ensures no squishing/stretching. 
-                 It fits the image perfectly into the box we created above. */}
+              {/* FIX: object-contain ensures no cropping at top/bottom. 
+                 It scales the image to fit the full width while maintaining aspect ratio. */}
               <Image 
                 src={HERO_SLIDES[current].image} 
                 alt={HERO_SLIDES[current].title}
                 width={1300} 
                 height={390}
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-contain" 
               />
             </Link>
           </motion.div>
