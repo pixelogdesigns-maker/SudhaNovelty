@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { Store, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function AboutPage() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-white">
       <SEOHelmet 
@@ -108,7 +110,10 @@ export default function AboutPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {/* Visit Store Card */}
-              <div className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-10 hover:bg-white/20 transition-all duration-300">
+              <button
+                onClick={() => navigate('/visit')}
+                className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-10 hover:bg-white/20 transition-all duration-300 text-left cursor-pointer"
+              >
                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform">
                   <Store size={40} />
                 </div>
@@ -116,10 +121,13 @@ export default function AboutPage() {
                 <p className="font-paragraph text-lg text-white/80">
                   Come see our toys in person, get expert advice, and let your child explore our collection.
                 </p>
-              </div>
+              </button>
 
               {/* Order Online Card */}
-              <div className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-10 hover:bg-white/20 transition-all duration-300">
+              <button
+                onClick={() => navigate('/toys')}
+                className="group bg-white/10 backdrop-blur-md border border-white/20 rounded-[2.5rem] p-10 hover:bg-white/20 transition-all duration-300 text-left cursor-pointer"
+              >
                 <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 text-primary group-hover:scale-110 transition-transform">
                   <Sparkles size={40} />
                 </div>
@@ -127,7 +135,7 @@ export default function AboutPage() {
                 <p className="font-paragraph text-lg text-white/80">
                   Browse our collection online and chat with us on WhatsApp for easy ordering and delivery.
                 </p>
-              </div>
+              </button>
             </div>
           </motion.div>
         </div>
