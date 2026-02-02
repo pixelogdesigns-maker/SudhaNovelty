@@ -154,73 +154,146 @@ const TextMarquee = () => {
 // 3. Shop By Age (Updated with Wave Background)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
-    const ageMap: { [key: string]: string } = { '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', '5-8': '6-8', '8-12': '9-12', '12+': '13+' };
+    const ageMap: { [key: string]: string } = { 
+      '0-1': '0-2', '1-2': '1-2', '2-4': '3-5', '4-8': '6-8', '8+': '9-12' 
+    };
     return ageMap[range] || range;
   };
 
-  const PASTEL_COLORS = ["bg-[#A7F3D0]", "bg-[#BFDBFE]", "bg-[#FECACA]", "bg-[#FDE68A]", "bg-[#DDD6FE]", "bg-[#FDBA74]"];
+  // 5 Items for the Pyramid Layout
+  const BAYBEE_GROUPS = [
+    { 
+      labelTop: "0-1", labelBottom: "YEAR", 
+      range: "0-1", 
+      color: "bg-[#A3D9C9]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_e6fdaf35f0924b37b24f0ccb83c15896~mv2.png" 
+    },
+    { 
+      labelTop: "1-2", labelBottom: "YEARS", 
+      range: "1-2", 
+      color: "bg-[#B5C7ED]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png" 
+    },
+    { 
+      labelTop: "2-4", labelBottom: "YEARS", 
+      range: "2-4", 
+      color: "bg-[#F7C0C0]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_f039ee8f733d4693a89035885a18d299~mv2.png" 
+    },
+    { 
+      labelTop: "4-8", labelBottom: "YEARS", 
+      range: "4-8", 
+      color: "bg-[#FCCD98]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_ad478e8adee9487ca1f530a14053e8b2~mv2.png" 
+    },
+    { 
+      labelTop: "8+", labelBottom: "YEARS", 
+      range: "8+", 
+      color: "bg-[#FDF4A5]", 
+      image: "https://static.wixstatic.com/media/b9ec8c_6119fa220f48469bbdeedcc80240d1df~mv2.png" 
+    },
+  ];
 
   return (
-    <section className="relative py-32 bg-[#6D28D9]"> {/* Deep Purple Background */}
+    // Changed BG to Soft Lavender to match the new reference
+    <section className="relative pt-24 pb-32 bg-[#DBCDF0] overflow-hidden font-sans">
       
-      {/* Top Wave SVG - Curves downward into the content */}
-      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-white"></path>
+      {/* --- TOP BRUSH STROKE (White Paint Effect) --- */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0]">
+        <svg 
+          viewBox="0 0 1200 60" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[40px] md:h-[60px]"
+        >
+          {/* Jagged "Brush" Path filled with WHITE to cut into the purple */}
+          <path 
+            d="M0,0V25c25,2,50-3,75,0s50,8,75,5s50-5,75-2s50,5,75,2s50-8,75-5s50,3,75,0s50-5,75-2s50,8,75,5s50-3,75,0s50,5,75,2s50-8,75-5s50,3,75,0s50-5,75-2s50,8,75,5s50-3,75,0s50,5,75,2V0H0Z" 
+            className="fill-white"
+          ></path>
+          {/* Second layer for depth/texture */}
+          <path 
+             d="M0,0V15c30,5,60-2,90,1s60,8,90,4s60-6,90-3s60,5,90,2s60-8,90-5s60,3,90,0s60-5,90-2s60,8,90,5s60-3,90,0s60,5,90,2s60-8,90-5s60,3,90,0V0H0Z"
+             className="fill-white opacity-50"
+          ></path>
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
-        <div className="text-center mb-16">
-          {/* Updated Text Colors for Contrast */}
-          <h2 className="font-heading text-4xl md:text-5xl text-white mb-4 drop-shadow-md">Shop By Age</h2>
-          <p className="text-purple-100 text-lg font-medium">Curated collections for every little milestone.</p>
+      <div className="relative z-10 max-w-4xl mx-auto px-4">
+        {/* Title Section - Dark Text for Contrast */}
+        <div className="text-center mb-12">
+          <h2 className="font-heading text-4xl md:text-5xl text-[#4A1D96] font-bold tracking-wide mb-2">
+            SHOP BY AGE
+          </h2>
+          <p className="text-[#6D4C9A] font-medium tracking-wide">
+            Curated collections for every little milestone.
+          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
-          {AGE_GROUPS.map((group, index) => (
-            <Link key={index} to={`/toys?age=${getAgeGroupId(group.range)}`} className="group flex flex-col items-center cursor-pointer">
+        {/* PYRAMID LAYOUT (3 Top, 2 Bottom) */}
+        <div className="flex flex-wrap justify-center gap-y-12 row-gap-12">
+          {BAYBEE_GROUPS.map((group, index) => (
+            <Link 
+              key={index} 
+              to={`/toys?age=${getAgeGroupId(group.range)}`} 
+              className="group flex flex-col items-center cursor-pointer w-[33%] md:w-[20%]"
+            >
+              {/* Circle Container - Added White Border for Pop */}
               <div className={`
-                relative w-36 h-36 md:w-44 md:h-44 rounded-full 
-                ${PASTEL_COLORS[index % PASTEL_COLORS.length]} 
-                flex flex-col items-center justify-center 
+                relative w-24 h-24 md:w-36 md:h-36 rounded-full 
+                ${group.color}
+                flex items-center justify-center 
                 shadow-lg border-4 border-white
-                transition-all duration-300 ease-out
-                group-hover:scale-110 
-                group-hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]
-                group-hover:-translate-y-2
+                transition-transform duration-300 ease-out
+                group-hover:scale-110 group-hover:shadow-xl
               `}>
-                <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6">
-                  {group.icon}
-                </span>
-                
-                {/* Glossy Reflection Effect */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent pointer-events-none" />
+                {/* Image Inside Circle */}
+                <div className="w-16 h-16 md:w-24 md:h-24 relative">
+                   <Image 
+                     src={group.image} 
+                     alt={group.range} 
+                     width={150} 
+                     className="w-full h-full object-contain drop-shadow-sm" 
+                   />
+                </div>
               </div>
 
-              <div className="text-center mt-6">
-                <h3 className="font-heading text-2xl md:text-3xl text-white font-bold leading-none mb-1 group-hover:text-yellow-300 transition-colors duration-300 drop-shadow-sm">
-                  {group.range}
+              {/* Text Label - Dark Purple for Contrast */}
+              <div className="text-center mt-4">
+                <h3 className="font-heading text-xl md:text-3xl text-[#4A1D96] font-bold leading-none">
+                   {group.labelTop}
                 </h3>
-                <p className="text-purple-200 text-xs md:text-sm font-bold tracking-widest uppercase group-hover:text-white transition-colors">
-                  {group.label.includes('Months') ? 'Months' : 'Years'}
-                </p>
+                <span className="block text-xs md:text-sm font-bold text-[#6D4C9A] uppercase tracking-widest mt-1">
+                   {group.labelBottom}
+                </span>
               </div>
             </Link>
           ))}
         </div>
       </div>
 
-      {/* Bottom Wave SVG - Curves upward out of the content */}
+      {/* --- BOTTOM BRUSH STROKE (White Paint Effect) --- */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-[calc(100%+1.3px)] h-[60px] md:h-[100px]">
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="fill-[#FFF8F3]"></path> 
-          {/* Note: fill-[#FFF8F3] matches the Next Section's background color (Best Sellers) */}
+        <svg 
+          viewBox="0 0 1200 60" 
+          preserveAspectRatio="none" 
+          className="relative block w-full h-[40px] md:h-[60px]"
+        >
+          {/* Jagged "Brush" Path Pointing UP */}
+          <path 
+            d="M0,60V35c25-2,50,3,75,0s50-8,75-5s50,5,75,2s50-5,75-2s50,8,75,5s50-3,75,0s50,5,75,2s50-8,75-5s50,3,75,0s50-5,75-2s50,8,75,5s50-3,75,0s50,5,75,2s50-8,75-5s50,3,75,0s50,5,75,2V60H0Z" 
+            className="fill-white" // Matches the section below (usually white)
+          ></path>
+          <path 
+            d="M0,60V45c30-5,60,2,90-1s60-8,90-4s60,6,90,3s60-5,90-2s60,8,90,5s60-3,90,0s60,5,90,2s60-8,90-5s60,3,90,0s60-5,90-2s60,8,90,5s60-3,90,0V60H0Z"
+            className="fill-white opacity-50"
+          ></path>
         </svg>
       </div>
     </section>
   );
 };
+
+export default ShopByAge;
 
 // 4. Best Sellers
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
