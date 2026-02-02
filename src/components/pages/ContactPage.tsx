@@ -121,9 +121,8 @@ export default function ContactPage() {
             {storeInfo?.whatsAppNumber && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-whatsapp-green rounded-full mb-3 md:mb-6">
@@ -148,9 +147,8 @@ export default function ContactPage() {
             {storeInfo?.phoneNumber && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
                 className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
@@ -175,9 +173,8 @@ export default function ContactPage() {
             {storeInfo?.emailAddress && (
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
                 className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
               >
                 <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
