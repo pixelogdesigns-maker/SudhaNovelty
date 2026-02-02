@@ -176,7 +176,7 @@ const ShopByAge = () => {
   ];
 
   const NEXT_SECTION_BG = "#FFF8F3"; 
-  const PREV_SECTION_BG = "#EC4899"; 
+  const PREV_SECTION_BG = "#FFFFFF"; 
 
   return (
     // Reduced top/bottom padding on mobile to save space
