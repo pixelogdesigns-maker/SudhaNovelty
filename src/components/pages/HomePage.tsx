@@ -58,7 +58,37 @@ const HERO_SLIDES = [
   }
 ];
 
-// ... keep VIDEO_REELS and other constants the same ...
+// Video Reels for the marquee section
+const VIDEO_REELS: VideoReel[] = [
+  {
+    id: '1',
+    title: 'Fun Playtime',
+    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video1~mv2.mp4',
+    description: 'Kids having fun with toys'
+  },
+  {
+    id: '2',
+    title: 'Adventure Time',
+    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video2~mv2.mp4',
+    description: 'Exciting toy adventures'
+  },
+  {
+    id: '3',
+    title: 'Learning Play',
+    videoUrl: 'https://static.wixstatic.com/media/b9ec8c_video3~mv2.mp4',
+    description: 'Educational toy fun'
+  }
+];
+
+// Category colors for the shop by category section
+const CATEGORY_COLORS = [
+  'bg-[#A7F3D0]',
+  'bg-[#BFDBFE]',
+  'bg-[#FECACA]',
+  'bg-[#FDE68A]',
+  'bg-[#DDD6FE]',
+  'bg-[#FDBA74]'
+];
 
 // --- Sub-Components ---
 
