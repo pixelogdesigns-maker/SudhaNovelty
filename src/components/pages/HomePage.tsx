@@ -83,10 +83,10 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // FIX: Desktop maintains 1300x390 aspect ratio (10:3), mobile allows zoom
-    // Using max-w-[1300px] on desktop to preserve original resolution
-    <section className="relative w-full overflow-hidden bg-white group">
-      <div className="w-full max-w-[1300px] mx-auto md:aspect-[1300/390] aspect-video">
+    // FIX: Fixed 1300x390 resolution - no zoom or scaling on any screen size
+    // Using fixed width and height to maintain exact resolution
+    <section className="relative overflow-hidden bg-white group flex justify-center">
+      <div className="w-[1300px] h-[390px] relative flex-shrink-0">
         <AnimatePresence mode='wait'>
           <motion.div
             key={current}
