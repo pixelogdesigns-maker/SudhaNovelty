@@ -83,31 +83,33 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    // FIX: Using aspect-video (16/9) for a more natural carousel height that doesn't squish images
-    // 'w-full' makes it stretch to the screen width, and the height adjusts automatically.
-    <section className="relative w-full aspect-video overflow-hidden bg-white group">
-      <AnimatePresence mode='wait'>
-        <motion.div
-          key={current}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 w-full h-full"
-        >
-          <Link to="/toys" className="block w-full h-full">
-            {/* FIX: object-cover ensures no squishing/stretching. 
-               It fits the image perfectly into the box we created above. */}
-            <Image 
-              src={HERO_SLIDES[current].image} 
-              alt={HERO_SLIDES[current].title}
-              width={1300} 
-              height={190}
-              className="w-full h-full object-cover" 
-            />
-          </Link>
-        </motion.div>
-      </AnimatePresence>
+    // FIX: Desktop maintains 1300x390 aspect ratio (10:3), mobile allows zoom
+    // Using max-w-[1300px] on desktop to preserve original resolution
+    <section className="relative w-full overflow-hidden bg-white group">
+      <div className="w-full max-w-[1300px] mx-auto md:aspect-[1300/390] aspect-video">
+        <AnimatePresence mode='wait'>
+          <motion.div
+            key={current}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Link to="/toys" className="block w-full h-full">
+              {/* FIX: object-cover ensures no squishing/stretching. 
+                 It fits the image perfectly into the box we created above. */}
+              <Image 
+                src={HERO_SLIDES[current].image} 
+                alt={HERO_SLIDES[current].title}
+                width={1300} 
+                height={390}
+                className="w-full h-full object-cover" 
+              />
+            </Link>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Navigation Arrows - Only visible on hover for a cleaner look */}
       <button 
