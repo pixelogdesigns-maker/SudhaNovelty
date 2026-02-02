@@ -32,7 +32,94 @@ interface VideoReel {
   description?: string;
 }
 
+// --- Data Configuration ---
 
+// UPDATED: New 1300x190 Resolution Images
+const HERO_SLIDES = [
+  { 
+    id: 1, 
+    title: "Adventure Ride", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
+  },
+  { 
+    id: 2, 
+    title: "Fun and Thrills", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
+  },
+  { 
+    id: 3, 
+    title: "Ride into Fun", 
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" 
+  },
+  { 
+    id: 4, 
+    title: "Kids Toys", 
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" 
+  }
+];
+
+// ... keep VIDEO_REELS and other constants the same ...
+
+// --- Sub-Components ---
+
+// 1. Hero Carousel (Strict 1300x190 Aspect Ratio Fix)
+const HeroCarousel = () => {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const goToPrev = () => setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+
+  return (
+    // THE FIX: 
+    // 1. 'w-full' makes it span the full width of the screen.
+    // 2. 'pb-[14.61%]' is the magic number. (190 / 1300 = 0.1461). 
+    //    This forces the container height to always be exactly proportional to the width.
+    <section className="relative w-full pb-[14.61%] bg-gray-100 overflow-hidden group">
+      <AnimatePresence mode='wait'>
+        <motion.div
+          key={current}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          // Absolute positioning fills the padding-based container perfectly
+          className="absolute inset-0 w-full h-full"
+        >
+          <Link to="/toys" className="block w-full h-full">
+            {/* object-fill ensures the image stretches exactly to the container bounds. 
+                Since the container is locked to the image ratio, no distortion or cropping occurs. */}
+            <Image 
+              src={HERO_SLIDES[current].image} 
+              alt={HERO_SLIDES[current].title}
+              width={1300} 
+              height={190}
+              className="w-full h-full object-fill" 
+            />
+          </Link>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Arrows (Hidden on mobile to keep view clean, visible on hover for desktop) */}
+      <button 
+        onClick={goToPrev} 
+        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
+      >
+        <ChevronLeft size={20} className="md:w-8 md:h-8" />
+      </button>
+      <button 
+        onClick={goToNext} 
+        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
+      >
+        <ChevronRight size={20} className="md:w-8 md:h-8" />
+      </button>
+    </section>
+  );
+};
 
 // 2. Text Marquee
 const TextMarquee = () => {
