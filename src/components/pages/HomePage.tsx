@@ -38,12 +38,12 @@ const HERO_SLIDES = [
   { 
     id: 1, 
     title: "Slide 1", 
-    image: "https://static.wixstatic.com/media/b9ec8c_fae7f2f50f794619a49b1c10557cfa37~mv2.png" 
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
   },
   { 
     id: 2, 
     title: "Slide 2", 
-    image: "https://static.wixstatic.com/media/b9ec8c_28663c2318ca48de8dddcce6a16ba99d~mv2.png" 
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
   },
   { 
     id: 3, 
