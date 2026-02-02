@@ -1,4 +1,4 @@
-// HPI 4.0-V (Final Polish: Lavender Brush Stroke Shop By Age)
+// HPI 4.1-V (Carousel Resolution Fix: 1300x190 Aspect Ratio)
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -34,26 +34,27 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
+// UPDATED: New 1300x190 Resolution Images
 const HERO_SLIDES = [
   { 
     id: 1, 
-    title: "Joy & Wonder", 
-    image: "https://static.wixstatic.com/media/b9ec8c_c0d459de579b445da2a4aa0fbc64d3d7~mv2.webp" 
+    title: "Slide 1", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
   },
   { 
     id: 2, 
-    title: "Adventure Awaits", 
-    image: "https://static.wixstatic.com/media/b9ec8c_303dd97652b64a4fac813faebc5dd2f7~mv2.webp" 
+    title: "Slide 2", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
   },
   { 
     id: 3, 
-    title: "Learning Through Play", 
-    image: "https://static.wixstatic.com/media/b9ec8c_6cd90928042c4f9aae5e826c37850be8~mv2.webp" 
+    title: "Slide 3", 
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" 
   },
   { 
     id: 4, 
-    title: "Playtime Reimagined", 
-    image: "https://static.wixstatic.com/media/b9ec8c_4de64ab7991c426493871d39afd3f14b~mv2.webp" 
+    title: "Slide 4", 
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" 
   }
 ];
 
@@ -69,7 +70,7 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Fixed Mobile Ratio)
+// 1. Hero Carousel (Updated for 1300x190 Ratio)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
 
@@ -82,31 +83,33 @@ const HeroCarousel = () => {
   const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
 
   return (
-    <section className="relative w-full aspect-[16/9] md:aspect-auto md:h-[800px] lg:h-[950px] overflow-hidden bg-gray-900">
+    // UPDATED: Uses 'aspect-[1300/190]' to lock the container to the exact image dimensions.
+    // 'w-full' ensures it spans the screen width.
+    // The height will auto-calculate to prevent any cropping or stretching.
+    <section className="relative w-full aspect-[1300/190] overflow-hidden bg-gray-100">
       <AnimatePresence mode='wait'>
         <motion.div
           key={current}
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
+          transition={{ duration: 1.0, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full"
         >
-          <Link to="/toys" className="block w-full h-full cursor-pointer">
+          <Link to="/toys" className="block w-full h-full">
             <Image 
               src={HERO_SLIDES[current].image} 
               alt={HERO_SLIDES[current].title}
-              width={1920} 
-              height={1080}
-              className="w-full h-full object-cover"
+              width={1300} 
+              height={190}
+              className="w-full h-full object-cover" // object-cover here ensures it fills the aspect-ratio box perfectly
             />
           </Link>
-          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/30 to-transparent pointer-events-none" />
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={goToPrev} className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronLeft size={20} className="md:w-7 md:h-7" /></button>
-      <button onClick={goToNext} className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 md:p-3 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-all"><ChevronRight size={20} className="md:w-7 md:h-7" /></button>
+      <button onClick={goToPrev} className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/40 rounded-full text-white transition-all"><ChevronLeft size={16} className="md:w-6 md:h-6" /></button>
+      <button onClick={goToNext} className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 p-1 md:p-2 bg-black/20 hover:bg-black/40 rounded-full text-white transition-all"><ChevronRight size={16} className="md:w-6 md:h-6" /></button>
     </section>
   );
 };
