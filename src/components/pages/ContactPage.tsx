@@ -13,7 +13,6 @@ import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 export default function ContactPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Added loading state
   const [formData, setFormData] = useState({
     visitorName: '',
     visitorEmail: '',
@@ -25,15 +24,9 @@ export default function ContactPage() {
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
-      try {
-        const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-        if (items && items.length > 0) {
-          setStoreInfo(items[0]);
-        }
-      } catch (error) {
-        console.error('Failed to fetch store info:', error);
-      } finally {
-        setIsLoading(false); // Stop loading regardless of success/fail
+      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+      if (items && items.length > 0) {
+        setStoreInfo(items[0]);
       }
     };
     fetchStoreInfo();
@@ -121,93 +114,85 @@ export default function ContactPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
-            
-            {/* FIX: Show Skeletons while loading, otherwise show cards immediately */}
-            {isLoading ? (
-               // SKELETON LOADERS
-               [1, 2, 3].map((i) => (
-                 <div key={i} className="bg-gray-50 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-sm animate-pulse h-[300px] flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-gray-200 rounded-full mb-6"></div>
-                    <div className="h-6 w-32 bg-gray-200 rounded mb-4"></div>
-                    <div className="h-4 w-48 bg-gray-200 rounded mb-6"></div>
-                    <div className="h-10 w-32 bg-gray-200 rounded"></div>
-                 </div>
-               ))
-            ) : (
-              // ACTUAL CONTENT - Removed 'delay' props for instant appearance
-              <>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }} // Fast fade-in
-                  className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+            {storeInfo?.whatsAppNumber && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-whatsapp-green rounded-full mb-3 md:mb-6">
+                  <MessageCircle className="text-white" size={24} className="md:w-8 md:h-8" />
+                </div>
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
+                  WhatsApp Chat
+                </h3>
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
+                  Get instant responses to your questions
+                </p>
+                <button
+                  onClick={handleWhatsAppClick}
+                  className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-whatsapp-green rounded-full mb-3 md:mb-6">
-                    <MessageCircle className="text-white" size={24} />
-                  </div>
-                  <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
-                    WhatsApp Chat
-                  </h3>
-                  <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
-                    Get instant responses to your questions
-                  </p>
-                  <button
-                    onClick={handleWhatsAppClick}
-                    className="inline-flex items-center justify-center gap-2 bg-whatsapp-green text-white font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <MessageCircle size={16} className="md:w-5 md:h-5" />
-                    Start Chat
-                  </button>
-                </motion.div>
+                  <MessageCircle size={16} className="md:w-5 md:h-5" />
+                  Start Chat
+                </button>
+              </motion.div>
+            )}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+            {storeInfo?.phoneNumber && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <Phone className="text-white" size={24} className="md:w-8 md:h-8" />
+                </div>
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
+                  Phone Call
+                </h3>
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
+                  Speak directly with our team
+                </p>
+                <a
+                  href={`tel:${storeInfo.phoneNumber}`}
+                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
-                    <Phone className="text-white" size={24} />
-                  </div>
-                  <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
-                    Phone Call
-                  </h3>
-                  <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
-                    Speak directly with our team
-                  </p>
-                  <a
-                    href={`tel:${storeInfo?.phoneNumber || ''}`}
-                    className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <Phone size={16} className="md:w-5 md:h-5" />
-                    Call Now
-                  </a>
-                </motion.div>
+                  <Phone size={16} className="md:w-5 md:h-5" />
+                  Call Now
+                </a>
+              </motion.div>
+            )}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+            {storeInfo?.emailAddress && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <Mail className="text-white" size={24} className="md:w-8 md:h-8" />
+                </div>
+                <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
+                  Email Us
+                </h3>
+                <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
+                  Send us a detailed message
+                </p>
+                <a
+                  href={`mailto:${storeInfo.emailAddress}`}
+                  className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
-                    <Mail className="text-white" size={24} />
-                  </div>
-                  <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
-                    Email Us
-                  </h3>
-                  <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
-                    Send us a detailed message
-                  </p>
-                  <a
-                    href={`mailto:${storeInfo?.emailAddress || ''}`}
-                    className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
-                  >
-                    <Mail size={16} className="md:w-5 md:h-5" />
-                    Send Email
-                  </a>
-                </motion.div>
-              </>
+                  <Mail size={16} className="md:w-5 md:h-5" />
+                  Send Email
+                </a>
+              </motion.div>
             )}
           </div>
         </div>
@@ -334,63 +319,52 @@ export default function ContactPage() {
               </h2>
 
               <div className="space-y-6 mb-8">
-                {/* Store info skeletons or content */}
-                {isLoading ? (
-                   <div className="space-y-6">
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                   </div>
-                ) : (
-                  <>
-                    {storeInfo?.address && (
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                          <MapPin className="text-primary" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-heading text-lg text-primary mb-2">Our Location</h3>
-                          <p className="font-paragraph text-base text-foreground leading-relaxed">
-                            {storeInfo.address}
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                {storeInfo?.address && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <MapPin className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-lg text-primary mb-2">Our Location</h3>
+                      <p className="font-paragraph text-base text-foreground leading-relaxed">
+                        {storeInfo.address}
+                      </p>
+                    </div>
+                  </div>
+                )}
 
-                    {storeInfo?.phoneNumber && (
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                          <Phone className="text-primary" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-heading text-lg text-primary mb-2">Phone</h3>
-                          <a
-                            href={`tel:${storeInfo.phoneNumber}`}
-                            className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                          >
-                            {storeInfo.phoneNumber}
-                          </a>
-                        </div>
-                      </div>
-                    )}
+                {storeInfo?.phoneNumber && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Phone className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-lg text-primary mb-2">Phone</h3>
+                      <a
+                        href={`tel:${storeInfo.phoneNumber}`}
+                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
+                      >
+                        {storeInfo.phoneNumber}
+                      </a>
+                    </div>
+                  </div>
+                )}
 
-                    {storeInfo?.emailAddress && (
-                      <div className="flex items-start gap-4">
-                        <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
-                          <Mail className="text-primary" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="font-heading text-lg text-primary mb-2">Email</h3>
-                          <a
-                            href={`mailto:${storeInfo.emailAddress}`}
-                            className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
-                          >
-                            {storeInfo.emailAddress}
-                          </a>
-                        </div>
-                      </div>
-                    )}
-                  </>
+                {storeInfo?.emailAddress && (
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-light-pink rounded-full flex items-center justify-center">
+                      <Mail className="text-primary" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-lg text-primary mb-2">Email</h3>
+                      <a
+                        href={`mailto:${storeInfo.emailAddress}`}
+                        className="font-paragraph text-base text-foreground hover:text-primary transition-colors"
+                      >
+                        {storeInfo.emailAddress}
+                      </a>
+                    </div>
+                  </div>
                 )}
               </div>
 

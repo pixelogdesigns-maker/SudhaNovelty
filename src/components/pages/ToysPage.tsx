@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check, Loader2 } from 'lucide-react'; // Added Loader2
+import { MessageCircle, Filter, ChevronDown, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -21,9 +21,6 @@ export default function ToysPage() {
   
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
-  
-  // FIX: Added loading state to prevent flash of empty content
-  const [isLoading, setIsLoading] = useState(true);
 
   // Define age groups for filtering
   const ageGroups = [
@@ -47,44 +44,35 @@ export default function ToysPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-        const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+      const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
+      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
 
-        if (toyItems) {
-          setToys(toyItems);
-          setFilteredToys(toyItems);
-        }
-
-        if (categoryItems) {
-          const activeCategories = categoryItems
-            .filter(cat => cat.isActive)
-            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-          setCategories(activeCategories);
-        }
-
-        if (storeItems && storeItems.length > 0) {
-          setStoreInfo(storeItems[0]);
-        }
-      } catch (error) {
-        console.error("Failed to load toys", error);
-      } finally {
-        // FIX: Only stop loading after data fetch is complete (success or fail)
-        setIsLoading(false);
+      if (toyItems) {
+        setToys(toyItems);
+        setFilteredToys(toyItems);
       }
+
+      if (categoryItems) {
+        const activeCategories = categoryItems
+          .filter(cat => cat.isActive)
+          .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+        setCategories(activeCategories);
+      }
+
+      if (storeItems && storeItems.length > 0) {
+        setStoreInfo(storeItems[0]);
+      }
+
+      // Sync State with URL Params
+      const categoryParam = searchParams.get('category');
+      if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
+
+      const ageParam = searchParams.get('age');
+      if (ageParam) setSelectedAgeGroup(ageParam);
     };
     fetchData();
-  }, []);
-
-  // Sync State with URL Params on mount only
-  useEffect(() => {
-    const categoryParam = searchParams.get('category');
-    if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
-
-    const ageParam = searchParams.get('age');
-    if (ageParam) setSelectedAgeGroup(ageParam);
-  }, []);
+  }, [searchParams]);
 
   // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
@@ -266,16 +254,9 @@ export default function ToysPage() {
       </section>
 
       {/* Products Grid */}
-      <section className="py-8 md:py-16 bg-white min-h-[50vh]">
+      <section className="py-8 md:py-16 bg-white">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
-          
-          {/* FIX: Handle Loading State Explicitly */}
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-20 space-y-4">
-              <Loader2 className="w-10 h-10 text-primary animate-spin" />
-              <p className="text-gray-500 font-medium">Loading collection...</p>
-            </div>
-          ) : filteredToys.length === 0 ? (
+          {filteredToys.length === 0 ? (
             <div className="text-center py-12 md:py-20 bg-gray-50 rounded-2xl md:rounded-3xl">
               <p className="font-paragraph text-base md:text-xl text-gray-500 mb-2">No toys found matching your filters.</p>
               <button onClick={() => {

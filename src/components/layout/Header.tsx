@@ -21,30 +21,30 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
       <div className="max-w-[160rem] mx-auto px-6">
-        {/* Container Height: Fixed to prevent logo resizing */}
-        <div className="flex items-center justify-between h-16 md:h-20 transition-all duration-300">
+        {/* Container Height: h-16 (64px) mobile, h-20 (80px) tablet, h-24 (96px) desktop. */}
+        <div className="flex items-center justify-between h-16 sm:h-20 md:h-24 transition-all duration-300">
           
           {/* Logo Section */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center h-full">
             
-            {/* --- MOBILE LOGO --- */}
-            {/* Fixed size prevents resizing when navigating between pages */}
+            {/* --- MOBILE LOGO (Updated Link) --- */}
+            {/* object-contain prevents the "cut off" issue by ensuring the whole image fits inside the height */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png" 
-              width={60} 
-              height={60}
-              className="md:hidden object-contain" 
+              width={220} 
+              height={100}
+              className="h-[85%] w-auto md:hidden object-contain" 
               originWidth={533}
-              originHeight={533}
+              originHeight={533} // Assuming square-ish for the new logo based on the upload
               alt="Sudha Novelties"
             />
 
-            {/* --- DESKTOP LOGO --- */}
+            {/* --- DESKTOP LOGO (Original) --- */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
-              width={140} 
-              height={60}
-              className="hidden md:block object-contain"
+              width={220} 
+              height={100}
+              className="hidden md:block h-[80%] w-auto object-contain"
               originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
