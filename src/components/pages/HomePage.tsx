@@ -293,8 +293,6 @@ const ShopByAge = () => {
   );
 };
 
-export default ShopByAge;
-
 // 4. Best Sellers
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
