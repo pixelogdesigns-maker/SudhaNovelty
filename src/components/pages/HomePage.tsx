@@ -139,10 +139,9 @@ const TextMarquee = () => {
   );
 };
 
-// 3. Shop By Age (Restored Icons + Lavender Brush Stroke)
+// 3. Shop By Age (Color Blended Brush Strokes)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
-    // Map display labels to query params
     const ageMap: { [key: string]: string } = { 
       '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', 
       '5-8': '6-8', '8-12': '9-12', '12+': '13+' 
@@ -150,20 +149,24 @@ const ShopByAge = () => {
     return ageMap[range] || range;
   };
 
-  // RESTORED: Your original 6 groups with Icons
   const AGE_GROUPS = [
-    { label: "MONTHS", range: "0-1", color: "bg-[#A7F3D0]", icon: "👶" }, // Baby
-    { label: "YEARS", range: "1-3", color: "bg-[#BFDBFE]", icon: "🧸" },   // Teddy
-    { label: "YEARS", range: "3-5", color: "bg-[#FECACA]", icon: "🎨" },   // Palette
-    { label: "YEARS", range: "5-8", color: "bg-[#FDE68A]", icon: "🚀" },   // Rocket
-    { label: "YEARS", range: "8-12", color: "bg-[#DDD6FE]", icon: "🧩" },  // Puzzle
-    { label: "YEARS", range: "12+", color: "bg-[#FDBA74]", icon: "🎮" },   // Controller
+    { label: "MONTHS", range: "0-1", color: "bg-[#A7F3D0]", icon: "👶" },
+    { label: "YEARS", range: "1-3", color: "bg-[#BFDBFE]", icon: "🧸" },
+    { label: "YEARS", range: "3-5", color: "bg-[#FECACA]", icon: "🎨" },
+    { label: "YEARS", range: "5-8", color: "bg-[#FDE68A]", icon: "🚀" },
+    { label: "YEARS", range: "8-12", color: "bg-[#DDD6FE]", icon: "🧩" },
+    { label: "YEARS", range: "12+", color: "bg-[#FDBA74]", icon: "🎮" },
   ];
+
+  // COLORS FOR BLENDING
+  const NEXT_SECTION_BG = "#FFF8F3"; // Cream color of the 'Best Sellers' section
+  const PREV_SECTION_BG = "#ffffff"; // White (or use "#EC4899" to blend with Marquee)
 
   return (
     <section className="relative pt-28 pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       
       {/* --- TOP BRUSH STROKE --- */}
+      {/* Blends with the section ABOVE */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
           viewBox="0 0 1200 50" 
@@ -171,19 +174,19 @@ const ShopByAge = () => {
           className="relative block w-full h-[35px] md:h-[50px]"
           style={{ transform: 'scaleY(-1)' }}
         >
+          {/* Changed fill to PREV_SECTION_BG */}
           <path 
             d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
-            className="fill-white" 
+            fill={PREV_SECTION_BG} 
           ></path>
            <path 
              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
-             fill="white"
+             fill={PREV_SECTION_BG}
           />
         </svg>
       </div>
 
       <div className="relative z-10 max-w-[120rem] mx-auto px-6">
-        {/* Title */}
         <div className="text-center mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">
             SHOP BY AGE
@@ -193,7 +196,6 @@ const ShopByAge = () => {
           </p>
         </div>
 
-        {/* 6-GRID LAYOUT (Restored from previous version) */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-12">
           {AGE_GROUPS.map((group, index) => (
             <Link 
@@ -201,7 +203,6 @@ const ShopByAge = () => {
               to={`/toys?age=${getAgeGroupId(group.range)}`} 
               className="group flex flex-col items-center cursor-pointer"
             >
-              {/* Circle Container */}
               <div className={`
                 relative w-36 h-36 md:w-44 md:h-44 rounded-full 
                 ${group.color} 
@@ -210,16 +211,12 @@ const ShopByAge = () => {
                 transition-all duration-300 ease-out
                 group-hover:scale-110 group-hover:shadow-xl
               `}>
-                {/* THE ICON */}
                 <span className="text-6xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
                   {group.icon}
                 </span>
-                
-                {/* Glossy Effect */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent pointer-events-none" />
               </div>
 
-              {/* Text Label */}
               <div className="text-center mt-6">
                 <h3 className="font-heading text-3xl text-[#3D2C5E] font-bold leading-none mb-1">
                   {group.range}
@@ -234,15 +231,17 @@ const ShopByAge = () => {
       </div>
 
       {/* --- BOTTOM BRUSH STROKE --- */}
+      {/* Blends with the section BELOW */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
           viewBox="0 0 1200 50" 
           preserveAspectRatio="none" 
           className="relative block w-full h-[35px] md:h-[50px]"
         >
+          {/* Changed fill to NEXT_SECTION_BG (#FFF8F3) */}
           <path 
             d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
-            fill="white" // Matches the next section color (white/off-white)
+            fill={NEXT_SECTION_BG} 
           ></path>
         </svg>
       </div>
