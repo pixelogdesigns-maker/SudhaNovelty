@@ -78,8 +78,8 @@ const HeroCarousel = () => {
 
   useEffect(() => {
     if (!isAutoplay) return;
-    // Reduced to 1.8 seconds for faster transitions
-    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 1800);
+    // 4 seconds per image display
+    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 4000);
     return () => clearInterval(timer);
   }, [isAutoplay]);
 
@@ -107,13 +107,13 @@ const HeroCarousel = () => {
     // Mobile: 384x200, Desktop: 1300x390
     <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
       <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
-        <AnimatePresence mode="sync">
+        <AnimatePresence mode="wait">
           <motion.div
             key={current}
             initial={{ x: 1000, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -1000, opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full overflow-hidden">
