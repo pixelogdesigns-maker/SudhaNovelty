@@ -149,10 +149,10 @@ const HeroCarousel = () => {
           ))}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - Minimal UI Design */}
         <button
           onClick={handlePrev}
-          className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-foreground p-2 md:p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+          className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
           aria-label="Previous slide"
         >
           <ChevronLeft size={24} className="md:w-6 md:h-6 w-5 h-5" />
@@ -160,7 +160,7 @@ const HeroCarousel = () => {
 
         <button
           onClick={handleNext}
-          className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-foreground p-2 md:p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+          className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
           aria-label="Next slide"
         >
           <ChevronRight size={24} className="md:w-6 md:h-6 w-5 h-5" />
