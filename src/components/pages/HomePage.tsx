@@ -34,32 +34,32 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-// Carousel images - recovered from previous state
+// Carousel images - mobile site carousel
 const HERO_SLIDES = [
   { 
     id: 1, 
     title: "Slide 1", 
-    image: "https://static.wixstatic.com/media/b9ec8c_0e7db5fb84eb44d294a3d904189f5f67~mv2.png?originWidth=1280&originHeight=384" 
+    image: "https://i.ibb.co/nqLmJ7x0/1.png" 
   },
   { 
     id: 2, 
     title: "Slide 2", 
-    image: "https://static.wixstatic.com/media/b9ec8c_26eeaa3ff00b4dc0a40a2325fdcf0b7a~mv2.png?originWidth=1280&originHeight=384" 
+    image: "https://i.ibb.co/n86g6LQm/2.png" 
   },
   { 
     id: 3, 
     title: "Slide 3", 
-    image: "https://static.wixstatic.com/media/b9ec8c_f5f172ba0aaf4bef9e3862a72cb9a6d0~mv2.png?originWidth=1280&originHeight=384" 
+    image: "https://i.ibb.co/YF4L40xx/3.png" 
   },
   { 
     id: 4, 
     title: "Slide 4", 
-    image: "https://static.wixstatic.com/media/b9ec8c_3a92db4f6b184e288c1c3d0bd67b1640~mv2.png?originWidth=1280&originHeight=384" 
+    image: "https://i.ibb.co/4qtYwct/4.png" 
   },
   { 
     id: 5, 
     title: "Slide 5", 
-    image: "https://static.wixstatic.com/media/b9ec8c_6791b993a3424712a6e821208db3c53d~mv2.png?originWidth=1280&originHeight=384" 
+    image: "https://i.ibb.co/DDRTD5Gy/5.png" 
   }
 ];
 
