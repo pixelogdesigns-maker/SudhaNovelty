@@ -34,32 +34,32 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-// Carousel images - mobile site carousel
+// UPDATED: New carousel images from user
 const HERO_SLIDES = [
   { 
     id: 1, 
     title: "Slide 1", 
-    image: "https://i.ibb.co/nqLmJ7x0/1.png" 
+    image: "https://ibb.co/DJW8PNW" 
   },
   { 
     id: 2, 
     title: "Slide 2", 
-    image: "https://i.ibb.co/n86g6LQm/2.png" 
+    image: "https://ibb.co/210k0ZTT" 
   },
   { 
     id: 3, 
     title: "Slide 3", 
-    image: "https://i.ibb.co/YF4L40xx/3.png" 
+    image: "https://ibb.co/Kzb0brVh" 
   },
   { 
     id: 4, 
     title: "Slide 4", 
-    image: "https://i.ibb.co/4qtYwct/4.png" 
+    image: "https://ibb.co/ymQPj6HR" 
   },
   { 
     id: 5, 
     title: "Slide 5", 
-    image: "https://i.ibb.co/DDRTD5Gy/5.png" 
+    image: "https://ibb.co/Gv5NvcsL" 
   }
 ];
 
@@ -102,7 +102,7 @@ const HeroCarousel = () => {
     // FIX: Full-width responsive carousel with aspect ratio maintained
     // Mobile: 384x617, Desktop: 1300x390
     <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
-      <div className="w-full aspect-[384/200] relative flex-shrink-0">
+      <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
