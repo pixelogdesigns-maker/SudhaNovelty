@@ -41,10 +41,10 @@ export default function Header() {
             
             {/* --- MOBILE BRAND TEXT --- */}
             <div className="md:hidden flex flex-col justify-center">
-              <span className="font-heading text-xs font-bold text-primary leading-tight tracking-wider">
+              <span className="font-paragraph text-xs font-bold text-primary leading-tight tracking-wider">
                 SUDHA
               </span>
-              <span className="font-heading text-xs font-bold text-primary leading-tight tracking-wider">
+              <span className="font-paragraph text-xs font-bold text-primary leading-tight tracking-wider">
                 NOVELTIES
               </span>
             </div>
