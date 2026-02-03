@@ -90,22 +90,29 @@ const HeroCarousel = () => {
         <AnimatePresence mode='wait'>
           <motion.div
             key={current}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.8 }}
             className="absolute inset-0 w-full h-full"
           >
-            <Link to="/toys" className="block w-full h-full">
+            <Link to="/toys" className="block w-full h-full overflow-hidden">
               {/* FIX: object-contain ensures no cropping at top/bottom. 
                  It scales the image to fit the full width while maintaining aspect ratio. */}
-              <Image 
-                src={HERO_SLIDES[current].image} 
-                alt={HERO_SLIDES[current].title}
-                width={1300} 
-                height={390}
-                className="w-full h-full object-contain" 
-              />
+              <motion.div
+                initial={{ scale: 1 }}
+                animate={{ scale: 1.1 }}
+                transition={{ duration: 5, ease: "easeInOut" }}
+                className="w-full h-full"
+              >
+                <Image 
+                  src={HERO_SLIDES[current].image} 
+                  alt={HERO_SLIDES[current].title}
+                  width={1300} 
+                  height={390}
+                  className="w-full h-full object-contain" 
+                />
+              </motion.div>
             </Link>
           </motion.div>
         </AnimatePresence>
