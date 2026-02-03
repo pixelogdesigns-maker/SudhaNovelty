@@ -70,51 +70,62 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Smooth Continuous Slide Animation)
+// 1. Hero Carousel (Smooth Continuous Slide Animation with Lazy Loading)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0]));
 
   useEffect(() => {
     if (!isAutoplay) return;
-    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 5000);
+    // Reduced to 1.8 seconds for faster transitions
+    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 1800);
     return () => clearInterval(timer);
   }, [isAutoplay]);
 
   const goToPrev = () => {
     setIsAutoplay(false);
     setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-    setTimeout(() => setIsAutoplay(true), 8000);
+    setTimeout(() => setIsAutoplay(true), 5000);
   };
   
   const goToNext = () => {
     setIsAutoplay(false);
     setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    setTimeout(() => setIsAutoplay(true), 8000);
+    setTimeout(() => setIsAutoplay(true), 5000);
   };
+
+  // Preload next and previous images
+  useEffect(() => {
+    const nextIndex = (current + 1) % HERO_SLIDES.length;
+    const prevIndex = (current - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
+    setLoadedImages(prev => new Set([...prev, nextIndex, prevIndex]));
+  }, [current]);
 
   return (
     // FIX: Full-width responsive carousel with aspect ratio maintained
-    // Mobile: 384x617, Desktop: 1300x390
+    // Mobile: 384x200, Desktop: 1300x390
     <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
       <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="sync">
           <motion.div
             key={current}
             initial={{ x: 1000, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -1000, opacity: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="w-full h-full"
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full overflow-hidden">
               {/* FIX: object-contain ensures no cropping at top/bottom. 
-                 It scales the image to fit the full width while maintaining aspect ratio. */}
+                 It scales the image to fit the full width while maintaining aspect ratio.
+                 Lazy loading for next/prev images for fast transitions. */}
               <Image 
                 src={HERO_SLIDES[current].image} 
                 alt={HERO_SLIDES[current].title}
                 width={1300} 
                 height={390}
+                loading={loadedImages.has(current) ? "eager" : "lazy"}
                 className="w-full h-full object-contain" 
               />
             </Link>
@@ -144,7 +155,7 @@ const HeroCarousel = () => {
             onClick={() => {
               setIsAutoplay(false);
               setCurrent(index);
-              setTimeout(() => setIsAutoplay(true), 8000);
+              setTimeout(() => setIsAutoplay(true), 5000);
             }}
             className={`transition-all duration-300 rounded-full ${
               index === current 
