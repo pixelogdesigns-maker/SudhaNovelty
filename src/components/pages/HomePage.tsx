@@ -158,14 +158,14 @@ const TextMarquee = () => {
       <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
         {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
           // Reduced margin from mx-4 to mx-2 on mobile
-          <div key={index} className="flex items-center mx-2 md:mx-4">
+          (<div key={index} className="flex items-center mx-2 md:mx-4">
             {/* Reduced text size from text-sm to text-xs on mobile */}
             <span className="text-white font-bold text-xs md:text-base tracking-widest uppercase">
               {item}
             </span>
             {/* Reduced separator spacing */}
             <span className="text-white/60 mx-2 md:mx-4">•</span>
-          </div>
+          </div>)
         ))}
       </div>
       <style>{`
@@ -202,7 +202,6 @@ const ShopByAge = () => {
   return (
     // Reduced top/bottom padding on mobile to save space
     <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
-      
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -221,12 +220,9 @@ const ShopByAge = () => {
           />
         </svg>
       </div>
-
       <div className="relative z-10 max-w-[120rem] mx-auto px-4 md:px-6">
         <div className="text-center mb-10 md:mb-16">
-          <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">
-            SHOP BY AGE
-          </h2>
+          <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">SHOP BY AG</h2>
           <p className="text-[#5A4685] font-medium tracking-wide text-sm md:text-base">
              Curated collections for every little milestone.
           </p>
@@ -274,7 +270,6 @@ const ShopByAge = () => {
           ))}
         </div>
       </div>
-
       {/* Bottom Brush Stroke */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 

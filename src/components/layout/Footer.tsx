@@ -36,7 +36,7 @@ export default function Footer() {
             <h3 className="font-heading text-xl text-primary mb-6">
               {storeInfo?.storeName || 'Sudha Novelties'}
             </h3>
-            <p className="font-paragraph text-base text-foreground leading-relaxed">Bringing smiles to children for over 25 years with quality toys and exceptional service.</p>
+            <p className="font-paragraph text-base text-foreground leading-relaxed">Bringing smiles to children for over 25+ years with quality toys and exceptional service.</p>
           </div>
 
           {/* Contact Information */}
@@ -121,7 +121,7 @@ export default function Footer() {
             © {new Date().getFullYear()} {storeInfo?.storeName || 'Sudha Novelties'}. All rights reserved.
           </p>
           <p className="font-paragraph text-sm text-center text-foreground/70 mt-2">
-            Powered by <a href="https://www.pixelog.in" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors font-medium">Pixelog</a>
+            Powered by <a href="https://www.pixelog.in" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors font-medium font-bitter-black">Pixelog</a>
           </p>
         </div>
       </div>

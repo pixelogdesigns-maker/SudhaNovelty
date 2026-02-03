@@ -22,7 +22,8 @@ export default {
                 heading: ["poppins-v2"],
                 paragraph: ["nunito sans"],
                 "coheadlinew23-arabicbol": ["coheadlinew23-arabicbol", "fantasy"],
-                "poppins-semibold": ["poppins-semibold", "poppins", "sans-serif"]
+                "poppins-semibold": ["poppins-semibold", "poppins", "sans-serif"],
+                "bitter-black": ["bitter-black", "bitter", "serif"]
             },
             colors: {
                 'light-pink': '#FCE4EC',
