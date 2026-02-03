@@ -20,7 +20,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
-      <div className="max-w-[120rem] mx-auto px-6">
+      <div className="max-w-[120rem] mx-auto px-4 md:px-6">
         {/* Container Height: Fixed to prevent logo resizing */}
         <div className="flex items-center justify-between h-16 md:h-20 transition-all duration-300">
           
@@ -90,7 +90,7 @@ export default function Header() {
 
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 flex flex-col gap-4 border-t border-gray-100 pt-4">
+          <nav className="md:hidden pb-4 flex flex-col gap-4 border-t border-gray-100 pt-4 px-2">
             {navLinks.map((link) => (
               <Link
                 key={link.path}

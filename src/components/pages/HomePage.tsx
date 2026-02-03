@@ -621,7 +621,7 @@ export default function HomePage() {
 
       {/* 6. Video Marquee Section */}
       <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-        <div className="max-w-[120rem] mx-auto mb-16 px-6 text-center">
+        <div className="max-w-[120rem] mx-auto mb-16 px-4 md:px-6 text-center">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>
         </div>
@@ -640,7 +640,7 @@ export default function HomePage() {
 
       {/* Keep Location Section */}
       <section className="py-24 bg-light-pink/20">
-        <div className="max-w-[120rem] mx-auto px-6 text-center">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 text-center">
              <h2 className="font-heading text-4xl mb-6">Visit Our Store</h2>
              <p className="text-xl text-gray-600 mb-8">{storeInfo?.address || '123 Toy Street'}</p>
              <Link to="/visit" className="inline-block px-8 py-4 bg-foreground text-white rounded-xl font-bold">Get Directions</Link>

@@ -376,7 +376,7 @@ export default function ToysPage() {
 
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-light-pink to-white">
-        <div className="max-w-[120rem] mx-auto px-6">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
