@@ -33,7 +33,7 @@ export default function Header() {
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png" 
               width={60} 
               height={60}
-              className="md:hidden object-contain border border-solid border-black" 
+              className="md:hidden object-contain border-black border border-none" 
               originWidth={533}
               originHeight={533}
               alt="Sudha Novelties"
@@ -44,7 +44,7 @@ export default function Header() {
               <span className="text-xs font-bold text-primary leading-tight tracking-wider font-poppins-semibold">
                 SUDHA
               </span>
-              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-heading">
+              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-poppins-semibold">
                 NOVELTIES
               </span>
             </div>
