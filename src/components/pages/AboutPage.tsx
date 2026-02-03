@@ -31,7 +31,7 @@ export default function AboutPage() {
             <h1 className="font-heading text-3xl md:text-7xl text-primary mb-4 md:mb-8">
               Our Story
             </h1>
-            <p className="font-paragraph text-base md:text-2xl text-foreground leading-relaxed text-gray-600">For over 10+ years, we've been dedicated to bringing smiles to children's faces with quality toys that inspire, educate, and entertain.</p>
+            <p className="font-paragraph text-base md:text-2xl text-foreground leading-relaxed text-gray-600">For over 25+ years, we've been dedicated to bringing smiles to children's faces with quality toys that inspire, educate, and entertain.</p>
           </motion.div>
         </div>
       </section>
