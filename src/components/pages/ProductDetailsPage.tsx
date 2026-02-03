@@ -214,16 +214,16 @@ Please provide availability details.`;
             <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               <div className="space-y-3 md:space-y-4">
                 {/* Main Image */}
-                <div className="relative aspect-square rounded-lg md:rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
+                <div className="relative aspect-square rounded-lg md:rounded-2xl overflow-hidden bg-white shadow-lg">
                   <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} className="w-full h-full">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence mode="sync">
                       <motion.div 
                         key={selectedImageIndex} 
                         initial={{ opacity: 0, x: slideDirection === 'left' ? 100 : -100 }} 
                         animate={{ opacity: 1, x: 0 }} 
                         exit={{ opacity: 0, x: slideDirection === 'left' ? -100 : 100 }} 
-                        transition={{ duration: 0.5, ease: 'easeInOut' }} 
-                        className="w-full h-full"
+                        transition={{ duration: 0.4, ease: 'easeInOut' }} 
+                        className="w-full h-full absolute inset-0"
                       >
                         <Image src={mainImage} alt={toy.name || 'Product'} width={600} className="w-full h-full object-cover" />
                       </motion.div>
