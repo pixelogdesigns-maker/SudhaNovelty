@@ -101,8 +101,9 @@ const HeroCarousel = () => {
   return (
     // FIX: Full-width responsive carousel with aspect ratio maintained
     // Mobile: 384x617, Desktop: 1300x390
-    <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
-      <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
+    // MOBILE ONLY: Hidden on desktop (md and above)
+    <section className="md:hidden relative overflow-hidden bg-gray-100 group flex justify-center">
+      <div className="w-full aspect-[384/200] relative flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
