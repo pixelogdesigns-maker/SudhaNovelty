@@ -114,6 +114,14 @@ const HeroCarousel = () => {
     }
   }, [index, slides.length]);
 
+  const handlePrev = () => {
+    setIndex((prev) => prev - 1);
+  };
+
+  const handleNext = () => {
+    setIndex((prev) => prev + 1);
+  };
+
   return (
     <section className="relative w-full overflow-hidden bg-gray-100">
       {/* Aspect ratio wrapper */}
@@ -140,6 +148,23 @@ const HeroCarousel = () => {
             </Link>
           ))}
         </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-foreground p-2 md:p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={24} className="md:w-6 md:h-6 w-5 h-5" />
+        </button>
+
+        <button
+          onClick={handleNext}
+          className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-foreground p-2 md:p-3 rounded-full transition-all duration-200 shadow-lg hover:shadow-xl"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={24} className="md:w-6 md:h-6 w-5 h-5" />
+        </button>
       </div>
     </section>
   );
