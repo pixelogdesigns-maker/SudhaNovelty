@@ -162,8 +162,8 @@ const HeroCarousel = () => {
 // 2. Text Marquee (Mobile Optimized)
 const TextMarquee = () => {
   const marqueeItems = [
-    "EDUCATIONAL TOYS", "ACTION FIGURES", "BOARD GAMES", "PLUSHIES",
-    "OUTDOOR FUN", "BEST SELLERS", "NEW ARRIVALS", "PUZZLES"
+    "BATTERY JEEP", "BATTERY BIKE", "RIDEONS", "RC CARS",
+    "SLIDERS", "CYCLES", "KIDS TOYS", "DECORATIVES"
   ];
 
   return (

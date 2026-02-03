@@ -33,7 +33,7 @@ export default function Header() {
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png" 
               width={60} 
               height={60}
-              className="md:hidden object-contain" 
+              className="md:hidden object-contain border border-solid border-black" 
               originWidth={533}
               originHeight={533}
               alt="Sudha Novelties"
@@ -41,10 +41,10 @@ export default function Header() {
             
             {/* --- MOBILE BRAND TEXT --- */}
             <div className="md:hidden flex flex-col justify-center">
-              <span className="font-paragraph text-xs font-bold text-primary leading-tight tracking-wider">
+              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-poppins-semibold">
                 SUDHA
               </span>
-              <span className="font-paragraph text-xs font-bold text-primary leading-tight tracking-wider">
+              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-heading">
                 NOVELTIES
               </span>
             </div>
