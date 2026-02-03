@@ -542,15 +542,19 @@ export default function HomePage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
-      
-      const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-      if (toyItems) setToys(toyItems);
+      try {
+        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+        
+        const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
+        if (toyItems) setToys(toyItems);
 
-      const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-      if (categoryItems) {
-        setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
+        const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+        if (categoryItems) {
+          setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
+        }
+      } catch (error) {
+        console.error('Error fetching homepage data:', error);
       }
     };
     fetchData();

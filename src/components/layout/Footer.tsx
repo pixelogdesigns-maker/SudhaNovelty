@@ -9,9 +9,13 @@ export default function Footer() {
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
-      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (items && items.length > 0) {
-        setStoreInfo(items[0]);
+      try {
+        const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (items && items.length > 0) {
+          setStoreInfo(items[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching store information:', error);
       }
     };
     fetchStoreInfo();
