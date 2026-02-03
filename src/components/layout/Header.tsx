@@ -40,9 +40,14 @@ export default function Header() {
             />
             
             {/* --- MOBILE BRAND TEXT --- */}
-            <span className="md:hidden font-heading text-sm font-bold text-primary whitespace-nowrap">
-              SUDHA<br />NOVELTIES
-            </span>
+            <div className="md:hidden flex flex-col justify-center">
+              <span className="font-heading text-xs font-bold text-primary leading-tight tracking-wider">
+                SUDHA
+              </span>
+              <span className="font-heading text-xs font-bold text-primary leading-tight tracking-wider">
+                NOVELTIES
+              </span>
+            </div>
 
             {/* --- DESKTOP LOGO --- */}
             <Image
