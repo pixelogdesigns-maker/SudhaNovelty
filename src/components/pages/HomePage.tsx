@@ -34,32 +34,27 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-// UPDATED: New carousel images from user
+// UPDATED: New 1300x190 Resolution Images
 const HERO_SLIDES = [
   { 
     id: 1, 
-    title: "Slide 1", 
-    image: "https://ibb.co/DJW8PNW" 
+    title: "Adventure Ride", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
   },
   { 
     id: 2, 
-    title: "Slide 2", 
-    image: "https://ibb.co/210k0ZTT" 
+    title: "Fun and Thrills", 
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
   },
   { 
     id: 3, 
-    title: "Slide 3", 
-    image: "https://ibb.co/Kzb0brVh" 
+    title: "Ride into Fun", 
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" 
   },
   { 
     id: 4, 
-    title: "Slide 4", 
-    image: "https://ibb.co/ymQPj6HR" 
-  },
-  { 
-    id: 5, 
-    title: "Slide 5", 
-    image: "https://ibb.co/Gv5NvcsL" 
+    title: "Kids Toys", 
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" 
   }
 ];
 
