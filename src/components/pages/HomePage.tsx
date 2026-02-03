@@ -358,7 +358,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                       else if (typeof product.productImages === 'string') imageUrl = product.productImages;
                       else if (typeof product.image === 'string') imageUrl = product.image;
                       return (
-                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       );
                     })()}
                   </div>
