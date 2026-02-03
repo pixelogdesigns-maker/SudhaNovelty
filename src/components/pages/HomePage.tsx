@@ -99,20 +99,13 @@ const HeroCarousel = () => {
             <Link to="/toys" className="block w-full h-full overflow-hidden">
               {/* FIX: object-contain ensures no cropping at top/bottom. 
                  It scales the image to fit the full width while maintaining aspect ratio. */}
-              <motion.div
-                initial={{ scale: 1 }}
-                animate={{ scale: 1.1 }}
-                transition={{ duration: 5, ease: "easeInOut" }}
-                className="w-full h-full"
-              >
-                <Image 
-                  src={HERO_SLIDES[current].image} 
-                  alt={HERO_SLIDES[current].title}
-                  width={1300} 
-                  height={390}
-                  className="w-full h-full object-contain" 
-                />
-              </motion.div>
+              <Image 
+                src={HERO_SLIDES[current].image} 
+                alt={HERO_SLIDES[current].title}
+                width={1300} 
+                height={390}
+                className="w-full h-full object-contain" 
+              />
             </Link>
           </motion.div>
         </AnimatePresence>
