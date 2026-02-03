@@ -77,7 +77,8 @@ const HeroCarousel = () => {
   const SLIDE_DURATION = 4500; // ms
   const TRANSITION_DURATION = 700; // ms
 
-  const slides = [...HERO_SLIDES, HERO_SLIDES[0]]; // clone first slide
+  // Create infinite loop: [last, ...all slides, first]
+  const slides = [HERO_SLIDES[HERO_SLIDES.length - 1], ...HERO_SLIDES, HERO_SLIDES[0]];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -91,18 +92,27 @@ const HeroCarousel = () => {
     const track = trackRef.current;
     if (!track) return;
 
+    // Apply transition for normal slides
     track.style.transition = `transform ${TRANSITION_DURATION}ms ease-in-out`;
     track.style.transform = `translateX(-${index * 100}%)`;
 
-    // when we reach the cloned slide → snap back instantly
-    if (index === HERO_SLIDES.length) {
+    // When reaching the last cloned slide (which is the first slide), loop back
+    if (index === slides.length - 1) {
       setTimeout(() => {
         track.style.transition = 'none';
-        track.style.transform = 'translateX(0%)';
-        setIndex(0);
+        track.style.transform = `translateX(-${1 * 100}%)`; // Jump to first real slide
+        setIndex(1);
       }, TRANSITION_DURATION);
     }
-  }, [index]);
+    // When going backwards past the first cloned slide, jump to last real slide
+    else if (index === 0) {
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${(slides.length - 2) * 100}%)`; // Jump to last real slide
+        setIndex(slides.length - 2);
+      }, TRANSITION_DURATION);
+    }
+  }, [index, slides.length]);
 
   return (
     <section className="relative w-full overflow-hidden bg-gray-100">
@@ -111,6 +121,7 @@ const HeroCarousel = () => {
         <div
           ref={trackRef}
           className="flex h-full w-full"
+          style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {slides.map((slide, i) => (
             <Link
@@ -123,7 +134,7 @@ const HeroCarousel = () => {
                 alt={slide.title}
                 width={1300}
                 height={390}
-                priority={i === 0}
+                priority={i === 0 || i === 1}
                 className="w-full h-full object-cover"
               />
             </Link>
