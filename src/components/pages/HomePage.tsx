@@ -498,6 +498,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
               <div className={`
                 relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
                 flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
+                border-[3px] md:border-[4px] border-white
               `}>
                 {cat.categoryImage ? (
                   <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
