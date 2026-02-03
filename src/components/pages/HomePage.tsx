@@ -95,9 +95,9 @@ const HeroCarousel = () => {
 
   return (
     // FIX: Full-width responsive carousel with aspect ratio maintained
-    // Mobile: Full screen height, Desktop: 1300x390
+    // Mobile: 384x617, Desktop: 1300x390
     <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
-      <div className="w-full h-screen md:aspect-[1300/390] relative flex-shrink-0 p-0 border-0 border-solid border-gray-200 m-0">
+      <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -108,18 +108,20 @@ const HeroCarousel = () => {
             className="w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full overflow-hidden">
-              {/* FIX: object-cover fills the entire screen on mobile while maintaining aspect ratio. */}
+              {/* FIX: object-contain ensures no cropping at top/bottom. 
+                 It scales the image to fit the full width while maintaining aspect ratio. */}
               <Image 
                 src={HERO_SLIDES[current].image} 
                 alt={HERO_SLIDES[current].title}
                 width={1300} 
                 height={390}
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-contain" 
               />
             </Link>
           </motion.div>
         </AnimatePresence>
       </div>
+
       {/* Navigation Arrows - Only visible on hover for a cleaner look */}
       <button 
         onClick={goToPrev} 
@@ -133,6 +135,7 @@ const HeroCarousel = () => {
       >
         <ChevronRight size={20} className="md:w-8 md:h-8" />
       </button>
+
       {/* Dot Indicators */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
         {HERO_SLIDES.map((_, index) => (
@@ -169,14 +172,14 @@ const TextMarquee = () => {
       <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
         {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
           // Reduced margin from mx-4 to mx-2 on mobile
-          (<div key={index} className="flex items-center mx-2 md:mx-4">
+          <div key={index} className="flex items-center mx-2 md:mx-4">
             {/* Reduced text size from text-sm to text-xs on mobile */}
             <span className="text-white font-bold text-xs md:text-base tracking-widest uppercase">
               {item}
             </span>
             {/* Reduced separator spacing */}
             <span className="text-white/60 mx-2 md:mx-4">•</span>
-          </div>)
+          </div>
         ))}
       </div>
       <style>{`
@@ -213,6 +216,7 @@ const ShopByAge = () => {
   return (
     // Reduced top/bottom padding on mobile to save space
     <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
+      
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -231,6 +235,7 @@ const ShopByAge = () => {
           />
         </svg>
       </div>
+
       <div className="relative z-10 max-w-[120rem] mx-auto px-4 md:px-6">
         <div className="text-center mb-10 md:mb-16">
           <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">
@@ -283,6 +288,7 @@ const ShopByAge = () => {
           ))}
         </div>
       </div>
+
       {/* Bottom Brush Stroke */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
