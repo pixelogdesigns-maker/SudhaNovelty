@@ -352,7 +352,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
                       {(() => {
-                      let imageUrl = 'https://www.amazon.in/Creations-Kids-Heavy-Jumbo-WN-1166/dp/B0C27R3DSY';
+                      let imageUrl = 'https://static.wixstatic.com/media/b9ec8c_d42971f3a67c446198b683dfb6302897~mv2.png?originWidth=384&originHeight=384';
                       if (product.productGallery?.[0]) imageUrl = product.productGallery[0].src || product.productGallery[0].url || product.productGallery[0];
                       else if (product.productImages1?.[0]) imageUrl = product.productImages1[0].src || product.productImages1[0].url || product.productImages1[0];
                       else if (typeof product.productImages === 'string') imageUrl = product.productImages;
