@@ -2,7 +2,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import useEmblaCarousel from 'embla-carousel-react';
 import { BaseCrudService } from '@/integrations';
 import { StoreInformation, Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
@@ -278,21 +277,23 @@ const ShopByAge = () => {
 
 // 4. Best Sellers
 const BestSellers = ({ toys }: { toys: Toys[] }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
-
-  const onSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
-  }, [emblaApi, onSelect]);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const scrollContainerRef = useCallback((node: HTMLDivElement | null) => {
+    if (!node) return;
+    
+    const handleScroll = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = node;
+      setScrollPosition(scrollLeft);
+      setCanScrollPrev(scrollLeft > 0);
+      setCanScrollNext(scrollLeft < scrollWidth - clientWidth - 10);
+    };
+    
+    node.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => node.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const bestSellers = toys
     .filter((toy: any) => toy.isBestSellingNow) 
@@ -330,15 +331,23 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
             <h2 className="font-heading text-4xl md:text-5xl text-foreground">Best Sellers</h2>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => emblaApi && emblaApi.scrollPrev()} disabled={!canScrollPrev} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronLeft size={24} /></button>
-            <button onClick={() => emblaApi && emblaApi.scrollNext()} disabled={!canScrollNext} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronRight size={24} /></button>
+            <button onClick={() => {
+              if (scrollContainerRef.current) {
+                scrollContainerRef.current.scrollBy({ left: -400, behavior: 'smooth' });
+              }
+            }} disabled={!canScrollPrev} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollPrev ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronLeft size={24} /></button>
+            <button onClick={() => {
+              if (scrollContainerRef.current) {
+                scrollContainerRef.current.scrollBy({ left: 400, behavior: 'smooth' });
+              }
+            }} disabled={!canScrollNext} className={`p-4 rounded-full border border-gray-200 bg-white transition-all ${!canScrollNext ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary hover:text-white'}`}><ChevronRight size={24} /></button>
           </div>
         </div>
 
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex -ml-6 pb-12">
+        <div className="overflow-x-auto scrollbar-hide" ref={scrollContainerRef}>
+          <div className="flex gap-6 pb-12 w-max">
             {bestSellers.map((product) => (
-              <div className="pl-6 flex-[0_0_80%] md:flex-[0_0_40%] lg:flex-[0_0_25%] min-w-0" key={product._id}>
+              <div className="flex-shrink-0 w-80" key={product._id}>
                 <Link to={`/toys/${product._id}`} className="group relative bg-white rounded-3xl p-4 transition-all duration-300 hover:shadow-xl border border-transparent hover:border-pink-100 block h-full">
                   <div className="absolute top-6 left-6 z-10 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full">Hot</div>
                   <div className="relative aspect-square rounded-2xl bg-gray-50 overflow-hidden mb-4">
@@ -607,6 +616,8 @@ export default function HomePage() {
       <style>{`
           @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
           .animate-marquee { animation: marquee 60s linear infinite; }
+          .scrollbar-hide::-webkit-scrollbar { display: none; }
+          .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
   );
