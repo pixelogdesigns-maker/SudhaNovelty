@@ -36,9 +36,7 @@ export default function Footer() {
             <h3 className="font-heading text-xl text-primary mb-6">
               {storeInfo?.storeName || 'Sudha Novelties'}
             </h3>
-            <p className="font-paragraph text-base text-foreground leading-relaxed">
-              Bringing smiles to children for over 10 years with quality toys and exceptional service.
-            </p>
+            <p className="font-paragraph text-base text-foreground leading-relaxed">Bringing smiles to children for over 25 years with quality toys and exceptional service.</p>
           </div>
 
           {/* Contact Information */}

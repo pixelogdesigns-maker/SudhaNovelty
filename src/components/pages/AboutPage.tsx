@@ -19,7 +19,6 @@ export default function AboutPage() {
       />
       <Header />
       <WhatsAppFloatingButton />
-
       {/* Hero Section */}
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-12 md:py-24">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
@@ -32,13 +31,10 @@ export default function AboutPage() {
             <h1 className="font-heading text-3xl md:text-7xl text-primary mb-4 md:mb-8">
               Our Story
             </h1>
-            <p className="font-paragraph text-base md:text-2xl text-foreground leading-relaxed text-gray-600">
-              For over 10 years, we've been dedicated to bringing smiles to children's faces with quality toys that inspire, educate, and entertain.
-            </p>
+            <p className="font-paragraph text-base md:text-2xl text-foreground leading-relaxed text-gray-600">For over 10+ years, we've been dedicated to bringing smiles to children's faces with quality toys that inspire, educate, and entertain.</p>
           </motion.div>
         </div>
       </section>
-
       {/* Journey Section (Updated Image & Content Only) */}
       <section className="py-12 md:py-24 bg-white relative overflow-hidden">
         {/* Decorative Blob */}
@@ -61,9 +57,7 @@ export default function AboutPage() {
                 <p>
                   What started as a small toy shop with a big dream has grown into a trusted destination for parents seeking quality toys for their children. Our journey began with a simple belief: every child deserves toys that are safe, engaging, and built to last.
                 </p>
-                <p>
-                  Over the past 10+ years, we've served thousands of families, helping them find the perfect toys for birthdays, holidays, and everyday fun. We've watched children grow up with our toys, and that's what makes our work so rewarding.
-                </p>
+                <p>Over the past 25+ years, we've served thousands of families, helping them find the perfect toys for birthdays, holidays, and everyday fun. We've watched children grow up with our toys, and that's what makes our work so rewarding.</p>
                 <p>
                   Today, we continue to uphold the same values that started it all: quality, safety, and genuine care for every customer. Whether you visit our offline store or browse online, you'll experience the same warmth and dedication that has made us a beloved part of the community.
                 </p>
@@ -90,7 +84,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
       {/* Shop Your Way Section */}
       <section className="py-12 md:py-24 bg-primary text-white">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
@@ -140,7 +133,6 @@ export default function AboutPage() {
           </motion.div>
         </div>
       </section>
-
       <Footer />
     </div>
   );
