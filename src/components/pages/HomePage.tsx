@@ -34,32 +34,32 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-// UPDATED: New carousel images from user
+// Carousel images - recovered from previous state
 const HERO_SLIDES = [
   { 
     id: 1, 
     title: "Slide 1", 
-    image: "https://ibb.co/DJW8PNW" 
+    image: "https://static.wixstatic.com/media/b9ec8c_0e7db5fb84eb44d294a3d904189f5f67~mv2.png?originWidth=1280&originHeight=384" 
   },
   { 
     id: 2, 
     title: "Slide 2", 
-    image: "https://ibb.co/210k0ZTT" 
+    image: "https://static.wixstatic.com/media/b9ec8c_26eeaa3ff00b4dc0a40a2325fdcf0b7a~mv2.png?originWidth=1280&originHeight=384" 
   },
   { 
     id: 3, 
     title: "Slide 3", 
-    image: "https://ibb.co/Kzb0brVh" 
+    image: "https://static.wixstatic.com/media/b9ec8c_f5f172ba0aaf4bef9e3862a72cb9a6d0~mv2.png?originWidth=1280&originHeight=384" 
   },
   { 
     id: 4, 
     title: "Slide 4", 
-    image: "https://ibb.co/ymQPj6HR" 
+    image: "https://static.wixstatic.com/media/b9ec8c_3a92db4f6b184e288c1c3d0bd67b1640~mv2.png?originWidth=1280&originHeight=384" 
   },
   { 
     id: 5, 
     title: "Slide 5", 
-    image: "https://ibb.co/Gv5NvcsL" 
+    image: "https://static.wixstatic.com/media/b9ec8c_6791b993a3424712a6e821208db3c53d~mv2.png?originWidth=1280&originHeight=384" 
   }
 ];
 
