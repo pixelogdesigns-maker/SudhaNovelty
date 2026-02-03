@@ -70,17 +70,28 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Corrected for Original Resolution)
+// 1. Hero Carousel (Smooth Continuous Slide Animation)
 const HeroCarousel = () => {
   const [current, setCurrent] = useState(0);
+  const [isAutoplay, setIsAutoplay] = useState(true);
 
   useEffect(() => {
+    if (!isAutoplay) return;
     const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [isAutoplay]);
 
-  const goToPrev = () => setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-  const goToNext = () => setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+  const goToPrev = () => {
+    setIsAutoplay(false);
+    setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    setTimeout(() => setIsAutoplay(true), 8000);
+  };
+  
+  const goToNext = () => {
+    setIsAutoplay(false);
+    setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
+    setTimeout(() => setIsAutoplay(true), 8000);
+  };
 
   return (
     // FIX: Full-width responsive carousel with aspect ratio maintained
@@ -90,10 +101,10 @@ const HeroCarousel = () => {
         <AnimatePresence mode='wait'>
           <motion.div
             key={current}
-            initial={{ x: 100 }}
-            animate={{ x: 0 }}
-            exit={{ x: -100 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            initial={{ x: 1000, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -1000, opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
             className="absolute inset-0 w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full overflow-hidden">
@@ -124,6 +135,26 @@ const HeroCarousel = () => {
       >
         <ChevronRight size={20} className="md:w-8 md:h-8" />
       </button>
+
+      {/* Dot Indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {HERO_SLIDES.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setIsAutoplay(false);
+              setCurrent(index);
+              setTimeout(() => setIsAutoplay(true), 8000);
+            }}
+            className={`transition-all duration-300 rounded-full ${
+              index === current 
+                ? 'bg-white w-8 h-2' 
+                : 'bg-white/50 w-2 h-2 hover:bg-white/75'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </section>
   );
 };
