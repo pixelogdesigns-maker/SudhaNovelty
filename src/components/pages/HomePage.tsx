@@ -70,101 +70,65 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Smooth Continuous Slide Animation with Lazy Loading)
+// 1. Hero Carousel (Smooth Continuous Slide Animation with Infinite Loop)
 const HeroCarousel = () => {
-  const [current, setCurrent] = useState(0);
-  const [isAutoplay, setIsAutoplay] = useState(true);
-  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set([0]));
+  const [index, setIndex] = useState(0);
+  const trackRef = React.useRef<HTMLDivElement>(null);
+  const SLIDE_DURATION = 4500; // ms
+  const TRANSITION_DURATION = 700; // ms
+
+  const slides = [...HERO_SLIDES, HERO_SLIDES[0]]; // clone first slide
 
   useEffect(() => {
-    if (!isAutoplay) return;
-    // 4 seconds per image display
-    const timer = setInterval(() => { setCurrent((prev) => (prev + 1) % HERO_SLIDES.length); }, 4000);
-    return () => clearInterval(timer);
-  }, [isAutoplay]);
+    const interval = setInterval(() => {
+      setIndex((prev) => prev + 1);
+    }, SLIDE_DURATION);
 
-  const goToPrev = () => {
-    setIsAutoplay(false);
-    setCurrent((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
-    setTimeout(() => setIsAutoplay(true), 5000);
-  };
-  
-  const goToNext = () => {
-    setIsAutoplay(false);
-    setCurrent((prev) => (prev + 1) % HERO_SLIDES.length);
-    setTimeout(() => setIsAutoplay(true), 5000);
-  };
+    return () => clearInterval(interval);
+  }, []);
 
-  // Preload next and previous images
   useEffect(() => {
-    const nextIndex = (current + 1) % HERO_SLIDES.length;
-    const prevIndex = (current - 1 + HERO_SLIDES.length) % HERO_SLIDES.length;
-    setLoadedImages(prev => new Set([...prev, nextIndex, prevIndex]));
-  }, [current]);
+    const track = trackRef.current;
+    if (!track) return;
+
+    track.style.transition = `transform ${TRANSITION_DURATION}ms ease-in-out`;
+    track.style.transform = `translateX(-${index * 100}%)`;
+
+    // when we reach the cloned slide → snap back instantly
+    if (index === HERO_SLIDES.length) {
+      setTimeout(() => {
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0%)';
+        setIndex(0);
+      }, TRANSITION_DURATION);
+    }
+  }, [index]);
 
   return (
-    // FIX: Full-width responsive carousel with aspect ratio maintained
-    // Mobile: 384x200, Desktop: 1300x390
-    <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
-      <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            initial={{ x: 1000, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -1000, opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="absolute inset-0 w-full h-full"
-          >
-            <Link to="/toys" className="block w-full h-full overflow-hidden">
-              {/* FIX: object-contain ensures no cropping at top/bottom. 
-                 It scales the image to fit the full width while maintaining aspect ratio.
-                 Lazy loading for next/prev images for fast transitions. */}
-              <Image 
-                src={HERO_SLIDES[current].image} 
-                alt={HERO_SLIDES[current].title}
-                width={1300} 
+    <section className="relative w-full overflow-hidden bg-gray-100">
+      {/* Aspect ratio wrapper */}
+      <div className="w-full aspect-[384/200] md:aspect-[1300/390]">
+        <div
+          ref={trackRef}
+          className="flex h-full w-full"
+        >
+          {slides.map((slide, i) => (
+            <Link
+              key={i}
+              to="/toys"
+              className="min-w-full h-full block"
+            >
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                width={1300}
                 height={390}
-                loading={loadedImages.has(current) ? "eager" : "lazy"}
-                className="w-full h-full object-contain" 
+                priority={i === 0}
+                className="w-full h-full object-cover"
               />
             </Link>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Navigation Arrows - Only visible on hover for a cleaner look */}
-      <button 
-        onClick={goToPrev} 
-        className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
-      >
-        <ChevronLeft size={20} className="md:w-8 md:h-8" />
-      </button>
-      <button 
-        onClick={goToNext} 
-        className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 rounded-full text-white transition-all opacity-0 group-hover:opacity-100"
-      >
-        <ChevronRight size={20} className="md:w-8 md:h-8" />
-      </button>
-
-      {/* Dot Indicators */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {HERO_SLIDES.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setIsAutoplay(false);
-              setCurrent(index);
-              setTimeout(() => setIsAutoplay(true), 5000);
-            }}
-            className={`transition-all duration-300 rounded-full ${
-              index === current 
-                ? 'bg-white w-8 h-2' 
-                : 'bg-white/50 w-2 h-2 hover:bg-white/75'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
