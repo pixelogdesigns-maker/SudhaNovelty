@@ -130,11 +130,15 @@ Please provide availability details.`;
   };
 
   // --- Navigation & Touch Logic ---
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
+
   const handlePrevImage = () => {
+    setSlideDirection('right');
     setSelectedImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const handleNextImage = () => {
+    setSlideDirection('left');
     setSelectedImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
@@ -213,7 +217,14 @@ Please provide availability details.`;
                 <div className="relative aspect-square rounded-lg md:rounded-2xl overflow-hidden bg-gray-100 shadow-lg">
                   <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} className="w-full h-full">
                     <AnimatePresence mode="wait">
-                      <motion.div key={selectedImageIndex} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} className="w-full h-full">
+                      <motion.div 
+                        key={selectedImageIndex} 
+                        initial={{ opacity: 0, x: slideDirection === 'left' ? 100 : -100 }} 
+                        animate={{ opacity: 1, x: 0 }} 
+                        exit={{ opacity: 0, x: slideDirection === 'left' ? -100 : 100 }} 
+                        transition={{ duration: 0.5, ease: 'easeInOut' }} 
+                        className="w-full h-full"
+                      >
                         <Image src={mainImage} alt={toy.name || 'Product'} width={600} className="w-full h-full object-cover" />
                       </motion.div>
                     </AnimatePresence>
