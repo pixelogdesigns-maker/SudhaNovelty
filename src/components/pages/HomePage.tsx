@@ -222,7 +222,7 @@ const ShopByAge = () => {
       </div>
       <div className="relative z-10 max-w-[120rem] mx-auto px-4 md:px-6">
         <div className="text-center mb-10 md:mb-16">
-          <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">SHOP BY AG</h2>
+          <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">Shop By Age</h2>
           <p className="text-[#5A4685] font-medium tracking-wide text-sm md:text-base">
              Curated collections for every little milestone.
           </p>
