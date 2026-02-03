@@ -95,9 +95,9 @@ const HeroCarousel = () => {
 
   return (
     // FIX: Full-width responsive carousel with aspect ratio maintained
-    // Mobile: 384x617, Desktop: 1300x390
+    // Mobile: Full screen height, Desktop: 1300x390
     <section className="relative overflow-hidden bg-gray-100 group flex justify-center">
-      <div className="w-full aspect-[384/200] md:aspect-[1300/390] relative flex-shrink-0">
+      <div className="w-full h-screen md:aspect-[1300/390] relative flex-shrink-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -108,14 +108,13 @@ const HeroCarousel = () => {
             className="w-full h-full"
           >
             <Link to="/toys" className="block w-full h-full overflow-hidden">
-              {/* FIX: object-contain ensures no cropping at top/bottom. 
-                 It scales the image to fit the full width while maintaining aspect ratio. */}
+              {/* FIX: object-cover fills the entire screen on mobile while maintaining aspect ratio. */}
               <Image 
                 src={HERO_SLIDES[current].image} 
                 alt={HERO_SLIDES[current].title}
                 width={1300} 
                 height={390}
-                className="w-full h-full object-contain" 
+                className="w-full h-full object-cover" 
               />
             </Link>
           </motion.div>
