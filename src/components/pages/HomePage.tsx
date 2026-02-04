@@ -356,7 +356,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   }
 
   return (
-    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px]">
+    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px] mt-0 pt-0">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
