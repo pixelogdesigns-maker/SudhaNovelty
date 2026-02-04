@@ -7,7 +7,7 @@ import { StoreInformation, Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { 
   Star, ShoppingBag, ChevronLeft, ChevronRight, 
-  Heart, Sparkles, ArrowRight 
+  Heart, Sparkles, ArrowRight, Instagram
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -638,9 +638,18 @@ export default function HomePage() {
 
       {/* 6. Video Marquee Section */}
       <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-        <div className="max-w-[120rem] mx-auto mb-16 px-4 md:px-6 text-center">
+        <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center pt-8">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
-            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto">A peek into the fun world waiting for you at our store.</p>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8">A peek into the fun world waiting for you at our store.</p>
+            <a 
+              href="https://www.instagram.com/sudha_novelties_?igsh=MWI4Zzlvdjk1cjc3YQ%3D%3D&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-3 px-6 py-3 bg-primary text-white rounded-full font-bold hover:bg-primary/90 transition-all duration-300 hover:shadow-lg"
+            >
+              <Instagram size={20} />
+              Follow Us on Instagram
+            </a>
         </div>
 
         <div className="relative w-full">
