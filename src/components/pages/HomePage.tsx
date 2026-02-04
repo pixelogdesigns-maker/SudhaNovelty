@@ -637,10 +637,10 @@ export default function HomePage() {
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
-      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
-        <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center m-0 p-0">
-            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4 m-0 p-0">See It In Action</h2>
-            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8 m-0 p-0">A peek into the fun world waiting for you at our store.</p>
+      <section id="videos" className="pt-0 pb-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
+        <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center m-0 p-0 pt-0">
+            <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4 m-0 p-0 pt-0">See It In Action</h2>
+            <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8 m-0 p-0 pt-0">A peek into the fun world waiting for you at our store.</p>
             <a 
               href="https://www.instagram.com/sudha_novelties_?igsh=MWI4Zzlvdjk1cjc3YQ%3D%3D&utm_source=qr"
               target="_blank"
@@ -665,10 +665,10 @@ export default function HomePage() {
       </section>
 
       {/* Keep Location Section */}
-      <section className="py-24 bg-light-pink/20 m-0 p-0">
-        <div className="max-w-[120rem] mx-auto px-4 md:px-6 text-center m-0 p-0">
-             <h2 className="font-heading text-4xl mb-6 m-0 p-0">Visit Our Store</h2>
-             <p className="text-xl text-gray-600 mb-8 m-0 p-0">{storeInfo?.address || '123 Toy Street'}</p>
+      <section className="pt-0 pb-24 bg-light-pink/20 m-0 p-0">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 text-center m-0 p-0 pt-0">
+             <h2 className="font-heading text-4xl mb-6 m-0 p-0 pt-0">Visit Our Store</h2>
+             <p className="text-xl text-gray-600 mb-8 m-0 p-0 pt-0">{storeInfo?.address || '123 Toy Street'}</p>
              <Link to="/visit" className="inline-block px-8 py-4 bg-foreground text-white rounded-xl font-bold m-0 p-0">Get Directions</Link>
         </div>
       </section>
