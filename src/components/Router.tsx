@@ -2,6 +2,7 @@ import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
+import { MiniCartContextProvider } from '@/components/MiniCartContextProvider';
 
 // Import pages
 import HomePage from '@/components/pages/HomePage';
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: "toys/:toyId",
-        element: <ProductDetailsPage />,
+        element: (
+          <MiniCartContextProvider>
+            <ProductDetailsPage />
+          </MiniCartContextProvider>
+        ),
         routeMetadata: {
           pageIdentifier: 'product-details',
         },
