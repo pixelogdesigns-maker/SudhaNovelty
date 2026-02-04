@@ -116,35 +116,33 @@ export default function ProductDetails({
           </ProductDescription>
 
           {/* Product Options (if any) */}
-          {product?.variantsInfo?.variants && product?.variantsInfo?.variants?.length > 0 && (
-            <ProductVariants>
-              <div className="space-y-6" data-testid="product-options">
-                <h3 className="text-lg font-semibold text-content-primary">
-                  Product Options
-                </h3>
+          <ProductVariants>
+            <div className="space-y-6" data-testid="product-options">
+              <h3 className="text-lg font-semibold text-content-primary">
+                Product Options
+              </h3>
 
-                <ProductVariantOptions>
-                  <ProductVariantOptionRepeater>
-                    <div className="space-y-3 mb-4">
-                      <OptionName />
-                      <OptionChoices>
-                        <div className="flex flex-wrap gap-3">
-                          <OptionChoiceRepeater>
-                            <>
-                              <ChoiceColor />
-                              <ChoiceText />
-                            </>
-                          </OptionChoiceRepeater>
-                        </div>
-                      </OptionChoices>
-                    </div>
-                  </ProductVariantOptionRepeater>
-                </ProductVariantOptions>
+              <ProductVariantOptions>
+                <ProductVariantOptionRepeater>
+                  <div className="space-y-3 mb-4">
+                    <OptionName />
+                    <OptionChoices>
+                      <div className="flex flex-wrap gap-3">
+                        <OptionChoiceRepeater>
+                          <>
+                            <ChoiceColor />
+                            <ChoiceText />
+                          </>
+                        </OptionChoiceRepeater>
+                      </div>
+                    </OptionChoices>
+                  </div>
+                </ProductVariantOptionRepeater>
+              </ProductVariantOptions>
 
-                <ProductVariantSelectorReset />
-              </div>
-            </ProductVariants>
-          )}
+              <ProductVariantSelectorReset />
+            </div>
+          </ProductVariants>
 
           {/* Product Modifiers */}
           <ProductModifiers>

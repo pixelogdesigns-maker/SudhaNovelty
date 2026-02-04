@@ -1,5 +1,5 @@
 // HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
@@ -317,10 +317,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const node = scrollContainerRef.current;
+  const scrollContainerRef = useCallback((node: HTMLDivElement | null) => {
     if (!node) return;
     
     const handleScroll = () => {
