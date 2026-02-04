@@ -472,7 +472,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   }
 
   return (
-    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+    <section className="relative pt-0 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -492,7 +492,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
+      <div className="relative z-10 max-w-[120rem] mx-auto px-6 pt-16 md:pt-28">
         <div className="flex justify-between items-end mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
           <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
