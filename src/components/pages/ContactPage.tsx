@@ -171,12 +171,12 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+                  className="bg-blue-50 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-blue-500 rounded-full mb-3 md:mb-6">
                     <Phone className="text-white" size={24} />
                   </div>
-                  <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
+                  <h3 className="font-heading text-lg md:text-2xl text-blue-600 mb-2 md:mb-3">
                     Phone Call
                   </h3>
                   <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
@@ -184,7 +184,7 @@ export default function ContactPage() {
                   </p>
                   <a
                     href={`tel:${storeInfo?.phoneNumber || ''}`}
-                    className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                    className="inline-flex items-center justify-center gap-2 bg-blue-500 text-white font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-blue-600 transition-all duration-300 shadow-md hover:shadow-lg"
                   >
                     <Phone size={16} className="md:w-5 md:h-5" />
                     Call Now
@@ -195,12 +195,12 @@ export default function ContactPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="bg-light-pink rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
+                  className="bg-purple-50 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
                 >
-                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-primary rounded-full mb-3 md:mb-6">
+                  <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-purple-500 rounded-full mb-3 md:mb-6">
                     <Mail className="text-white" size={24} />
                   </div>
-                  <h3 className="font-heading text-lg md:text-2xl text-primary mb-2 md:mb-3">
+                  <h3 className="font-heading text-lg md:text-2xl text-purple-600 mb-2 md:mb-3">
                     Email Us
                   </h3>
                   <p className="font-paragraph text-sm md:text-base text-foreground mb-4 md:mb-6">
@@ -208,7 +208,7 @@ export default function ContactPage() {
                   </p>
                   <a
                     href={`mailto:${storeInfo?.emailAddress || ''}`}
-                    className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg"
+                    className="inline-flex items-center justify-center gap-2 bg-purple-500 text-white font-paragraph text-sm md:text-base px-4 md:px-6 py-2 md:py-3 rounded-lg md:rounded-xl hover:bg-purple-600 transition-all duration-300 shadow-md hover:shadow-lg"
                   >
                     <Mail size={16} className="md:w-5 md:h-5" />
                     Send Email
