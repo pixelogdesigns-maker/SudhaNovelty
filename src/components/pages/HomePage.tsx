@@ -626,7 +626,7 @@ export default function HomePage() {
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
-      <section id="videos" className="pt-24 md:pt-32 pb-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
+      <section id="videos" className="pt-0 pb-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
         <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center m-0 p-0 pt-0">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4 m-0 p-0 pt-0">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8 m-0 p-0 pt-0">A peek into the fun world waiting for you at our store.</p>
