@@ -295,19 +295,6 @@ const ShopByAge = () => {
           ))}
         </div>
       </div>
-      {/* Bottom Brush Stroke */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
-        <svg 
-          viewBox="0 0 1200 50" 
-          preserveAspectRatio="none" 
-          className="relative block w-full h-[30px] md:h-[50px]"
-        >
-          <path 
-            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
-            fill={NEXT_SECTION_BG} 
-          ></path>
-        </svg>
-      </div>
     </section>
   );
 };
