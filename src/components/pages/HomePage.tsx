@@ -356,7 +356,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   }
 
   return (
-    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px] mt-0 pt-0">
+    <section className="py-24 pb-0 bg-[#FFF8F3] relative overflow-hidden min-h-[600px] mt-0 pt-0">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
@@ -472,7 +472,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   }
 
   return (
-    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+    <section className="relative pt-0 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
