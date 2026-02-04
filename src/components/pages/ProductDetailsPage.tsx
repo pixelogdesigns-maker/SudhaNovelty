@@ -12,17 +12,23 @@ import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
 import { useNavigation } from '@/components/NavigationContext';
 import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
+import { useMiniCartContext } from '@/components/MiniCartContextProvider';
+import { useWixModules } from '@wix/sdk-react';
+import { ecom } from '@wix/ecom';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
-  const [searchParams, setSearchParams] = useSearchParams(); // Added setSearchParams to update URL
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const Navigation = useNavigation();
+  const { open: openMiniCart } = useMiniCartContext();
+  const { currentCart } = useWixModules(ecom);
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   
   // Swipe gestures state
   const [touchStart, setTouchStart] = useState(0);
@@ -68,31 +74,25 @@ export default function ProductDetailsPage() {
   }
 
   // --- HELPER: Determine Available Colors ---
-  // We check if the toy has a list of colors. If not, we try to split the single string or default.
   const getAvailableColors = () => {
     if (!toy) return [];
-    // Priority 1: If your DB has a specific array for colors (e.g. toy.colors)
     if (Array.isArray((toy as any).colors)) return (toy as any).colors;
     
-    // Priority 2: If 'color' is a comma-separated string (e.g. "Red, Blue, Green")
     if (typeof toy.color === 'string' && toy.color.includes(',')) {
       return toy.color.split(',').map(c => c.trim());
     }
 
-    // Priority 3: Single color
     if (toy.color) return [toy.color];
 
-    return []; // No color options available
+    return [];
   };
 
   const availableColors = getAvailableColors();
 
   // --- SMART IMAGE SELECTION ---
-  // If a color is in the URL, try to find an image that matches that color name
   useEffect(() => {
     if (toy && images.length > 0 && requestedColor) {
       const colorLower = requestedColor.toLowerCase().trim();
-      // Look for the color string inside the image URL/Filename
       const matchingIndex = images.findIndex(img => img.toLowerCase().includes(colorLower));
       
       if (matchingIndex !== -1) {
@@ -105,7 +105,6 @@ export default function ProductDetailsPage() {
 
   // --- HANDLER: Update Color in URL ---
   const handleColorSelect = (color: string) => {
-    // This updates the URL (e.g., ?color=Red) without reloading the page
     setSearchParams(prev => {
       prev.set('color', color);
       return prev;
@@ -116,7 +115,6 @@ export default function ProductDetailsPage() {
   const handleRazorpaySuccess = (response: any) => {
     console.log('Payment successful:', response);
     alert('Payment successful! Order ID: ' + response.razorpay_order_id);
-    // You can redirect to a success page or update order status here
   };
 
   const handleRazorpayError = (error: any) => {
@@ -131,17 +129,51 @@ export default function ProductDetailsPage() {
     const currentUrl = window.location.href;
     const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : 'Standard');
 
-    const message = `Hello! I am interested in buying this product:
-*${toy.name}*
-Price: Rs. ${toy.price || 'N/A'}
-Selected Color: ${displayColor}
-
-Link: ${currentUrl}
-
-Please provide availability details.`;
+    const message = `Hello! I am interested in buying this product:\n*${toy.name}*\nPrice: Rs. ${toy.price || 'N/A'}\nSelected Color: ${displayColor}\n\nLink: ${currentUrl}\n\nPlease provide availability details.`;
 
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
+  };
+
+  // --- HANDLER: Add to Cart (Wix Stores) ---
+  const handleAddToCart = async () => {
+    if (!toy || !currentCart) return;
+
+    setIsAddingToCart(true);
+    try {
+      const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : undefined);
+      
+      // Add item to Wix Stores cart
+      await currentCart.addToCart({
+        lineItems: [
+          {
+            catalogReference: {
+              appId: '215238eb-22a5-4c36-9e7b-e7c08025e04e', // Wix Stores app ID
+              catalogItemId: toyId,
+            },
+            quantity: 1,
+            ...(displayColor && {
+              options: {
+                selections: [
+                  {
+                    optionName: 'Color',
+                    choice: displayColor,
+                  },
+                ],
+              },
+            }),
+          },
+        ],
+      });
+
+      // Open mini cart to show the item was added
+      openMiniCart();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   // --- Navigation & Touch Logic ---
@@ -283,7 +315,7 @@ Please provide availability details.`;
                 </div>
               )}
 
-              {/* --- RESTORED COLOR OPTIONS SELECTOR --- */}
+              {/* Color Options Selector */}
               {availableColors.length > 0 && (
                 <div className="mb-6 md:mb-8">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-2 md:mb-3">Available Colors</p>
@@ -291,11 +323,10 @@ Please provide availability details.`;
                     {availableColors.map((color) => {
                        const isSelected = requestedColor === color || (!requestedColor && availableColors[0] === color);
                        
-                       // Simple function to guess a CSS color background from the name (fallback to gray)
                        const getBgColor = (c: string) => {
                           const lower = c.toLowerCase();
                           if (['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'black', 'white', 'gray'].includes(lower)) return lower;
-                          return 'gray'; // Fallback for complex names like "Midnight Blue"
+                          return 'gray';
                        };
 
                        return (
@@ -310,7 +341,6 @@ Please provide availability details.`;
                             }
                           `}
                         >
-                          {/* Optional: Small color dot */}
                           <span 
                             className="w-2 md:w-3 h-2 md:h-3 rounded-full border border-black/10" 
                             style={{ backgroundColor: getBgColor(color) }}
@@ -334,12 +364,14 @@ Please provide availability details.`;
               <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
                 {/* Add to Cart and Buy Now Buttons */}
                 <div className="flex gap-3">
-                  <Navigation
-                    route={`/cart?add=${toyId}`}
-                    className="flex-1 bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={isAddingToCart}
+                    className="flex-1 bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
                   >
-                    <ShoppingCart size={18} className="md:w-6 md:h-6" /> Add to Cart
-                  </Navigation>
+                    <ShoppingCart size={18} className="md:w-6 md:h-6" /> 
+                    {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                  </button>
                   <Navigation
                     route={`/cart?buy=${toyId}`}
                     className="flex-1 bg-secondary text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
