@@ -414,19 +414,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 5. Category Section Header (Separator between Best Sellers and Shop By Category)
-const CategorySectionHeader = () => {
-  return (
-    <section className="bg-white py-8 md:py-12 relative z-10 mt-0 pt-0">
-      <div className="max-w-[120rem] mx-auto px-6 m-0 p-0">
-        <div className="flex justify-between items-center">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
-          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
-        </div>
-      </div>
-    </section>
-  );
-};
+
 
 // 6. Shop By Category
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
@@ -485,7 +473,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   }
 
   return (
-    <section className="relative pt-8 md:pt-12 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+    <section className="relative pt-40 md:pt-56 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -506,6 +494,10 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
       </div>
 
       <div className="relative z-10 max-w-[120rem] mx-auto px-6">
+        <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-12 md:mb-16 flex justify-between items-center">
+          <span>Shop By Category</span>
+          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors text-lg md:text-xl">All Products</Link>
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
           {categories.map((cat, index) => (
             <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
@@ -630,14 +622,11 @@ export default function HomePage() {
       {/* 4. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 5. Category Section Header */}
-      <CategorySectionHeader />
-
-      {/* 6. Shop By Category */}
+      {/* 5. Shop By Category */}
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
-      <section id="videos" className="pt-0 pb-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
+      <section id="videos" className="pt-24 md:pt-32 pb-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden m-0 p-0">
         <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center m-0 p-0 pt-0">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4 m-0 p-0 pt-0">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8 m-0 p-0 pt-0">A peek into the fun world waiting for you at our store.</p>
