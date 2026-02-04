@@ -417,8 +417,8 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
 // 5. Category Section Header (Separator between Best Sellers and Shop By Category)
 const CategorySectionHeader = () => {
   return (
-    <section className="bg-white py-8 md:py-12 relative z-10">
-      <div className="max-w-[120rem] mx-auto px-6">
+    <section className="bg-white py-8 md:py-12 relative z-10 mt-0 pt-0">
+      <div className="max-w-[120rem] mx-auto px-6 m-0 p-0">
         <div className="flex justify-between items-center">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
           <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
@@ -637,8 +637,8 @@ export default function HomePage() {
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
-      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden">
-        <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center pt-8">
+      <section id="videos" className="py-24 bg-gradient-to-b from-white to-light-pink/20 relative overflow-hidden mt-0 pt-0">
+        <div className="max-w-[120rem] mx-auto mb-12 px-4 md:px-6 text-center pt-0">
             <h2 className="font-heading text-4xl md:text-5xl text-primary mb-4">See It In Action</h2>
             <p className="font-paragraph text-lg text-foreground max-w-2xl mx-auto mb-8">A peek into the fun world waiting for you at our store.</p>
             <a 
