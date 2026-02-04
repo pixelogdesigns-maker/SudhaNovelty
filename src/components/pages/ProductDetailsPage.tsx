@@ -104,10 +104,9 @@ export default function ProductDetailsPage() {
   // --- HANDLER: Update Color in URL ---
   const handleColorSelect = (color: string) => {
     // This updates the URL (e.g., ?color=Red) without reloading the page
-    setSearchParams(prev => {
-      prev.set('color', color);
-      return prev;
-    });
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('color', color);
+    setSearchParams(newParams);
   };
 
   // --- HANDLER: WhatsApp Click ---
