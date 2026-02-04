@@ -4,17 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check, ShoppingCart } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { useNavigation } from '@/components/NavigationContext';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
   const [searchParams, setSearchParams] = useSearchParams(); // Added setSearchParams to update URL
   const navigate = useNavigate();
+  const Navigation = useNavigation();
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -317,6 +319,23 @@ Please provide availability details.`;
               )}
 
               <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
+                {/* Add to Cart and Buy Now Buttons */}
+                <div className="flex gap-3">
+                  <Navigation
+                    route={`/cart?add=${toyId}`}
+                    className="flex-1 bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                  >
+                    <ShoppingCart size={18} className="md:w-6 md:h-6" /> Add to Cart
+                  </Navigation>
+                  <Navigation
+                    route={`/cart?buy=${toyId}`}
+                    className="flex-1 bg-secondary text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                  >
+                    Buy Now
+                  </Navigation>
+                </div>
+
+                {/* Order via WhatsApp - Secondary Button */}
                 <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
                   <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
                 </button>
