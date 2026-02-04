@@ -226,7 +226,7 @@ const ShopByAge = () => {
 
   return (
     // Reduced top/bottom padding on mobile to save space
-    <section className="relative pt-16 md:pt-28 pb-0 bg-[#DCD1F2] overflow-hidden font-sans">
+    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -356,7 +356,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   }
 
   return (
-    <section className="pt-24 pb-0 bg-[#FFF8F3] relative overflow-hidden min-h-[600px]">
+    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px]">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
