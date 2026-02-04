@@ -2,6 +2,8 @@ import { MemberProvider } from '@/integrations';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
+import { useLoaderData, createStaticRouter, StaticRouterProvider, type StaticHandlerContext } from 'react-router';
+import { useMemo } from 'react';
 
 // Import pages
 import HomePage from '@/components/pages/HomePage';
@@ -11,6 +13,9 @@ import ProductDetailsPage from '@/components/pages/ProductDetailsPage';
 import VisitStorePage from '@/components/pages/VisitStorePage';
 import ContactPage from '@/components/pages/ContactPage';
 import AdminPage from '@/components/pages/AdminPage';
+
+// Import WixServicesProvider from store router
+import { WixServicesProvider, rootRouteLoader } from '@/wix-verticals/react-pages/react-router/routes/root';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -25,8 +30,13 @@ function Layout() {
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <WixServicesProvider>
+        <Layout />
+      </WixServicesProvider>
+    ),
     errorElement: <ErrorPage />,
+    loader: rootRouteLoader,
     children: [
       {
         index: true,
