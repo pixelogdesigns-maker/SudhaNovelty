@@ -11,6 +11,7 @@ import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
 import { useNavigation } from '@/components/NavigationContext';
+import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -109,6 +110,18 @@ export default function ProductDetailsPage() {
       prev.set('color', color);
       return prev;
     });
+  };
+
+  // --- HANDLER: Razorpay Payment ---
+  const handleRazorpaySuccess = (response: any) => {
+    console.log('Payment successful:', response);
+    alert('Payment successful! Order ID: ' + response.razorpay_order_id);
+    // You can redirect to a success page or update order status here
+  };
+
+  const handleRazorpayError = (error: any) => {
+    console.error('Payment error:', error);
+    alert('Payment failed. Please try again.');
   };
 
   // --- HANDLER: WhatsApp Click ---
