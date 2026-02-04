@@ -13,8 +13,6 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 import { useNavigation } from '@/components/NavigationContext';
 import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
 import { useMiniCartContext } from '@/components/MiniCartContextProvider';
-import { useWixModules } from '@wix/sdk-react';
-import { ecom } from '@wix/ecom';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -22,7 +20,6 @@ export default function ProductDetailsPage() {
   const navigate = useNavigate();
   const Navigation = useNavigation();
   const { open: openMiniCart } = useMiniCartContext();
-  const { currentCart } = useWixModules(ecom);
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
@@ -135,41 +132,30 @@ export default function ProductDetailsPage() {
     window.open(whatsAppUrl, '_blank');
   };
 
-  // --- HANDLER: Add to Cart (Wix Stores) ---
+  // --- HANDLER: Add to Cart (Razorpay Checkout) ---
   const handleAddToCart = async () => {
-    if (!toy || !currentCart) return;
+    if (!toy) return;
 
     setIsAddingToCart(true);
     try {
       const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : undefined);
       
-      // Add item to Wix Stores cart
-      await currentCart.addToCart({
-        lineItems: [
-          {
-            catalogReference: {
-              appId: '215238eb-22a5-4c36-9e7b-e7c08025e04e', // Wix Stores app ID
-              catalogItemId: toyId,
-            },
-            quantity: 1,
-            ...(displayColor && {
-              options: {
-                selections: [
-                  {
-                    optionName: 'Color',
-                    choice: displayColor,
-                  },
-                ],
-              },
-            }),
-          },
-        ],
-      });
-
-      // Open mini cart to show the item was added
+      // Open Razorpay checkout with the toy details
+      const checkoutData = {
+        productId: toyId,
+        productName: toy.name,
+        price: toy.price || 0,
+        color: displayColor,
+        quantity: 1,
+      };
+      
+      // Store checkout data in session storage for the checkout component
+      sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+      
+      // Open mini cart or navigate to checkout
       openMiniCart();
     } catch (error) {
-      console.error('Error adding to cart:', error);
+      console.error('Error preparing cart:', error);
       alert('Failed to add item to cart. Please try again.');
     } finally {
       setIsAddingToCart(false);
