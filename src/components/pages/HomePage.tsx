@@ -338,7 +338,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
 
   if (toys.length === 0) {
     return (
-      <section className="py-24 bg-[#FFF8F3] overflow-hidden">
+      <section className="py-24 bg-[#FFF8F3] overflow-hidden min-h-[600px]">
          <div className="max-w-[120rem] mx-auto px-6">
             <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-12"></div>
             <div className="flex gap-6 overflow-hidden">
@@ -356,7 +356,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   }
 
   return (
-    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden">
+    <section className="py-24 bg-[#FFF8F3] relative overflow-hidden min-h-[600px] mt-0 pt-0">
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
       <div className="max-w-[120rem] mx-auto px-6 relative z-10">
         <div className="flex justify-between items-end mb-12">
@@ -442,7 +442,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
           </svg>
         </div>
 
-        <div className="relative z-10 max-w-[120rem] mx-auto px-6 py-20 md:py-32">
+        <div className="relative z-10 max-w-[120rem] mx-auto px-6">
            <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
               {[1,2,3,4,5,6].map(i => (
@@ -472,7 +472,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   }
 
   return (
-    <section className="relative bg-[#E0F7FF] overflow-hidden">
+    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
@@ -492,7 +492,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-[120rem] mx-auto px-6 py-20 md:py-32">
+      <div className="relative z-10 max-w-[120rem] mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
           <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
