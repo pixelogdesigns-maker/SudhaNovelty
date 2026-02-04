@@ -473,7 +473,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
   }
 
   return (
-    <section className="relative pt-40 md:pt-56 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
+    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
