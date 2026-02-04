@@ -116,7 +116,7 @@ export default function ProductDetails({
           </ProductDescription>
 
           {/* Product Options (if any) */}
-          {product?.variantsInfo?.variants && product.variantsInfo.variants.length > 0 && (
+          {product?.variantsInfo?.variants && product?.variantsInfo?.variants?.length > 0 && (
             <ProductVariants>
               <div className="space-y-6" data-testid="product-options">
                 <h3 className="text-lg font-semibold text-content-primary">
