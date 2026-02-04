@@ -414,9 +414,23 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   );
 };
 
-// 5. Shop By Category
+// 5. Category Section Header (Separator between Best Sellers and Shop By Category)
+const CategorySectionHeader = () => {
+  return (
+    <section className="bg-white py-8 md:py-12 relative z-10">
+      <div className="max-w-[120rem] mx-auto px-6">
+        <div className="flex justify-between items-center">
+          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
+          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 6. Shop By Category
 const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
-  const PREV_SECTION_BG = "#FFF8F3";
+  const PREV_SECTION_BG = "#FFFFFF";
   const NEXT_SECTION_BG = "#FFFFFF";
   const CATEGORY_BG = "#E0F7FF";
 
@@ -443,7 +457,6 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
         </div>
 
         <div className="relative z-10 max-w-[120rem] mx-auto px-6">
-           <div className="h-10 w-64 bg-gray-200 rounded-lg animate-pulse mb-16"></div>
            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
               {[1,2,3,4,5,6].map(i => (
                  <div key={i} className="flex flex-col items-center gap-5">
@@ -493,11 +506,6 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
       </div>
 
       <div className="relative z-10 max-w-[120rem] mx-auto px-6">
-        <div className="flex justify-between items-end mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl text-foreground">Shop By Category</h2>
-          <Link to="/toys" className="font-bold text-gray-500 hover:text-primary underline decoration-2 underline-offset-4 transition-colors">All Products</Link>
-        </div>
-
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
           {categories.map((cat, index) => (
             <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
@@ -622,7 +630,10 @@ export default function HomePage() {
       {/* 4. Best Sellers */}
       <BestSellers toys={toys} />
 
-      {/* 5. Shop By Category */}
+      {/* 5. Category Section Header */}
+      <CategorySectionHeader />
+
+      {/* 6. Shop By Category */}
       <ShopByCategory categories={categories} />
 
       {/* 6. Video Marquee Section */}
