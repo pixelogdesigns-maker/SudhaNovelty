@@ -4,12 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check, ShoppingCart } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { Product, ProductActionAddToCart, ProductActionBuyNow } from '@/components/ui/store/Product';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -316,11 +317,44 @@ Please provide availability details.`;
                 </div>
               )}
 
-              <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
-                <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
-                  <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
-                </button>
-              </div>
+              {/* eCommerce Action Buttons */}
+              <Product product={toy}>
+                <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
+                  <div className="flex gap-3 w-full">
+                    <ProductActionAddToCart
+                      label="Add to Cart"
+                      loadingState={
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Adding...
+                        </span>
+                      }
+                      className="flex-1"
+                    />
+                    <ProductActionBuyNow
+                      label="Buy Now"
+                      loadingState={
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Processing...
+                        </span>
+                      }
+                      className="flex-1"
+                    />
+                  </div>
+
+                  {/* WhatsApp Order Button - Secondary Action */}
+                  <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
+                    <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
+                  </button>
+                </div>
+              </Product>
 
               <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
                 <div className="bg-light-pink/30 rounded-lg md:rounded-xl p-3 md:p-4">
