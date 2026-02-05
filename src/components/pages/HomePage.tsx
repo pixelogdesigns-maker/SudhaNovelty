@@ -59,16 +59,15 @@ const MOBILE_HERO_SLIDES = [
   { id: 5, image: "https://static.wixstatic.com/media/b9ec8c_32347698fc164e3bbc315e012b3550a5~mv2.png" }
 ];
 
-// --- Modified Hero Carousel ---
-
 const HeroCarousel = () => {
-  const [index, setIndex] = useState(1); // Start at 1 because of the infinite loop clones
+  const [index, setIndex] = useState(1); // Start at index 1 due to infinite loop cloning
   const [isMobile, setIsMobile] = useState(false);
-  const trackRef = React.useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
   const SLIDE_DURATION = 4500;
   const TRANSITION_DURATION = 700;
 
-  // Handle Responsive Detection
+  // 1. Detect Screen Size for Responsive Images
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -76,30 +75,35 @@ const HeroCarousel = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Determine which slide set to use
+  // 2. Setup Slides based on device
   const activeSlides = isMobile ? MOBILE_HERO_SLIDES : HERO_SLIDES;
 
-  // Create infinite loop: [last, ...all slides, first]
+  // Create infinite loop array: [last, ...all slides, first]
   const displaySlides = [
     activeSlides[activeSlides.length - 1],
     ...activeSlides,
     activeSlides[0]
   ];
 
+  // 3. Auto-slide Effect
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => prev + 1);
     }, SLIDE_DURATION);
+
     return () => clearInterval(interval);
   }, [activeSlides.length]);
 
+  // 4. Handle Animation and Infinite Loop Jump
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
+    // Apply smooth transition
     track.style.transition = `transform ${TRANSITION_DURATION}ms ease-in-out`;
     track.style.transform = `translateX(-${index * 100}%)`;
 
+    // Loop back when reaching the cloned ends
     if (index === displaySlides.length - 1) {
       setTimeout(() => {
         track.style.transition = 'none';
@@ -119,45 +123,70 @@ const HeroCarousel = () => {
   const handleNext = () => setIndex((prev) => prev + 1);
 
   return (
-    <section className="relative w-full overflow-hidden bg-gray-100">
-      {/* CSS Aspect Ratio Optimization:
-          Mobile: aspect-[9/16] or similar to fit high-res vertical images
-          Desktop: aspect-[1300/390] as per original
+    <section className="relative w-full overflow-hidden bg-white">
+      {/* Container aspect ratio optimization:
+          Mobile uses your exact 1250/1406 ratio to prevent any cropping.
+          Desktop maintains the 1300/390 resolution.
       */}
-      <div className={`w-full ${isMobile ? 'aspect-[2/3] sm:aspect-[3/4]' : 'aspect-[2/1] sm:aspect-[16/9] md:aspect-[1300/390]'}`}>
+      <div
+        className="w-full relative"
+        style={{
+          aspectRatio: isMobile ? "1250 / 1406" : "1300 / 390",
+          minHeight: isMobile ? "auto" : "250px"
+        }}
+      >
         <div
           ref={trackRef}
           className="flex h-full w-full"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
           {displaySlides.map((slide, i) => (
-            <Link key={i} to="/toys" className="min-w-full h-full block">
+            <Link
+              key={`${slide.id}-${i}`}
+              to="/toys"
+              className="min-w-full h-full block"
+            >
               <Image
                 src={slide.image}
-                alt="Hero Slide"
-                width={isMobile ? 800 : 1300}
-                height={isMobile ? 1200 : 390}
+                alt="Sudha Novelties Hero"
+                width={isMobile ? 1250 : 1300}
+                height={isMobile ? 1406 : 390}
                 priority={i === 1}
-                className="w-full h-full object-cover"
+                // object-cover ensures it fills the calculated container perfectly
+                className="w-full h-full object-cover object-center"
               />
             </Link>
           ))}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - Styled for high visibility against busy backgrounds */}
         <button
-          onClick={handlePrev}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-black bg-white/20 backdrop-blur-sm text-black flex items-center justify-center"
+          onClick={(e) => { e.preventDefault(); handlePrev(); }}
+          className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/30 backdrop-blur-md border border-white/50 text-black shadow-lg flex items-center justify-center hover:bg-white/50 transition-all"
+          aria-label="Previous slide"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={24} />
         </button>
 
         <button
-          onClick={handleNext}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-black bg-white/20 backdrop-blur-sm text-black flex items-center justify-center"
+          onClick={(e) => { e.preventDefault(); handleNext(); }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/30 backdrop-blur-md border border-white/50 text-black shadow-lg flex items-center justify-center hover:bg-white/50 transition-all"
+          aria-label="Next slide"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={24} />
         </button>
+
+        {/* Optional: Slide Indicators (Dots) */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          {activeSlides.map((_, i) => (
+            <div
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                (index === i + 1) ? 'w-6 bg-primary' : 'w-2 bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
