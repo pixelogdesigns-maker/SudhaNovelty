@@ -124,26 +124,25 @@ const HeroCarousel = () => {
           Mobile: aspect-[9/16] or similar to fit high-res vertical images
           Desktop: aspect-[1300/390] as per original
       */}
-    <div className={`w-full ${isMobile ? 'aspect-[9/16]' : 'aspect-[1300/390]'}`}>
-  <div
-    ref={trackRef}
-    className="flex h-full w-full"
-    style={{ transform: `translateX(-${index * 100}%)` }}
-  >
-    {displaySlides.map((slide, i) => (
-      <Link key={i} to="/toys" className="min-w-full h-full block">
-        <Image
-          src={slide.image}
-          alt="Hero Slide"
-          // Use high-fidelity dimensions for the loader
-          width={isMobile ? 1080 : 1300}
-          height={isMobile ? 1920 : 390}
-          priority={i === 1}
-          className="w-full h-full object-cover object-center"
-        />
-      </Link>
-    ))}
-  </div>
+      <div className={`w-full ${isMobile ? 'aspect-[2/3] sm:aspect-[3/4]' : 'aspect-[2/1] sm:aspect-[16/9] md:aspect-[1300/390]'}`}>
+        <div
+          ref={trackRef}
+          className="flex h-full w-full"
+          style={{ transform: `translateX(-${index * 100}%)` }}
+        >
+          {displaySlides.map((slide, i) => (
+            <Link key={i} to="/toys" className="min-w-full h-full block">
+              <Image
+                src={slide.image}
+                alt="Hero Slide"
+                width={isMobile ? 800 : 1300}
+                height={isMobile ? 1200 : 390}
+                priority={i === 1}
+                className="w-full h-full object-cover"
+              />
+            </Link>
+          ))}
+        </div>
 
         {/* Navigation Arrows */}
         <button
