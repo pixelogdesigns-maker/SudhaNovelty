@@ -4,22 +4,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check, ShoppingCart } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { useNavigation } from '@/components/NavigationContext';
+import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
+import { useMiniCartContext } from '@/components/MiniCartContextProvider';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
-  const [searchParams, setSearchParams] = useSearchParams(); // Added setSearchParams to update URL
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const Navigation = useNavigation();
+  const { open: openMiniCart } = useMiniCartContext();
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   
   // Swipe gestures state
   const [touchStart, setTouchStart] = useState(0);
@@ -40,8 +46,8 @@ export default function ProductDetailsPage() {
         if (storeItems && storeItems.length > 0) {
           setStoreInfo(storeItems[0]);
         }
-      } catch (error) {
-        console.error('Error fetching product details:', error);
+      } catch {
+        // Error fetching product - show not found
       } finally {
         setIsLoading(false);
       }
@@ -65,31 +71,25 @@ export default function ProductDetailsPage() {
   }
 
   // --- HELPER: Determine Available Colors ---
-  // We check if the toy has a list of colors. If not, we try to split the single string or default.
   const getAvailableColors = () => {
     if (!toy) return [];
-    // Priority 1: If your DB has a specific array for colors (e.g. toy.colors)
     if (Array.isArray((toy as any).colors)) return (toy as any).colors;
     
-    // Priority 2: If 'color' is a comma-separated string (e.g. "Red, Blue, Green")
     if (typeof toy.color === 'string' && toy.color.includes(',')) {
       return toy.color.split(',').map(c => c.trim());
     }
 
-    // Priority 3: Single color
     if (toy.color) return [toy.color];
 
-    return []; // No color options available
+    return [];
   };
 
   const availableColors = getAvailableColors();
 
   // --- SMART IMAGE SELECTION ---
-  // If a color is in the URL, try to find an image that matches that color name
   useEffect(() => {
     if (toy && images.length > 0 && requestedColor) {
       const colorLower = requestedColor.toLowerCase().trim();
-      // Look for the color string inside the image URL/Filename
       const matchingIndex = images.findIndex(img => img.toLowerCase().includes(colorLower));
       
       if (matchingIndex !== -1) {
@@ -102,11 +102,19 @@ export default function ProductDetailsPage() {
 
   // --- HANDLER: Update Color in URL ---
   const handleColorSelect = (color: string) => {
-    // This updates the URL (e.g., ?color=Red) without reloading the page
     setSearchParams(prev => {
       prev.set('color', color);
       return prev;
     });
+  };
+
+  // --- HANDLER: Razorpay Payment ---
+  const handleRazorpaySuccess = (response: any) => {
+    alert('Payment successful! Order ID: ' + response.razorpay_order_id);
+  };
+
+  const handleRazorpayError = () => {
+    alert('Payment failed. Please try again.');
   };
 
   // --- HANDLER: WhatsApp Click ---
@@ -116,17 +124,39 @@ export default function ProductDetailsPage() {
     const currentUrl = window.location.href;
     const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : 'Standard');
 
-    const message = `Hello! I am interested in buying this product:
-*${toy.name}*
-Price: Rs. ${toy.price || 'N/A'}
-Selected Color: ${displayColor}
-
-Link: ${currentUrl}
-
-Please provide availability details.`;
+    const message = `Hello! I am interested in buying this product:\n*${toy.name}*\nPrice: Rs. ${toy.price || 'N/A'}\nSelected Color: ${displayColor}\n\nLink: ${currentUrl}\n\nPlease provide availability details.`;
 
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
+  };
+
+  // --- HANDLER: Add to Cart (Razorpay Checkout) ---
+  const handleAddToCart = async () => {
+    if (!toy) return;
+
+    setIsAddingToCart(true);
+    try {
+      const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : undefined);
+      
+      // Open Razorpay checkout with the toy details
+      const checkoutData = {
+        productId: toyId,
+        productName: toy.name,
+        price: toy.price || 0,
+        color: displayColor,
+        quantity: 1,
+      };
+      
+      // Store checkout data in session storage for the checkout component
+      sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+      
+      // Open mini cart or navigate to checkout
+      openMiniCart();
+    } catch {
+      alert('Failed to add item to cart. Please try again.');
+    } finally {
+      setIsAddingToCart(false);
+    }
   };
 
   // --- Navigation & Touch Logic ---
@@ -268,7 +298,7 @@ Please provide availability details.`;
                 </div>
               )}
 
-              {/* --- RESTORED COLOR OPTIONS SELECTOR --- */}
+              {/* Color Options Selector */}
               {availableColors.length > 0 && (
                 <div className="mb-6 md:mb-8">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-2 md:mb-3">Available Colors</p>
@@ -276,11 +306,10 @@ Please provide availability details.`;
                     {availableColors.map((color) => {
                        const isSelected = requestedColor === color || (!requestedColor && availableColors[0] === color);
                        
-                       // Simple function to guess a CSS color background from the name (fallback to gray)
                        const getBgColor = (c: string) => {
                           const lower = c.toLowerCase();
                           if (['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'black', 'white', 'gray'].includes(lower)) return lower;
-                          return 'gray'; // Fallback for complex names like "Midnight Blue"
+                          return 'gray';
                        };
 
                        return (
@@ -295,7 +324,6 @@ Please provide availability details.`;
                             }
                           `}
                         >
-                          {/* Optional: Small color dot */}
                           <span 
                             className="w-2 md:w-3 h-2 md:h-3 rounded-full border border-black/10" 
                             style={{ backgroundColor: getBgColor(color) }}
@@ -317,6 +345,25 @@ Please provide availability details.`;
               )}
 
               <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
+                {/* Add to Cart and Buy Now Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleAddToCart}
+                    disabled={isAddingToCart}
+                    className="flex-1 bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                  >
+                    <ShoppingCart size={18} className="md:w-6 md:h-6" /> 
+                    {isAddingToCart ? 'Adding...' : 'Add to Cart'}
+                  </button>
+                  <Navigation
+                    route={`/cart?buy=${toyId}`}
+                    className="flex-1 bg-secondary text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                  >
+                    Buy Now
+                  </Navigation>
+                </div>
+
+                {/* Order via WhatsApp - Secondary Button */}
                 <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
                   <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
                 </button>

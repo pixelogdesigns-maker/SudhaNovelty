@@ -14,8 +14,8 @@ export default function Footer() {
         if (items && items.length > 0) {
           setStoreInfo(items[0]);
         }
-      } catch (error) {
-        console.error('Error fetching store information:', error);
+      } catch {
+        // Error fetching store info - use defaults
       }
     };
     fetchStoreInfo();
@@ -114,9 +114,7 @@ export default function Footer() {
 
         {/* Bottom Section */}
         <div className="mt-12 pt-8 border-t border-primary/20">
-          <p className="font-paragraph text-base text-center text-foreground">
-            Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy! 💝
-          </p>
+          <p className="font-paragraph text-base text-center text-foreground">Thank you for trusting us with your child's happiness. We're here to help you find the perfect toy ! 💝</p>
           <p className="font-paragraph text-sm text-center text-foreground/70 mt-4">
             © {new Date().getFullYear()} {storeInfo?.storeName || 'Sudha Novelties'}. All rights reserved.
           </p>

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
 import { Toys, ToyCategories, StoreInformation } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check, Loader2 } from 'lucide-react'; // Added Loader2
+import { MessageCircle, Filter, ChevronDown, Check, Loader2 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -23,10 +23,8 @@ export default function ToysPage() {
   const [filteredToys, setFilteredToys] = useState<Toys[]>([]);
   const [isAgeDropdownOpen, setIsAgeDropdownOpen] = useState(false);
   
-  // FIX: Added loading state to prevent flash of empty content
   const [isLoading, setIsLoading] = useState(true);
 
-  // Define age groups for filtering
   const ageGroups = [
     { id: '0-2', label: '0-2 Years', minAge: 0, maxAge: 2 },
     { id: '3-5', label: '3-5 Years', minAge: 3, maxAge: 5 },
@@ -35,7 +33,6 @@ export default function ToysPage() {
     { id: '13+', label: '13+ Years', minAge: 13, maxAge: 100 },
   ];
 
-  // --- Helper to update URL params ---
   const updateUrlParams = (key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value === 'all') {
@@ -68,17 +65,15 @@ export default function ToysPage() {
         if (storeItems && storeItems.length > 0) {
           setStoreInfo(storeItems[0]);
         }
-      } catch (error) {
-        console.error("Failed to load toys", error);
+      } catch {
+        // Error loading toys - show empty state
       } finally {
-        // FIX: Only stop loading after data fetch is complete (success or fail)
         setIsLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  // Sync State with URL Params on mount only
   useEffect(() => {
     const categoryParam = searchParams.get('category');
     if (categoryParam) setSelectedCategory(decodeURIComponent(categoryParam));
@@ -87,7 +82,6 @@ export default function ToysPage() {
     if (ageParam) setSelectedAgeGroup(ageParam);
   }, []);
 
-  // --- Helper: Age Group Logic ---
   const matchesAgeGroup = (toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
 
@@ -123,11 +117,9 @@ export default function ToysPage() {
     return true;
   };
 
-  // --- FILTERING LOGIC ---
   useEffect(() => {
     let filtered = toys;
 
-    // 1. Apply Category Filter
     if (selectedCategory !== 'all') {
       const targetCategory = selectedCategory.trim().toLowerCase();
       filtered = filtered.filter(toy => {
@@ -136,13 +128,11 @@ export default function ToysPage() {
       });
     }
 
-    // 2. Apply Age Group Filter
     filtered = filtered.filter(matchesAgeGroup);
 
     setFilteredToys(filtered);
   }, [selectedCategory, selectedAgeGroup, toys]);
 
-  // --- WhatsApp Handler ---
   const handleWhatsAppClick = (toy?: Toys) => {
     let message = '';
     if (toy) {
@@ -166,7 +156,6 @@ export default function ToysPage() {
       <Header />
       <WhatsAppFloatingButton />
       
-      {/* Hero Section */}
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-8 md:py-16">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
@@ -185,12 +174,10 @@ export default function ToysPage() {
         </div>
       </section>
 
-      {/* Filter Section */}
       <section className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-100 py-3 md:py-4 shadow-sm transition-all">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row gap-3 md:gap-4 items-center justify-between">
 
-            {/* Left: Category Pills */}
             <div className="w-full md:w-auto overflow-hidden">
               <div className="flex items-center gap-2 md:gap-3 overflow-x-auto pb-2 md:pb-0 scrollbar-hide mask-fade-right">
                 <span className="flex-shrink-0 text-gray-400 font-medium text-xs md:text-sm flex items-center gap-1 mr-1 md:mr-2">
@@ -232,7 +219,6 @@ export default function ToysPage() {
               </div>
             </div>
 
-            {/* Right: Age Filter Dropdown */}
             <div className="flex gap-2 md:gap-3 w-full md:w-auto">
               <div className="relative z-50 flex-1 md:flex-none">
                 {isAgeDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsAgeDropdownOpen(false)} />}
@@ -272,11 +258,9 @@ export default function ToysPage() {
         </div>
       </section>
 
-      {/* Products Grid */}
       <section className="py-8 md:py-16 bg-white min-h-[50vh]">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           
-          {/* FIX: Handle Loading State Explicitly */}
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-20 space-y-4">
               <Loader2 className="w-10 h-10 text-primary animate-spin" />
@@ -374,7 +358,6 @@ export default function ToysPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-16 bg-gradient-to-br from-light-pink to-white">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
