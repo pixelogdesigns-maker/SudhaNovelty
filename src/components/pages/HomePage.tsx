@@ -1,18 +1,18 @@
 // HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
-import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
-import { SEOHelmet } from '@/components/SEOHelmet';
-import { Image } from '@/components/ui/image';
-import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
-import { StoreInformation, ToyCategories, Toys } from '@/entities';
-import { BaseCrudService } from '@/integrations';
-import {
-  ChevronLeft, ChevronRight,
-  Instagram,
-  Sparkles
-} from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BaseCrudService } from '@/integrations';
+import { StoreInformation, Toys, ToyCategories } from '@/entities';
+import { Image } from '@/components/ui/image';
+import {
+  Star, ShoppingBag, ChevronLeft, ChevronRight,
+  Heart, Sparkles, ArrowRight, Instagram
+} from 'lucide-react';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { SEOHelmet } from '@/components/SEOHelmet';
 
 // --- Types ---
 interface Product {
@@ -39,122 +39,131 @@ const VIDEO_REELS: VideoReel[] = [
   { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001' },
   { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
 ];
-// --- Updated Data Configuration ---
+// --- Data Configuration ---
 
+// UPDATED: New 1300x190 Resolution Images
 const HERO_SLIDES = [
-  { id: 1, title: "Adventure Ride", image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" },
-  { id: 2, title: "Fun and Thrills", image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" },
-  { id: 3, title: "Ride into Fun", image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" },
-  { id: 4, title: "Kids Toys", image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" }
+  {
+    id: 1,
+    title: "Adventure Ride",
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png"
+  },
+  {
+    id: 2,
+    title: "Fun and Thrills",
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png"
+  },
+  {
+    id: 3,
+    title: "Ride into Fun",
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png"
+  },
+  {
+    id: 4,
+    title: "Kids Toys",
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png"
+  }
 ];
 
-// NEW: Mobile specific images
-const MOBILE_HERO_SLIDES = [
-  { id: 1, image: "https://static.wixstatic.com/media/b9ec8c_9a7b30dd8f464616b3ecee1b90cc586c~mv2.png" },
-  { id: 2, image: "https://static.wixstatic.com/media/b9ec8c_55eb79cc79b74508a0881287cb811e59~mv2.png" },
-  { id: 3, image: "https://static.wixstatic.com/media/b9ec8c_8460879fc0c84f038e0fa1444a61b1cd~mv2.png" },
-  { id: 4, image: "https://static.wixstatic.com/media/b9ec8c_589da27448cb46cfbc9a8632a26da300~mv2.png" },
-  { id: 5, image: "https://static.wixstatic.com/media/b9ec8c_32347698fc164e3bbc315e012b3550a5~mv2.png" }
-];
 
-// --- Modified Hero Carousel ---
+const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 
+// --- Sub-Components ---
+
+// 1. Hero Carousel (Smooth Continuous Slide Animation with Infinite Loop)
 const HeroCarousel = () => {
-  const [index, setIndex] = useState(1); // Start at 1 because of the infinite loop clones
-  const [isMobile, setIsMobile] = useState(false);
+  const [index, setIndex] = useState(0);
   const trackRef = React.useRef<HTMLDivElement>(null);
-  const SLIDE_DURATION = 4500;
-  const TRANSITION_DURATION = 700;
-
-  // Handle Responsive Detection
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Determine which slide set to use
-  const activeSlides = isMobile ? MOBILE_HERO_SLIDES : HERO_SLIDES;
+  const SLIDE_DURATION = 4500; // ms
+  const TRANSITION_DURATION = 700; // ms
 
   // Create infinite loop: [last, ...all slides, first]
-  const displaySlides = [
-    activeSlides[activeSlides.length - 1],
-    ...activeSlides,
-    activeSlides[0]
-  ];
+  const slides = [HERO_SLIDES[HERO_SLIDES.length - 1], ...HERO_SLIDES, HERO_SLIDES[0]];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => prev + 1);
     }, SLIDE_DURATION);
+
     return () => clearInterval(interval);
-  }, [activeSlides.length]);
+  }, []);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
 
+    // Apply transition for normal slides
     track.style.transition = `transform ${TRANSITION_DURATION}ms ease-in-out`;
     track.style.transform = `translateX(-${index * 100}%)`;
 
-    if (index === displaySlides.length - 1) {
+    // When reaching the last cloned slide (which is the first slide), loop back
+    if (index === slides.length - 1) {
       setTimeout(() => {
         track.style.transition = 'none';
-        track.style.transform = `translateX(-100%)`;
+        track.style.transform = `translateX(-${1 * 100}%)`; // Jump to first real slide
         setIndex(1);
       }, TRANSITION_DURATION);
-    } else if (index === 0) {
+    }
+    // When going backwards past the first cloned slide, jump to last real slide
+    else if (index === 0) {
       setTimeout(() => {
         track.style.transition = 'none';
-        track.style.transform = `translateX(-${(displaySlides.length - 2) * 100}%)`;
-        setIndex(displaySlides.length - 2);
+        track.style.transform = `translateX(-${(slides.length - 2) * 100}%)`; // Jump to last real slide
+        setIndex(slides.length - 2);
       }, TRANSITION_DURATION);
     }
-  }, [index, displaySlides.length]);
+  }, [index, slides.length]);
 
-  const handlePrev = () => setIndex((prev) => prev - 1);
-  const handleNext = () => setIndex((prev) => prev + 1);
+  const handlePrev = () => {
+    setIndex((prev) => prev - 1);
+  };
+
+  const handleNext = () => {
+    setIndex((prev) => prev + 1);
+  };
 
   return (
     <section className="relative w-full overflow-hidden bg-gray-100">
-      {/* CSS Aspect Ratio Optimization:
-          Mobile: aspect-[9/16] or similar to fit high-res vertical images
-          Desktop: aspect-[1300/390] as per original
-      */}
-      <div className={`w-full ${isMobile ? 'aspect-[2/3] sm:aspect-[3/4]' : 'aspect-[2/1] sm:aspect-[16/9] md:aspect-[1300/390]'}`}>
+      {/* Aspect ratio wrapper - optimized for mobile */}
+      <div className="w-full aspect-[2/1] sm:aspect-[16/9] md:aspect-[1300/390]">
         <div
           ref={trackRef}
           className="flex h-full w-full"
           style={{ transform: `translateX(-${index * 100}%)` }}
         >
-          {displaySlides.map((slide, i) => (
-            <Link key={i} to="/toys" className="min-w-full h-full block">
+          {slides.map((slide, i) => (
+            <Link
+              key={i}
+              to="/toys"
+              className="min-w-full h-full block"
+            >
               <Image
                 src={slide.image}
-                alt="Hero Slide"
-                width={isMobile ? 800 : 1300}
-                height={isMobile ? 1200 : 390}
-                priority={i === 1}
+                alt={slide.title}
+                width={1300}
+                height={390}
+                priority={i === 0 || i === 1}
                 className="w-full h-full object-cover"
               />
             </Link>
           ))}
         </div>
 
-        {/* Navigation Arrows */}
+        {/* Navigation Arrows - Minimal UI Design */}
         <button
           onClick={handlePrev}
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-black bg-white/20 backdrop-blur-sm text-black flex items-center justify-center"
+          className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
+          aria-label="Previous slide"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={20} className="sm:w-6 sm:h-6 md:w-6 md:h-6 w-4 h-4" />
         </button>
 
         <button
           onClick={handleNext}
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border-2 border-black bg-white/20 backdrop-blur-sm text-black flex items-center justify-center"
+          className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
+          aria-label="Next slide"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={20} className="sm:w-6 sm:h-6 md:w-6 md:h-6 w-4 h-4" />
         </button>
       </div>
     </section>
