@@ -1,18 +1,17 @@
 // HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService } from '@/integrations';
-import { StoreInformation, Toys, ToyCategories } from '@/entities';
-import { Image } from '@/components/ui/image';
-import { 
-  Star, ShoppingBag, ChevronLeft, ChevronRight, 
-  Heart, Sparkles, ArrowRight 
-} from 'lucide-react';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import Header from '@/components/layout/Header';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { Image } from '@/components/ui/image';
+import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { StoreInformation, ToyCategories, Toys } from '@/entities';
+import { BaseCrudService } from '@/integrations';
+import {
+  ChevronLeft, ChevronRight,
+  Sparkles
+} from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // --- Types ---
 interface Product {
@@ -34,26 +33,56 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-const HERO_SLIDES = [
-  { 
-    id: 1, 
-    title: "Adventure Ride", 
-    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png" 
+// Desktop/Tablet Images (UNCHANGED)
+const HERO_SLIDES_DESKTOP = [
+  {
+    id: 1,
+    title: "Adventure Ride",
+    image: "https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png"
   },
-  { 
-    id: 2, 
-    title: "Fun and Thrills", 
-    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png" 
+  {
+    id: 2,
+    title: "Fun and Thrills",
+    image: "https://static.wixstatic.com/media/b9ec8c_5135147e7c924949868e6784a8ec2b0b~mv2.png"
   },
-  { 
-    id: 3, 
-    title: "Ride into Fun", 
-    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png" 
+  {
+    id: 3,
+    title: "Ride into Fun",
+    image: "https://static.wixstatic.com/media/b9ec8c_437473a0153547498fa1a693aef4ce42~mv2.png"
   },
-  { 
-    id: 4, 
-    title: "Kids Toys", 
-    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png" 
+  {
+    id: 4,
+    title: "Kids Toys",
+    image: "https://static.wixstatic.com/media/b9ec8c_51a19e64d35b496b97f0804f5445f7ee~mv2.png"
+  }
+];
+
+// Mobile-only Images (UPDATED WITH YOUR NEW LINKS)
+const HERO_SLIDES_MOBILE = [
+  {
+    id: 1,
+    title: "Mobile Slide 1",
+    image: "https://static.wixstatic.com/media/b9ec8c_9a7b30dd8f464616b3ecee1b90cc586c~mv2.png"
+  },
+  {
+    id: 2,
+    title: "Mobile Slide 2",
+    image: "https://static.wixstatic.com/media/b9ec8c_55eb79cc79b74508a0881287cb811e59~mv2.png"
+  },
+  {
+    id: 3,
+    title: "Mobile Slide 3",
+    image: "https://static.wixstatic.com/media/b9ec8c_8460879fc0c84f038e0fa1444a61b1cd~mv2.png"
+  },
+  {
+    id: 4,
+    title: "Mobile Slide 4",
+    image: "https://static.wixstatic.com/media/b9ec8c_589da27448cb46cfbc9a8632a26da300~mv2.png"
+  },
+  {
+    id: 5,
+    title: "Mobile Slide 5",
+    image: "https://static.wixstatic.com/media/b9ec8c_32347698fc164e3bbc315e012b3550a5~mv2.png"
   }
 ];
 
@@ -69,12 +98,28 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 
 // --- Sub-Components ---
 
-// 1. Hero Carousel (Smooth Continuous Slide Animation with Infinite Loop)
+// 1. Hero Carousel (Updated Logic for Mobile Swapping)
 const HeroCarousel = () => {
   const [index, setIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const SLIDE_DURATION = 4500; // ms
   const TRANSITION_DURATION = 700; // ms
+
+  // Detect mobile view on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      // If screen is smaller than 768px (tablet breakpoint), use mobile images
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // AUTOMATIC SWAP: This line checks 'isMobile'.
+  // If true, it uses your NEW mobile links. If false, it uses the desktop links.
+  const HERO_SLIDES = isMobile ? HERO_SLIDES_MOBILE : HERO_SLIDES_DESKTOP;
 
   // Create infinite loop: [last, ...all slides, first]
   const slides = [HERO_SLIDES[HERO_SLIDES.length - 1], ...HERO_SLIDES, HERO_SLIDES[0]];
@@ -182,14 +227,14 @@ const TextMarquee = () => {
       <div className="flex w-max animate-marquee-fast hover:[animation-play-state:paused]">
         {[...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, index) => (
           // Reduced margin from mx-4 to mx-2 on mobile
-          (<div key={index} className="flex items-center mx-2 md:mx-4">
+          <div key={index} className="flex items-center mx-2 md:mx-4">
             {/* Reduced text size from text-sm to text-xs on mobile */}
             <span className="text-white font-bold text-xs md:text-base tracking-widest uppercase">
               {item}
             </span>
             {/* Reduced separator spacing */}
             <span className="text-white/60 mx-2 md:mx-4">•</span>
-          </div>)
+          </div>
         ))}
       </div>
       <style>{`
@@ -204,9 +249,9 @@ const TextMarquee = () => {
 // 3. Shop By Age (Mobile Optimized: 3 Columns)
 const ShopByAge = () => {
   const getAgeGroupId = (range: string) => {
-    const ageMap: { [key: string]: string } = { 
-      '0-1': '0-2', '1-3': '3-5', '3-5': '3-5', 
-      '5-8': '6-8', '8-12': '9-12', '12+': '13+' 
+    const ageMap: { [key: string]: string } = {
+      '0-1': '0-2', '1-3': '3-5', '3-5': '3-5',
+      '5-8': '6-8', '8-12': '9-12', '12+': '13+'
     };
     return ageMap[range] || range;
   };
@@ -220,25 +265,25 @@ const ShopByAge = () => {
     { label: "YEARS", range: "12+", color: "bg-[#FDBA74]", icon: "🎮" },
   ];
 
-  const NEXT_SECTION_BG = "#FFF8F3"; 
-  const PREV_SECTION_BG = "#FFFFFF"; 
+  const NEXT_SECTION_BG = "#FFF8F3";
+  const PREV_SECTION_BG = "#FFFFFF";
 
   return (
     // Reduced top/bottom padding on mobile to save space
     <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
-        <svg 
-          viewBox="0 0 1200 50" 
-          preserveAspectRatio="none" 
+        <svg
+          viewBox="0 0 1200 50"
+          preserveAspectRatio="none"
           className="relative block w-full h-[30px] md:h-[50px]"
           style={{ transform: 'scaleY(-1)' }}
         >
-          <path 
-            d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
-            fill={PREV_SECTION_BG} 
+          <path
+            d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z"
+            fill={PREV_SECTION_BG}
           ></path>
-           <path 
+           <path
              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
              fill={PREV_SECTION_BG}
           />
@@ -248,29 +293,29 @@ const ShopByAge = () => {
         <div className="text-center mb-10 md:mb-16">
           <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">Shop By Age</h2>
           <p className="text-[#5A4685] font-medium tracking-wide text-sm md:text-base">
-             Curated collections for every little milestone.
+              Curated collections for every little milestone.
           </p>
         </div>
 
-        {/* MOBILE OPTIMIZATION: 
+        {/* MOBILE OPTIMIZATION:
             Changed grid-cols-2 to grid-cols-3 for mobile.
             This puts 3 items per row, reducing the total rows from 3 to 2.
         */}
         <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-3 md:gap-x-6 gap-y-8 md:gap-y-12">
           {AGE_GROUPS.map((group, index) => (
-            <Link 
-              key={index} 
-              to={`/toys?age=${getAgeGroupId(group.range)}`} 
+            <Link
+              key={index}
+              to={`/toys?age=${getAgeGroupId(group.range)}`}
               className="group flex flex-col items-center cursor-pointer"
             >
-              {/* SIZING OPTIMIZATION: 
+              {/* SIZING OPTIMIZATION:
                   Reduced mobile size to w-20 h-20 (80px) to fit 3 in a row.
                   Desktop stays spacious at w-44 h-44.
               */}
               <div className={`
-                relative w-20 h-20 sm:w-28 sm:h-28 md:w-44 md:h-44 rounded-full 
-                ${group.color} 
-                flex flex-col items-center justify-center 
+                relative w-20 h-20 sm:w-28 sm:h-28 md:w-44 md:h-44 rounded-full
+                ${group.color}
+                flex flex-col items-center justify-center
                 shadow-lg border-[3px] md:border-[4px] border-white
                 transition-all duration-300 ease-out
                 group-hover:scale-110 group-hover:shadow-xl
@@ -296,14 +341,14 @@ const ShopByAge = () => {
       </div>
       {/* Bottom Brush Stroke */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
-        <svg 
-          viewBox="0 0 1200 50" 
-          preserveAspectRatio="none" 
+        <svg
+          viewBox="0 0 1200 50"
+          preserveAspectRatio="none"
           className="relative block w-full h-[30px] md:h-[50px]"
         >
-          <path 
-            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
-            fill={NEXT_SECTION_BG} 
+          <path
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
+            fill={NEXT_SECTION_BG}
           ></path>
         </svg>
       </div>
@@ -318,22 +363,22 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollContainerRef = useCallback((node: HTMLDivElement | null) => {
     if (!node) return;
-    
+
     const handleScroll = () => {
       const { scrollLeft, scrollWidth, clientWidth } = node;
       setScrollPosition(scrollLeft);
       setCanScrollPrev(scrollLeft > 0);
       setCanScrollNext(scrollLeft < scrollWidth - clientWidth - 10);
     };
-    
+
     node.addEventListener('scroll', handleScroll);
     handleScroll();
     return () => node.removeEventListener('scroll', handleScroll);
   }, []);
 
   const bestSellers = toys
-    .filter((toy: any) => toy.isBestSellingNow) 
-    .slice(0, 4); 
+    .filter((toy: any) => toy.isBestSellingNow)
+    .slice(0, 4);
 
   if (toys.length === 0) {
     return (
@@ -351,7 +396,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   }
 
   if (bestSellers.length === 0) {
-    return null; 
+    return null;
   }
 
   return (
@@ -424,20 +469,20 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
       <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
         {/* Top Brush Stroke */}
         <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
-          <svg 
-            viewBox="0 0 1200 50" 
-            preserveAspectRatio="none" 
+          <svg
+            viewBox="0 0 1200 50"
+            preserveAspectRatio="none"
             className="relative block w-full h-[30px] md:h-[50px]"
             style={{ transform: 'scaleY(-1)' }}
           >
-            <path 
-              d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
-              fill={PREV_SECTION_BG} 
+            <path
+              d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z"
+              fill={PREV_SECTION_BG}
             ></path>
-             <path 
+             <path
               d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
               fill={PREV_SECTION_BG}
-           />
+            />
           </svg>
         </div>
 
@@ -455,14 +500,14 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 
         {/* Bottom Brush Stroke */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
-          <svg 
-            viewBox="0 0 1200 50" 
-            preserveAspectRatio="none" 
+          <svg
+            viewBox="0 0 1200 50"
+            preserveAspectRatio="none"
             className="relative block w-full h-[30px] md:h-[50px]"
           >
-            <path 
-              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
-              fill={NEXT_SECTION_BG} 
+            <path
+              d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
+              fill={NEXT_SECTION_BG}
             ></path>
           </svg>
         </div>
@@ -474,20 +519,20 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
     <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#E0F7FF] overflow-hidden min-h-[500px]">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
-        <svg 
-          viewBox="0 0 1200 50" 
-          preserveAspectRatio="none" 
+        <svg
+          viewBox="0 0 1200 50"
+          preserveAspectRatio="none"
           className="relative block w-full h-[30px] md:h-[50px]"
           style={{ transform: 'scaleY(-1)' }}
         >
-          <path 
-            d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z" 
-            fill={PREV_SECTION_BG} 
+          <path
+            d="M0,0 C150,15 250,5 400,12 C550,20 650,5 800,10 C950,15 1050,0 1200,5 V50 H0 V0 Z"
+            fill={PREV_SECTION_BG}
           ></path>
-           <path 
+           <path
             d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
             fill={PREV_SECTION_BG}
-         />
+          />
         </svg>
       </div>
 
@@ -501,7 +546,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
           {categories.map((cat, index) => (
             <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
               <div className={`
-                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]} 
+                relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
                 flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
                 border-[3px] md:border-[4px] border-white
               `}>
@@ -524,14 +569,14 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 
       {/* Bottom Brush Stroke */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] z-10">
-        <svg 
-          viewBox="0 0 1200 50" 
-          preserveAspectRatio="none" 
+        <svg
+          viewBox="0 0 1200 50"
+          preserveAspectRatio="none"
           className="relative block w-full h-[30px] md:h-[50px]"
         >
-          <path 
-            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
-            fill={NEXT_SECTION_BG} 
+          <path
+            d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z"
+            fill={NEXT_SECTION_BG}
           ></path>
         </svg>
       </div>
@@ -557,12 +602,12 @@ const MarqueeVideo = ({ video }: { video: VideoReel }) => {
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
       <video
         ref={videoRef}
-        src={video.videoUrl} 
+        src={video.videoUrl}
         poster={video.thumbnailUrl}
         autoPlay
         loop
         muted
-        playsInline 
+        playsInline
         className="w-full h-full object-cover pointer-events-none"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
@@ -582,7 +627,7 @@ export default function HomePage() {
       try {
         const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
         if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
-        
+
         const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
         if (toyItems) setToys(toyItems);
 
@@ -599,7 +644,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white font-paragraph selection:bg-primary selection:text-white overflow-x-clip">
-      <SEOHelmet 
+      <SEOHelmet
         title="Sudha Novelties - Premium Toys & Novelties Store | Best Toys for All Ages"
         description="Discover premium toys and novelties at Sudha Novelties. Shop quality toys for kids of all ages with fast delivery. Visit our store or shop online today!"
         keywords="toys store, premium toys, toys for kids, novelties, best sellers, toy shop"
@@ -608,13 +653,13 @@ export default function HomePage() {
       />
       <Header />
       <WhatsAppFloatingButton />
-      
+
       {/* 1. Hero Carousel */}
       <HeroCarousel />
-      
+
       {/* 2. Text Marquee */}
       <TextMarquee />
-      
+
       {/* 3. Shop By Age */}
       <ShopByAge />
 
