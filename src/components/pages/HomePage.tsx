@@ -11,7 +11,7 @@ import {
   Instagram,
   Sparkles
 } from 'lucide-react';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // --- Types ---
