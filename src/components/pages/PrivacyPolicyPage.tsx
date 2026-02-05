@@ -12,9 +12,7 @@ export default function PrivacyPolicyPage() {
           <div className="prose prose-lg max-w-none space-y-6">
             <section>
               <h2 className="font-heading text-2xl text-foreground mb-4">Introduction</h2>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                Sudha Novelties ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.
-              </p>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">Sudha Novelties is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website.</p>
             </section>
 
             <section>
