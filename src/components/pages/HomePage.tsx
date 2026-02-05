@@ -34,8 +34,8 @@ interface VideoReel {
 
 // --- Data Configuration ---
 
-// UPDATED: New 1300x190 Resolution Images
-const HERO_SLIDES = [
+// Desktop/Tablet Images
+const HERO_SLIDES_DESKTOP = [
   { 
     id: 1, 
     title: "Adventure Ride", 
@@ -58,6 +58,30 @@ const HERO_SLIDES = [
   }
 ];
 
+// Mobile-only Images
+const HERO_SLIDES_MOBILE = [
+  { 
+    id: 1, 
+    title: "Mobile Slide 1", 
+    image: "https://static.wixstatic.com/media/b9ec8c_20de11b88c144986be439168b1e098db~mv2.png?originWidth=1280&originHeight=384" 
+  },
+  { 
+    id: 2, 
+    title: "Mobile Slide 2", 
+    image: "https://static.wixstatic.com/media/b9ec8c_f1b69a6ae9c948c09cae4253157087f7~mv2.png?originWidth=1280&originHeight=384" 
+  },
+  { 
+    id: 3, 
+    title: "Mobile Slide 3", 
+    image: "https://static.wixstatic.com/media/b9ec8c_36d34b1311784721a2b561c3185900ca~mv2.png?originWidth=1280&originHeight=384" 
+  },
+  { 
+    id: 4, 
+    title: "Mobile Slide 4", 
+    image: "https://static.wixstatic.com/media/b9ec8c_4b57e3ad23524c08bf586d144368c74b~mv2.png?originWidth=1280&originHeight=384" 
+  }
+];
+
 const VIDEO_REELS: VideoReel[] = [
   { id: 'video-1', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001' },
   { id: 'video-2', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001' },
@@ -73,9 +97,23 @@ const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-gr
 // 1. Hero Carousel (Smooth Continuous Slide Animation with Infinite Loop)
 const HeroCarousel = () => {
   const [index, setIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const trackRef = React.useRef<HTMLDivElement>(null);
   const SLIDE_DURATION = 4500; // ms
   const TRANSITION_DURATION = 700; // ms
+
+  // Detect mobile view on mount and window resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint is 768px
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Use mobile or desktop slides based on screen size
+  const HERO_SLIDES = isMobile ? HERO_SLIDES_MOBILE : HERO_SLIDES_DESKTOP;
 
   // Create infinite loop: [last, ...all slides, first]
   const slides = [HERO_SLIDES[HERO_SLIDES.length - 1], ...HERO_SLIDES, HERO_SLIDES[0]];
