@@ -12,6 +12,11 @@ import ProductDetailsPage from '@/components/pages/ProductDetailsPage';
 import VisitStorePage from '@/components/pages/VisitStorePage';
 import ContactPage from '@/components/pages/ContactPage';
 import AdminPage from '@/components/pages/AdminPage';
+import ReplacementPolicyPage from '@/components/pages/ReplacementPolicyPage';
+import WarrantyPolicyPage from '@/components/pages/WarrantyPolicyPage';
+import ShippingPolicyPage from '@/components/pages/ShippingPolicyPage';
+import TermsAndConditionsPage from '@/components/pages/TermsAndConditionsPage';
+import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
 
 // Layout component that includes ScrollToTop
 function Layout() {
@@ -80,6 +85,41 @@ const router = createBrowserRouter([
         element: <AdminPage />,
         routeMetadata: {
           pageIdentifier: 'admin',
+        },
+      },
+      {
+        path: "replacement-policy",
+        element: <ReplacementPolicyPage />,
+        routeMetadata: {
+          pageIdentifier: 'replacement-policy',
+        },
+      },
+      {
+        path: "warranty-policy",
+        element: <WarrantyPolicyPage />,
+        routeMetadata: {
+          pageIdentifier: 'warranty-policy',
+        },
+      },
+      {
+        path: "shipping-policy",
+        element: <ShippingPolicyPage />,
+        routeMetadata: {
+          pageIdentifier: 'shipping-policy',
+        },
+      },
+      {
+        path: "terms-and-conditions",
+        element: <TermsAndConditionsPage />,
+        routeMetadata: {
+          pageIdentifier: 'terms-and-conditions',
+        },
+      },
+      {
+        path: "privacy-policy",
+        element: <PrivacyPolicyPage />,
+        routeMetadata: {
+          pageIdentifier: 'privacy-policy',
         },
       },
       {

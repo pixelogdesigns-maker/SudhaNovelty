@@ -30,7 +30,7 @@ export default function Footer() {
   return (
     <footer className="bg-light-pink mt-0">
       <div className="max-w-[120rem] mx-auto px-4 md:px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Store Info */}
           <div>
             <h3 className="font-heading text-xl text-primary mb-6">
@@ -107,6 +107,28 @@ export default function Footer() {
               </a>
               <a href="/contact" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
                 Contact Us
+              </a>
+            </div>
+          </div>
+
+          {/* Policies */}
+          <div>
+            <h3 className="font-heading text-xl text-primary mb-6">Policies</h3>
+            <div className="space-y-3">
+              <a href="/replacement-policy" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                Replacement Policy
+              </a>
+              <a href="/warranty-policy" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                Warranty Policy
+              </a>
+              <a href="/shipping-policy" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                Shipping Policy
+              </a>
+              <a href="/terms-and-conditions" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                Terms & Conditions
+              </a>
+              <a href="/privacy-policy" className="block font-paragraph text-base text-foreground hover:text-primary transition-colors">
+                Privacy Policy
               </a>
             </div>
           </div>
