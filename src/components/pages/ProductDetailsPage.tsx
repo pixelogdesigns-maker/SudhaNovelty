@@ -46,8 +46,8 @@ export default function ProductDetailsPage() {
         if (storeItems && storeItems.length > 0) {
           setStoreInfo(storeItems[0]);
         }
-      } catch (error) {
-        console.error('Error fetching product details:', error);
+      } catch {
+        // Error fetching product - show not found
       } finally {
         setIsLoading(false);
       }
@@ -110,12 +110,10 @@ export default function ProductDetailsPage() {
 
   // --- HANDLER: Razorpay Payment ---
   const handleRazorpaySuccess = (response: any) => {
-    console.log('Payment successful:', response);
     alert('Payment successful! Order ID: ' + response.razorpay_order_id);
   };
 
-  const handleRazorpayError = (error: any) => {
-    console.error('Payment error:', error);
+  const handleRazorpayError = () => {
     alert('Payment failed. Please try again.');
   };
 
@@ -154,8 +152,7 @@ export default function ProductDetailsPage() {
       
       // Open mini cart or navigate to checkout
       openMiniCart();
-    } catch (error) {
-      console.error('Error preparing cart:', error);
+    } catch {
       alert('Failed to add item to cart. Please try again.');
     } finally {
       setIsAddingToCart(false);

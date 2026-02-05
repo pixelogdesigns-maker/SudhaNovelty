@@ -549,8 +549,8 @@ const MarqueeVideo = ({ video }: { video: VideoReel }) => {
     if (videoRef.current) {
       videoRef.current.defaultMuted = true;
       videoRef.current.muted = true;
-      videoRef.current.play().catch(error => {
-        console.log("Autoplay prevented:", error);
+      videoRef.current.play().catch(() => {
+        // Autoplay prevented - silent fail is acceptable
       });
     }
   }, []);
@@ -592,8 +592,8 @@ export default function HomePage() {
         if (categoryItems) {
           setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
         }
-      } catch (error) {
-        console.error('Error fetching homepage data:', error);
+      } catch {
+        // Error fetching data - silently fail with defaults
       }
     };
     fetchData();

@@ -14,8 +14,8 @@ export default function Footer() {
         if (items && items.length > 0) {
           setStoreInfo(items[0]);
         }
-      } catch (error) {
-        console.error('Error fetching store information:', error);
+      } catch {
+        // Error fetching store info - use defaults
       }
     };
     fetchStoreInfo();
