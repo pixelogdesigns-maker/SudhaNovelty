@@ -124,8 +124,8 @@ const HeroCarousel = () => {
 
   return (
     <section className="relative w-full overflow-hidden bg-gray-100">
-      {/* Aspect ratio wrapper */}
-      <div className="w-full aspect-[384/200] md:aspect-[1300/390]">
+      {/* Aspect ratio wrapper - optimized for mobile */}
+      <div className="w-full aspect-[2/1] sm:aspect-[16/9] md:aspect-[1300/390]">
         <div
           ref={trackRef}
           className="flex h-full w-full"
@@ -152,18 +152,18 @@ const HeroCarousel = () => {
         {/* Navigation Arrows - Minimal UI Design */}
         <button
           onClick={handlePrev}
-          className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
+          className="absolute left-2 sm:left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
           aria-label="Previous slide"
         >
-          <ChevronLeft size={24} className="md:w-6 md:h-6 w-5 h-5" />
+          <ChevronLeft size={20} className="sm:w-6 sm:h-6 md:w-6 md:h-6 w-4 h-4" />
         </button>
 
         <button
           onClick={handleNext}
-          className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
+          className="absolute right-2 sm:right-4 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full border-2 border-black bg-transparent text-black hover:bg-black/5 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center"
           aria-label="Next slide"
         >
-          <ChevronRight size={24} className="md:w-6 md:h-6 w-5 h-5" />
+          <ChevronRight size={20} className="sm:w-6 sm:h-6 md:w-6 md:h-6 w-4 h-4" />
         </button>
       </div>
     </section>
@@ -226,13 +226,13 @@ const ShopByAge = () => {
 
   return (
     // Reduced top/bottom padding on mobile to save space
-    <section className="relative pt-16 md:pt-28 pb-20 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
+    <section className="relative pt-12 md:pt-28 pb-16 md:pb-32 bg-[#DCD1F2] overflow-hidden font-sans">
       {/* Top Brush Stroke */}
       <div className="absolute top-0 left-0 w-full overflow-hidden leading-[0] z-10">
         <svg 
           viewBox="0 0 1200 50" 
           preserveAspectRatio="none" 
-          className="relative block w-full h-[30px] md:h-[50px]"
+          className="relative block w-full h-[20px] md:h-[50px]"
           style={{ transform: 'scaleY(-1)' }}
         >
           <path 
@@ -245,19 +245,19 @@ const ShopByAge = () => {
           />
         </svg>
       </div>
-      <div className="relative z-10 max-w-[120rem] mx-auto px-4 md:px-6">
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="font-heading text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">Shop By Age</h2>
-          <p className="text-[#5A4685] font-medium tracking-wide text-sm md:text-base">
+      <div className="relative z-10 max-w-[120rem] mx-auto px-3 sm:px-4 md:px-6">
+        <div className="text-center mb-8 sm:mb-10 md:mb-16">
+          <h2 className="font-heading text-2xl sm:text-3xl md:text-5xl text-[#3D2C5E] font-bold tracking-wide mb-2 drop-shadow-sm">Shop By Age</h2>
+          <p className="text-[#5A4685] font-medium tracking-wide text-xs sm:text-sm md:text-base px-2">
              Curated collections for every little milestone.
           </p>
         </div>
 
         {/* MOBILE OPTIMIZATION: 
-            Changed grid-cols-2 to grid-cols-3 for mobile.
-            This puts 3 items per row, reducing the total rows from 3 to 2.
+            3 columns on mobile, 3 on tablet, 6 on desktop
+            Reduced gaps for mobile to save space
         */}
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-x-3 md:gap-x-6 gap-y-8 md:gap-y-12">
+        <div className="grid grid-cols-3 gap-x-2 sm:gap-x-3 md:gap-x-6 gap-y-6 sm:gap-y-8 md:gap-y-12">
           {AGE_GROUPS.map((group, index) => (
             <Link 
               key={index} 
@@ -265,29 +265,30 @@ const ShopByAge = () => {
               className="group flex flex-col items-center cursor-pointer"
             >
               {/* SIZING OPTIMIZATION: 
-                  Reduced mobile size to w-20 h-20 (80px) to fit 3 in a row.
-                  Desktop stays spacious at w-44 h-44.
+                  Mobile: w-16 h-16 (64px)
+                  Tablet: w-24 h-24
+                  Desktop: w-44 h-44
               */}
               <div className={`
-                relative w-20 h-20 sm:w-28 sm:h-28 md:w-44 md:h-44 rounded-full 
+                relative w-16 h-16 sm:w-24 sm:h-24 md:w-44 md:h-44 rounded-full 
                 ${group.color} 
                 flex flex-col items-center justify-center 
-                shadow-lg border-[3px] md:border-[4px] border-white
+                shadow-lg border-[2px] sm:border-[3px] md:border-[4px] border-white
                 transition-all duration-300 ease-out
                 group-hover:scale-110 group-hover:shadow-xl
               `}>
-                <span className="text-3xl sm:text-4xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                <span className="text-2xl sm:text-4xl md:text-7xl filter drop-shadow-sm transform transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
                   {group.icon}
                 </span>
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 via-transparent to-transparent pointer-events-none" />
               </div>
 
-              <div className="text-center mt-3 md:mt-6">
-                <h3 className="font-heading text-lg md:text-3xl text-[#3D2C5E] font-bold leading-none mb-1">
+              <div className="text-center mt-2 sm:mt-3 md:mt-6">
+                <h3 className="font-heading text-sm sm:text-lg md:text-3xl text-[#3D2C5E] font-bold leading-none mb-0.5">
                   {group.range}
                 </h3>
                 {/* Reduced text size for mobile so labels don't wrap awkwardly */}
-                <p className="text-[#5A4685] text-[10px] md:text-sm font-bold tracking-widest uppercase">
+                <p className="text-[#5A4685] text-[8px] sm:text-[10px] md:text-sm font-bold tracking-widest uppercase">
                   {group.label}
                 </p>
               </div>
@@ -300,7 +301,7 @@ const ShopByAge = () => {
         <svg 
           viewBox="0 0 1200 50" 
           preserveAspectRatio="none" 
-          className="relative block w-full h-[30px] md:h-[50px]"
+          className="relative block w-full h-[20px] md:h-[50px]"
         >
           <path 
             d="M0,50 L0,0 Q150,15 300,5 T600,10 T900,5 T1200,15 V50 Z" 
