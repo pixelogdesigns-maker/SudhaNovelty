@@ -1,7 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
 import { Image } from '@/components/ui/image';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function Header() {
   const location = useLocation();
@@ -23,43 +23,42 @@ export default function Header() {
       <div className="max-w-[120rem] mx-auto px-4 md:px-6">
         {/* Container Height: Fixed to prevent logo resizing */}
         <div className="flex items-center justify-between h-16 md:h-20 transition-all duration-300">
-          
+
           {/* Logo Section */}
           <Link to="/" className="flex items-center gap-2">
-            
+
             {/* --- MOBILE LOGO --- */}
             {/* Fixed size prevents resizing when navigating between pages */}
             <Image
-              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png" 
-              width={60} 
+              src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
+              width={60}
               height={60}
-              className="md:hidden object-contain border-black border border-none" 
+              className="md:hidden object-contain border-black border border-none"
               originWidth={533}
               originHeight={533}
               alt="Sudha Novelties"
             />
-            
-            {/* --- MOBILE BRAND TEXT --- */}
-            <div className="md:hidden flex flex-col justify-center">
-              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-poppins-semibold">
-                SUDHA
-              </span>
-              <span className="text-xs font-bold text-primary leading-tight tracking-wider font-poppins-semibold">
-                NOVELTIES
-              </span>
-            </div>
 
+            {/* --- MOBILE BRAND TEXT --- */}
             {/* --- DESKTOP LOGO --- */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
-              width={140} 
+              width={140}
               height={60}
               className="hidden md:block object-contain"
               originWidth={533}
               originHeight={196}
               alt="Sudha Novelties"
             />
-          </Link>
+          <div className="md:hidden flex flex-col justify-center">
+              <span className="font-bold text-primary tracking-wider font-poppins-semibold text-3xl">
+              </span>
+              <span className="font-bold text-primary tracking-wider font-poppins-semibold text-xl">
+                SUDHA NOVELTIES
+              </span>
+            </div>
+
+            </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
