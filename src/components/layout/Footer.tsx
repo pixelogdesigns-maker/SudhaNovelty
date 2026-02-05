@@ -4,7 +4,7 @@ import { StoreInformation } from '@/entities';
 import { MapPin, Phone, Clock, MessageCircle } from 'lucide-react';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
-export default function Footer() {
+function Footer() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
 
   useEffect(() => {
@@ -148,3 +148,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default Footer;
