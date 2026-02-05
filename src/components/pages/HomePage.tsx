@@ -1,18 +1,18 @@
 // HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
-import React, { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService } from '@/integrations';
-import { StoreInformation, Toys, ToyCategories } from '@/entities';
-import { Image } from '@/components/ui/image';
-import {
-  Star, ShoppingBag, ChevronLeft, ChevronRight,
-  Heart, Sparkles, ArrowRight, Instagram
-} from 'lucide-react';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import Header from '@/components/layout/Header';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { Image } from '@/components/ui/image';
+import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
+import { StoreInformation, ToyCategories, Toys } from '@/entities';
+import { BaseCrudService } from '@/integrations';
+import {
+  ChevronLeft, ChevronRight,
+  Instagram,
+  Sparkles
+} from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // --- Types ---
 interface Product {
@@ -39,6 +39,8 @@ const VIDEO_REELS: VideoReel[] = [
   { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001' },
   { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
 ];
+
+const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 // --- Data Configuration ---
 
 // UPDATED: New 1300x190 Resolution Images
@@ -65,8 +67,6 @@ const HERO_SLIDES = [
   }
 ];
 
-
-const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
 
 // --- Sub-Components ---
 
