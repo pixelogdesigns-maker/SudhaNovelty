@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-rou
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import { MiniCartContextProvider } from '@/components/MiniCartContextProvider';
+import Watermark from '@/components/Watermark';
 
 // Import pages
 import HomePage from '@/components/pages/HomePage';
@@ -18,12 +19,13 @@ import ShippingPolicyPage from '@/components/pages/ShippingPolicyPage';
 import TermsAndConditionsPage from '@/components/pages/TermsAndConditionsPage';
 import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
 
-// Layout component that includes ScrollToTop
+// Layout component that includes ScrollToTop and Watermark
 function Layout() {
   return (
     <>
       <ScrollToTop />
       <Outlet />
+      <Watermark />
     </>
   );
 }
