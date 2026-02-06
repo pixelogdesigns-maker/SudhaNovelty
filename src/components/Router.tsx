@@ -1,23 +1,22 @@
-import { MemberProvider } from '@/integrations';
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
-import { ScrollToTop } from '@/lib/scroll-to-top';
-import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import { MiniCartContextProvider } from '@/components/MiniCartContextProvider';
-import Watermark from '@/components/Watermark';
+import { MemberProvider } from '@/integrations';
+import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
+import { ScrollToTop } from '@/lib/scroll-to-top';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 // Import pages
-import HomePage from '@/components/pages/HomePage';
 import AboutPage from '@/components/pages/AboutPage';
-import ToysPage from '@/components/pages/ToysPage';
-import ProductDetailsPage from '@/components/pages/ProductDetailsPage';
-import VisitStorePage from '@/components/pages/VisitStorePage';
-import ContactPage from '@/components/pages/ContactPage';
 import AdminPage from '@/components/pages/AdminPage';
+import ContactPage from '@/components/pages/ContactPage';
+import HomePage from '@/components/pages/HomePage';
+import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
+import ProductDetailsPage from '@/components/pages/ProductDetailsPage';
 import ReplacementPolicyPage from '@/components/pages/ReplacementPolicyPage';
-import WarrantyPolicyPage from '@/components/pages/WarrantyPolicyPage';
 import ShippingPolicyPage from '@/components/pages/ShippingPolicyPage';
 import TermsAndConditionsPage from '@/components/pages/TermsAndConditionsPage';
-import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
+import ToysPage from '@/components/pages/ToysPage';
+import VisitStorePage from '@/components/pages/VisitStorePage';
+import WarrantyPolicyPage from '@/components/pages/WarrantyPolicyPage';
 
 // Layout component that includes ScrollToTop and Watermark
 function Layout() {
@@ -25,7 +24,7 @@ function Layout() {
     <>
       <ScrollToTop />
       <Outlet />
-      <Watermark />
+      {/* <Watermark /> */}
     </>
   );
 }
