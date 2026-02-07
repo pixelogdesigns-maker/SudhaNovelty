@@ -182,7 +182,7 @@ export default function VisitStorePage() {
           <StoreBlock 
             title="Branch Store - New Corporation"
             // Google Map Embed for New Corporation branch (8.8024759, 78.1397059)
-            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.8!2d78.1397059!3d8.8024759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03efdee738034b:0x94a6c5a233714cdc!2sSudha+Novelties+New+Corporation+branch!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d985.7063522886207!2d78.13994240929999!3d8.802467621795664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03efdee738034b%3A0x94a6c5a233714cdc!2sSudha%20Novelties%20New%20Corporation%20branch!5e0!3m2!1sen!2sin!4v1770497960682!5m2!1sen!2sin"
             addressUrl="https://www.google.com/maps/place/Sudha+Novelties+New+Corporation+branch/@8.8024676,78.1399424,19z/data=!4m14!1m7!3m6!1s0x3b03ef98fd8c85a7:0x8e37c310bb684eec!2sSudha+Novelties!8m2!3d8.8047754!4d78.1483568!16s%2Fg%2F11c6tlgtns!3m5!1s0x3b03efdee738034b:0x94a6c5a233714cdc!8m2!3d8.8024759!4d78.1397059!16s%2Fg%2F11ytz34vlj?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D"
             isReversed={true}
             // New Corporation Branch Details
