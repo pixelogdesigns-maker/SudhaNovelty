@@ -13,6 +13,7 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 import { useNavigation } from '@/components/NavigationContext';
 import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
 import { useMiniCartContext } from '@/components/MiniCartContextProvider';
+import PurchaseDisabledModal from '@/components/ui/PurchaseDisabledModal';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -26,6 +27,7 @@ export default function ProductDetailsPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [showPurchaseDisabledModal, setShowPurchaseDisabledModal] = useState(false);
   
   // Swipe gestures state
   const [touchStart, setTouchStart] = useState(0);
@@ -132,31 +134,7 @@ export default function ProductDetailsPage() {
 
   // --- HANDLER: Add to Cart (Razorpay Checkout) ---
   const handleAddToCart = async () => {
-    if (!toy) return;
-
-    setIsAddingToCart(true);
-    try {
-      const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : undefined);
-      
-      // Open Razorpay checkout with the toy details
-      const checkoutData = {
-        productId: toyId,
-        productName: toy.name,
-        price: toy.price || 0,
-        color: displayColor,
-        quantity: 1,
-      };
-      
-      // Store checkout data in session storage for the checkout component
-      sessionStorage.setItem('checkoutData', JSON.stringify(checkoutData));
-      
-      // Open mini cart or navigate to checkout
-      openMiniCart();
-    } catch {
-      alert('Failed to add item to cart. Please try again.');
-    } finally {
-      setIsAddingToCart(false);
-    }
+    setShowPurchaseDisabledModal(true);
   };
 
   // --- Navigation & Touch Logic ---
@@ -355,12 +333,12 @@ export default function ProductDetailsPage() {
                     <ShoppingCart size={18} className="md:w-6 md:h-6" /> 
                     {isAddingToCart ? 'Adding...' : 'Add to Cart'}
                   </button>
-                  <Navigation
-                    route={`/cart?buy=${toyId}`}
+                  <button
+                    onClick={() => setShowPurchaseDisabledModal(true)}
                     className="flex-1 bg-secondary text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
                   >
                     Buy Now
-                  </Navigation>
+                  </button>
                 </div>
 
                 {/* Order via WhatsApp - Secondary Button */}
@@ -397,6 +375,16 @@ export default function ProductDetailsPage() {
       </section>
 
       <Footer />
+
+      {/* Purchase Disabled Modal */}
+      <PurchaseDisabledModal
+        isOpen={showPurchaseDisabledModal}
+        onClose={() => setShowPurchaseDisabledModal(false)}
+        onWhatsAppClick={() => {
+          setShowPurchaseDisabledModal(false);
+          handleWhatsAppClick();
+        }}
+      />
     </div>
   );
 }
