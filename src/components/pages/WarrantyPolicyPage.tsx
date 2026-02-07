@@ -12,9 +12,7 @@ export default function WarrantyPolicyPage() {
           <div className="prose prose-lg max-w-none space-y-6">
             <section>
               <h2 className="font-heading text-2xl text-foreground mb-4">Warranty Coverage</h2>
-              <p className="font-paragraph text-base text-foreground leading-relaxed">
-                All toys purchased from Sudha Novelties come with a manufacturer's warranty against defects in materials and workmanship for a period of 30 days from the date of purchase.
-              </p>
+              <p className="font-paragraph text-base text-foreground leading-relaxed">Warranty Oriented Products Purchased from Sudha Novelties come with a manufacturer's warranty against defects in materials and workmanship for a period of 30 days from the date of purchase.</p>
             </section>
 
             <section>

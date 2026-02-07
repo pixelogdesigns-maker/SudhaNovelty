@@ -30,7 +30,7 @@ export default function ToysPage() {
     { id: '3-5', label: '3-5 Years', minAge: 3, maxAge: 5 },
     { id: '6-8', label: '6-8 Years', minAge: 6, maxAge: 8 },
     { id: '9-12', label: '9-12 Years', minAge: 9, maxAge: 12 },
-    { id: '13+', label: '13+ Years', minAge: 13, maxAge: 100 },
+    { id: '12+', label: '12+ Years', minAge: 12, maxAge: 100 },
   ];
 
   const updateUrlParams = (key: string, value: string) => {
