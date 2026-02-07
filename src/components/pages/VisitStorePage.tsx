@@ -183,7 +183,7 @@ export default function VisitStorePage() {
             title="Branch Store"
             // You can change this mapSrc to the specific branch location if it differs slightly
             mapSrc="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3941.6!2d78.1!3d8.8!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b03ef8000000000%3A0x0!2sWGC%20Rd%2C%20Thoothukudi!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-            addressUrl="https://www.google.com/maps/search/Sudha+Novelties+WGC+ROAD+THOOTHUKUDI"
+            addressUrl="https://www.google.com/maps/place/Sudha+Novelties+New+Corporation+branch/@8.8024676,78.1399424,19z/data=!4m14!1m7!3m6!1s0x3b03ef98fd8c85a7:0x8e37c310bb684eec!2sSudha+Novelties!8m2!3d8.8047754!4d78.1483568!16s%2Fg%2F11c6tlgtns!3m5!1s0x3b03efdee738034b:0x94a6c5a233714cdc!8m2!3d8.8024759!4d78.1397059!16s%2Fg%2F11ytz34vlj?entry=ttu&g_ep=EgoyMDI2MDIwNC4wIKXMDSoASAFQAw%3D%3D"
             isReversed={true}
             // HARDCODED VALUES FROM IMAGE 2
             address="WGC ROAD , THOOTHUKUDI" 
