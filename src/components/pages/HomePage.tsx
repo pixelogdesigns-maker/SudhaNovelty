@@ -357,7 +357,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
 
   const bestSellers = toys
     .filter((toy: any) => toy.isBestSellingNow)
-    .slice(0, 4);
+    .slice(0, 8);
 
   if (toys.length === 0) {
     return (
