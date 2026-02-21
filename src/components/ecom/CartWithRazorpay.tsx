@@ -45,13 +45,11 @@ export default function CartContent() {
   const [cartTotal, setCartTotal] = useState(0);
 
   const handleRazorpaySuccess = (response: any) => {
-    console.log('Payment successful:', response);
     alert('Payment successful! Order ID: ' + response.razorpay_order_id);
     setShowRazorpay(false);
   };
 
-  const handleRazorpayError = (error: any) => {
-    console.error('Payment error:', error);
+  const handleRazorpayError = () => {
     alert('Payment failed. Please try again.');
   };
 

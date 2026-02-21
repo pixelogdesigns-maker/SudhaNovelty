@@ -11,7 +11,7 @@ import {
   Instagram,
   Sparkles
 } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 // --- Types ---
@@ -564,7 +564,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 };
 
 // 6. Video Marquee Component
-const MarqueeVideo = ({ video }: { video: VideoReel }) => {
+const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -592,7 +592,7 @@ const MarqueeVideo = ({ video }: { video: VideoReel }) => {
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
     </div>
   );
-};
+});
 
 // --- Main Page Integration ---
 

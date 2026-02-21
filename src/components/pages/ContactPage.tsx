@@ -14,7 +14,7 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ContactPage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // Added loading state
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
     visitorName: '',
     visitorEmail: '',
@@ -31,10 +31,10 @@ export default function ContactPage() {
         if (items && items.length > 0) {
           setStoreInfo(items[0]);
         }
-      } catch (error) {
-        console.error('Failed to fetch store info:', error);
+      } catch {
+        // Silently fail - use defaults
       } finally {
-        setIsLoading(false); // Stop loading regardless of success/fail
+        setIsLoading(false);
       }
     };
     fetchStoreInfo();
@@ -54,29 +54,35 @@ export default function ContactPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const inquiry: ContactInquiries = {
-      _id: crypto.randomUUID(),
-      visitorName: formData.visitorName,
-      visitorEmail: formData.visitorEmail,
-      subject: formData.subject,
-      message: formData.message,
-      submissionDate: new Date(),
-    };
+    try {
+      const inquiry: ContactInquiries = {
+        _id: crypto.randomUUID(),
+        visitorName: formData.visitorName,
+        visitorEmail: formData.visitorEmail,
+        subject: formData.subject,
+        message: formData.message,
+        submissionDate: new Date(),
+      };
 
-    await BaseCrudService.create('contactinquiries', inquiry);
+      await BaseCrudService.create('contactinquiries', inquiry);
 
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
-    setFormData({
-      visitorName: '',
-      visitorEmail: '',
-      subject: '',
-      message: '',
-    });
+      setSubmitSuccess(true);
+      setFormData({
+        visitorName: '',
+        visitorEmail: '',
+        subject: '',
+        message: '',
+      });
 
-    setTimeout(() => {
+      setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 5000);
+    } catch {
+      // Silently fail
       setSubmitSuccess(false);
-    }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -128,25 +134,21 @@ export default function ContactPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 mb-8 md:mb-16">
-            
-            {/* FIX: Show Skeletons while loading, otherwise show cards immediately */}
             {isLoading ? (
-               // SKELETON LOADERS
-               [1, 2, 3].map((i) => (
-                 <div key={i} className="bg-gray-50 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-sm animate-pulse h-[300px] flex flex-col items-center justify-center">
-                    <div className="w-16 h-16 bg-gray-200 rounded-full mb-6"></div>
-                    <div className="h-6 w-32 bg-gray-200 rounded mb-4"></div>
-                    <div className="h-4 w-48 bg-gray-200 rounded mb-6"></div>
-                    <div className="h-10 w-32 bg-gray-200 rounded"></div>
-                 </div>
-               ))
+              [1, 2, 3].map((i) => (
+                <div key={i} className="bg-gray-50 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-sm animate-pulse h-[300px] flex flex-col items-center justify-center">
+                  <div className="w-16 h-16 bg-gray-200 rounded-full mb-6"></div>
+                  <div className="h-6 w-32 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-4 w-48 bg-gray-200 rounded mb-6"></div>
+                  <div className="h-10 w-32 bg-gray-200 rounded"></div>
+                </div>
+              ))
             ) : (
-              // ACTUAL CONTENT - Removed 'delay' props for instant appearance
               <>
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }} // Fast fade-in
+                  transition={{ duration: 0.4 }}
                   className="bg-gradient-to-br from-whatsapp-green/10 to-whatsapp-green/5 rounded-lg md:rounded-2xl p-4 md:p-8 text-center shadow-md hover:shadow-xl transition-all duration-300"
                 >
                   <div className="inline-flex items-center justify-center w-12 md:w-16 h-12 md:h-16 bg-whatsapp-green rounded-full mb-3 md:mb-6">
@@ -341,13 +343,12 @@ export default function ContactPage() {
               </h2>
 
               <div className="space-y-6 mb-8">
-                {/* Store info skeletons or content */}
                 {isLoading ? (
-                   <div className="space-y-6">
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                      <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
-                   </div>
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
+                    <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
+                    <div className="flex items-center gap-4"><div className="w-12 h-12 bg-gray-200 rounded-full animate-pulse"></div><div className="h-6 w-48 bg-gray-200 rounded animate-pulse"></div></div>
+                  </div>
                 ) : (
                   <>
                     {storeInfo?.address && (

@@ -24,8 +24,7 @@ export const SocialSharingButtons: React.FC<SocialSharingButtonsProps> = ({
     try {
       await navigator.clipboard.writeText(url);
       return true;
-    } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
+    } catch {
       return false;
     }
   };
