@@ -531,7 +531,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
               `}>
                 {cat.categoryImage ? (
                   <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
-                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
+                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} height={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
                   </div>
                 ) : (
                   <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">{cat.categoryName?.charAt(0) || '?'}</div>
