@@ -11,7 +11,7 @@ import {
   Instagram,
   Sparkles
 } from 'lucide-react';
-import React, { useCallback, useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 // --- Types ---
@@ -340,7 +340,10 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollContainerRef = useCallback((node: HTMLDivElement | null) => {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const node = scrollContainerRef.current;
     if (!node) return;
 
     const handleScroll = () => {
