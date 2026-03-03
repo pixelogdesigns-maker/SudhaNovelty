@@ -13,7 +13,6 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 import { useNavigation } from '@/components/NavigationContext';
 import RazorpayCheckout from '@/components/ecom/RazorpayCheckout';
 import { useMiniCartContext } from '@/components/MiniCartContextProvider';
-import PurchaseDisabledModal from '@/components/ui/PurchaseDisabledModal';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -27,7 +26,7 @@ export default function ProductDetailsPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [showPurchaseDisabledModal, setShowPurchaseDisabledModal] = useState(false);
+  const [showRazorpayCheckout, setShowRazorpayCheckout] = useState(false);
   
   // Swipe gestures state
   const [touchStart, setTouchStart] = useState(0);
@@ -110,15 +109,6 @@ export default function ProductDetailsPage() {
     });
   };
 
-  // --- HANDLER: Razorpay Payment ---
-  const handleRazorpaySuccess = (response: any) => {
-    alert('Payment successful! Order ID: ' + response.razorpay_order_id);
-  };
-
-  const handleRazorpayError = () => {
-    alert('Payment failed. Please try again.');
-  };
-
   // --- HANDLER: WhatsApp Click ---
   const handleWhatsAppClick = () => {
     if (!toy) return;
@@ -132,9 +122,21 @@ export default function ProductDetailsPage() {
     window.open(whatsAppUrl, '_blank');
   };
 
-  // --- HANDLER: Add to Cart (Razorpay Checkout) ---
-  const handleAddToCart = async () => {
-    setShowPurchaseDisabledModal(true);
+  // --- HANDLER: Buy Now (Razorpay Checkout) ---
+  const handleBuyNow = async () => {
+    setShowRazorpayCheckout(true);
+  };
+
+  // --- HANDLER: Razorpay Payment Success ---
+  const handleRazorpaySuccess = (response: any) => {
+    alert('Payment successful! Order ID: ' + response.razorpay_order_id);
+    setShowRazorpayCheckout(false);
+  };
+
+  // --- HANDLER: Razorpay Payment Error ---
+  const handleRazorpayError = (error: any) => {
+    alert('Payment failed. Please try again.');
+    setShowRazorpayCheckout(false);
   };
 
   // --- Navigation & Touch Logic ---
@@ -323,28 +325,44 @@ export default function ProductDetailsPage() {
               )}
 
               <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
-                {/* Add to Cart and Buy Now Buttons */}
-                <div className="flex gap-3">
-                  <button
-                    onClick={handleAddToCart}
-                    disabled={isAddingToCart}
-                    className="flex-1 bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
-                  >
-                    <ShoppingCart size={18} className="md:w-6 md:h-6" /> 
-                    {isAddingToCart ? 'Adding...' : 'Add to Cart'}
-                  </button>
-                  <button
-                    onClick={() => setShowPurchaseDisabledModal(true)}
-                    className="flex-1 bg-secondary text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
-                  >
-                    Buy Now
-                  </button>
-                </div>
+                {/* Razorpay Checkout */}
+                {showRazorpayCheckout && toy.price && (
+                  <div className="space-y-3">
+                    <RazorpayCheckout
+                      amount={toy.price}
+                      productName={toy.name || 'Toy'}
+                      productDescription={toy.shortDescription || 'Premium toy from Sudha Novelties'}
+                      onSuccess={handleRazorpaySuccess}
+                      onError={handleRazorpayError}
+                      label="Complete Payment"
+                    />
+                    <button
+                      onClick={() => setShowRazorpayCheckout(false)}
+                      className="w-full bg-gray-200 text-foreground font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-gray-300 transition-all duration-300"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
 
-                {/* Order via WhatsApp - Secondary Button */}
-                <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
-                  <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
-                </button>
+                {/* Buy Now and WhatsApp Buttons */}
+                {!showRazorpayCheckout && (
+                  <>
+                    <button
+                      onClick={handleBuyNow}
+                      disabled={isAddingToCart}
+                      className="w-full bg-primary text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3"
+                    >
+                      <ShoppingCart size={18} className="md:w-6 md:h-6" /> 
+                      {isAddingToCart ? 'Processing...' : 'Buy Now'}
+                    </button>
+
+                    {/* Order via WhatsApp - Secondary Button */}
+                    <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
+                      <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
+                    </button>
+                  </>
+                )}
               </div>
 
               <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-200">
@@ -375,16 +393,6 @@ export default function ProductDetailsPage() {
       </section>
 
       <Footer />
-
-      {/* Purchase Disabled Modal */}
-      <PurchaseDisabledModal
-        isOpen={showPurchaseDisabledModal}
-        onClose={() => setShowPurchaseDisabledModal(false)}
-        onWhatsAppClick={() => {
-          setShowPurchaseDisabledModal(false);
-          handleWhatsAppClick();
-        }}
-      />
     </div>
   );
 }
