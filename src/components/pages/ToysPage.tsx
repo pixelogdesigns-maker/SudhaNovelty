@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BaseCrudService } from '@/integrations';
@@ -25,15 +25,15 @@ export default function ToysPage() {
   
   const [isLoading, setIsLoading] = useState(true);
 
-  const ageGroups = [
+  const ageGroups = useMemo(() => [
     { id: '0-2', label: '0-2 Years', minAge: 0, maxAge: 2 },
     { id: '3-5', label: '3-5 Years', minAge: 3, maxAge: 5 },
     { id: '6-8', label: '6-8 Years', minAge: 6, maxAge: 8 },
     { id: '9-12', label: '9-12 Years', minAge: 9, maxAge: 12 },
     { id: '12+', label: '12+ Years', minAge: 12, maxAge: 100 },
-  ];
+  ], []);
 
-  const updateUrlParams = (key: string, value: string) => {
+  const updateUrlParams = useCallback((key: string, value: string) => {
     const newParams = new URLSearchParams(searchParams);
     if (value === 'all') {
       newParams.delete(key);
@@ -41,7 +41,7 @@ export default function ToysPage() {
       newParams.set(key, value);
     }
     setSearchParams(newParams);
-  };
+  }, [searchParams, setSearchParams]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,9 +80,9 @@ export default function ToysPage() {
 
     const ageParam = searchParams.get('age');
     if (ageParam) setSelectedAgeGroup(ageParam);
-  }, []);
+  }, [searchParams]);
 
-  const matchesAgeGroup = (toy: Toys): boolean => {
+  const matchesAgeGroup = useCallback((toy: Toys): boolean => {
     if (selectedAgeGroup === 'all') return true;
 
     const ageGroup = ageGroups.find(ag => ag.id === selectedAgeGroup);
@@ -115,7 +115,7 @@ export default function ToysPage() {
     if (val !== null) return val >= ageGroup.minAge && val <= ageGroup.maxAge;
 
     return true;
-  };
+  }, [selectedAgeGroup, ageGroups]);
 
   useEffect(() => {
     let filtered = toys;
@@ -131,19 +131,19 @@ export default function ToysPage() {
     filtered = filtered.filter(matchesAgeGroup);
 
     setFilteredToys(filtered);
-  }, [selectedCategory, selectedAgeGroup, toys]);
+  }, [selectedCategory, selectedAgeGroup, toys, matchesAgeGroup]);
 
-  const handleWhatsAppClick = (toy?: Toys) => {
+  const handleWhatsAppClick = useCallback((toy?: Toys) => {
     let message = '';
     if (toy) {
       const productPageUrl = new URL(`${window.location.origin}/toys/${toy._id}`);
-      message = `Hello! I am interested in this product: ${toy.name}\n\n${productPageUrl.toString()}`;
+      message = `Hello! I am interested in this product: ${toy.name}\\n\\n${productPageUrl.toString()}`;
     } else {
       message = "Hello! I would like to inquire about your toys.";
     }
     const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
     window.open(whatsAppUrl, '_blank');
-  };
+  }, [storeInfo?.whatsAppNumber]);
 
   return (
     <div className="min-h-screen bg-white">
