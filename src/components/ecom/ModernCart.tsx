@@ -8,6 +8,9 @@ export default function ModernCart() {
   const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
   const { currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
+  
+  // Use INR as the currency for India
+  const displayCurrency = currency || 'INR';
 
   const handleCheckout = async () => {
     setIsProcessing(true);
@@ -87,7 +90,7 @@ export default function ModernCart() {
                         {item.name}
                       </h3>
                       <p className="font-paragraph text-sm text-primary font-bold mt-1">
-                        {formatPrice(item.price, currency ?? DEFAULT_CURRENCY)}
+                        {formatPrice(item.price, displayCurrency)}
                       </p>
 
                       {/* Quantity Controls */}
@@ -132,7 +135,7 @@ export default function ModernCart() {
                 <div className="flex justify-between items-center">
                   <span className="font-paragraph text-gray-600">Subtotal</span>
                   <span className="font-heading font-bold text-foreground">
-                    {formatPrice(totalPrice, currency ?? DEFAULT_CURRENCY)}
+                    {formatPrice(totalPrice, displayCurrency)}
                   </span>
                 </div>
 

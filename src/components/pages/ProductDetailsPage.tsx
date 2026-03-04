@@ -14,6 +14,9 @@ export default function ProductDetailsPage() {
   const { addingItemId, actions: cartActions } = useCart();
   const { currency } = useCurrency();
   
+  // Use INR as the currency for India
+  const displayCurrency = currency || 'INR';
+  
   const [toy, setToy] = useState<Toys | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);

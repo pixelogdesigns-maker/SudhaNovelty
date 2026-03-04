@@ -15,6 +15,9 @@ export default function ToysPage() {
   const { addingItemId, actions: cartActions } = useCart();
   const { currency } = useCurrency();
   
+  // Use INR as the currency for India
+  const displayCurrency = currency || 'INR';
+  
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
   
