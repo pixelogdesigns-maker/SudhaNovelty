@@ -5,7 +5,6 @@ import { BaseCrudService, useCart } from '@/integrations';
 import { Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
@@ -153,8 +152,6 @@ export default function ToysPage() {
         keywords="buy toys online, toy collection, kids toys, premium toys, toys for all ages"
         canonical="https://sudha-novelties.com/toys"
       />
-      <Header />
-      
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-8 md:py-16">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <motion.div
