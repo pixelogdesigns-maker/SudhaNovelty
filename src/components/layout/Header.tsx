@@ -1,11 +1,14 @@
 import { Image } from '@/components/ui/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useCart } from '@/integrations';
+import ModernCart from '@/components/ecom/ModernCart';
 
 function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { itemCount, actions } = useCart();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -77,14 +80,31 @@ function Header() {
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Right Section: Cart Icon + Mobile Menu Button */}
+          <div className="flex items-center gap-4">
+            {/* Cart Icon */}
+            <button
+              onClick={actions.toggleCart}
+              className="relative p-2 text-foreground hover:text-primary transition-colors"
+              aria-label="Shopping cart"
+            >
+              <ShoppingCart size={24} />
+              {itemCount > 0 && (
+                <span className="absolute top-0 right-0 bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Navigation Dropdown */}
@@ -111,5 +131,14 @@ function Header() {
   );
 }
 
+export function HeaderWithCart() {
+  return (
+    <>
+      <Header />
+      <ModernCart />
+    </>
+  );
+}
+
 export { Header };
-export default Header;
+export default HeaderWithCart;

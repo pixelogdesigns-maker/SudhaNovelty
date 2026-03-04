@@ -17,12 +17,14 @@ import TermsAndConditionsPage from '@/components/pages/TermsAndConditionsPage';
 import ToysPage from '@/components/pages/ToysPage';
 import VisitStorePage from '@/components/pages/VisitStorePage';
 import WarrantyPolicyPage from '@/components/pages/WarrantyPolicyPage';
+import { HeaderWithCart } from '@/components/layout/Header';
 
-// Layout component that includes ScrollToTop and Watermark
+// Layout component that includes ScrollToTop and HeaderWithCart
 function Layout() {
   return (
     <>
       <ScrollToTop />
+      <HeaderWithCart />
       <Outlet />
       {/* <Watermark /> */}
     </>

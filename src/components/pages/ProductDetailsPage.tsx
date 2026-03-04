@@ -1,56 +1,45 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService } from '@/integrations';
-import { Toys, StoreInformation } from '@/entities';
+import { BaseCrudService, useCart, useCurrency, formatPrice, DEFAULT_CURRENCY, buyNow } from '@/integrations';
+import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, ArrowLeft, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
-import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { addingItemId, actions: cartActions } = useCart();
+  const { currency } = useCurrency();
   
   const [toy, setToy] = useState<Toys | null>(null);
-  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Swipe gestures state
+  const [quantity, setQuantity] = useState(1);
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-
-  // 1. GET COLOR FROM URL (Default to first available if none)
-  const requestedColor = searchParams.get('color');
+  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
 
   useEffect(() => {
     const fetchData = async () => {
       if (!toyId) return;
-
       try {
         const toyData = await BaseCrudService.getById<Toys>('toys', toyId);
         setToy(toyData);
-
-        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-        if (storeItems && storeItems.length > 0) {
-          setStoreInfo(storeItems[0]);
-        }
       } catch {
-        // Error fetching product - show not found
+        // Error fetching product
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, [toyId]);
 
-  // --- HELPER: Get all images ---
+  // Get all images
   let images: string[] = [];
   if (toy) {
     if (toy.productGallery && Array.isArray(toy.productGallery) && toy.productGallery.length > 0) {
@@ -64,59 +53,7 @@ export default function ProductDetailsPage() {
     }
   }
 
-  // --- HELPER: Determine Available Colors ---
-  const getAvailableColors = () => {
-    if (!toy) return [];
-    if (Array.isArray((toy as any).colors)) return (toy as any).colors;
-    
-    if (typeof toy.color === 'string' && toy.color.includes(',')) {
-      return toy.color.split(',').map(c => c.trim());
-    }
-
-    if (toy.color) return [toy.color];
-
-    return [];
-  };
-
-  const availableColors = getAvailableColors();
-
-  // --- SMART IMAGE SELECTION ---
-  useEffect(() => {
-    if (toy && images.length > 0 && requestedColor) {
-      const colorLower = requestedColor.toLowerCase().trim();
-      const matchingIndex = images.findIndex(img => img.toLowerCase().includes(colorLower));
-      
-      if (matchingIndex !== -1) {
-        setSelectedImageIndex(matchingIndex);
-      }
-    }
-  }, [toy, requestedColor, images]); 
-
   const mainImage = images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
-
-  // --- HANDLER: Update Color in URL ---
-  const handleColorSelect = (color: string) => {
-    setSearchParams(prev => {
-      prev.set('color', color);
-      return prev;
-    });
-  };
-
-  // --- HANDLER: WhatsApp Click ---
-  const handleWhatsAppClick = () => {
-    if (!toy) return;
-
-    const currentUrl = window.location.href;
-    const displayColor = requestedColor || (availableColors.length > 0 ? availableColors[0] : 'Standard');
-
-    const message = `Hello! I am interested in buying this product:\n*${toy.name}*\nPrice: Rs. ${toy.price || 'N/A'}\nSelected Color: ${displayColor}\n\nLink: ${currentUrl}\n\nPlease provide availability details.`;
-
-    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
-    window.open(whatsAppUrl, '_blank');
-  };
-
-  // --- Navigation & Touch Logic ---
-  const [slideDirection, setSlideDirection] = useState<'left' | 'right'>('right');
 
   const handlePrevImage = () => {
     setSlideDirection('right');
@@ -137,6 +74,30 @@ export default function ProductDetailsPage() {
     if (distance < -50) handlePrevImage();
     setTouchStart(0);
     setTouchEnd(0);
+  };
+
+  const handleAddToCart = async () => {
+    if (!toy) return;
+    await cartActions.addToCart({
+      collectionId: 'toys',
+      itemId: toy._id,
+      quantity
+    });
+    setQuantity(1);
+  };
+
+  const handleBuyNow = async () => {
+    if (!toy) return;
+    setIsBuyingNow(true);
+    try {
+      await buyNow([{
+        collectionId: 'toys',
+        itemId: toy._id,
+        quantity
+      }]);
+    } finally {
+      setIsBuyingNow(false);
+    }
   };
 
   if (isLoading) {
@@ -181,7 +142,6 @@ export default function ProductDetailsPage() {
         ogImage={images[0] || toy?.image}
       />
       <Header />
-      <WhatsAppFloatingButton />
 
       {/* Breadcrumb */}
       <section className="bg-light-pink/30 py-3 md:py-4">
@@ -250,60 +210,77 @@ export default function ProductDetailsPage() {
               {toy.price && (
                 <div className="mb-4 md:mb-6">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Price</p>
-                  <p className="text-3xl md:text-4xl font-bold text-primary">Rs. {toy.price}</p>
-                </div>
-              )}
-
-              {/* Color Options Selector */}
-              {availableColors.length > 0 && (
-                <div className="mb-6 md:mb-8">
-                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-2 md:mb-3">Available Colors</p>
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {availableColors.map((color) => {
-                       const isSelected = requestedColor === color || (!requestedColor && availableColors[0] === color);
-                       
-                       const getBgColor = (c: string) => {
-                          const lower = c.toLowerCase();
-                          if (['red', 'blue', 'green', 'yellow', 'purple', 'pink', 'orange', 'black', 'white', 'gray'].includes(lower)) return lower;
-                          return 'gray';
-                       };
-
-                       return (
-                        <button
-                          key={color}
-                          onClick={() => handleColorSelect(color)}
-                          className={`
-                            relative px-3 md:px-6 py-1 md:py-2 rounded-full border-2 transition-all duration-300 flex items-center gap-2 text-xs md:text-base
-                            ${isSelected 
-                              ? 'border-primary bg-primary/5 text-primary font-bold shadow-sm' 
-                              : 'border-gray-200 hover:border-primary/50 text-gray-600'
-                            }
-                          `}
-                        >
-                          <span 
-                            className="w-2 md:w-3 h-2 md:h-3 rounded-full border border-black/10" 
-                            style={{ backgroundColor: getBgColor(color) }}
-                          />
-                          {color}
-                          {isSelected && <Check size={12} className="md:w-4 md:h-4" />}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <p className="text-3xl md:text-4xl font-bold text-primary">{formatPrice(toy.price, currency ?? DEFAULT_CURRENCY)}</p>
                 </div>
               )}
 
               {toy.shortDescription && (
-                <div className="mb-3 md:mb-4">
+                <div className="mb-6 md:mb-8">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Description</p>
                   <p className="font-paragraph text-base md:text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>
                 </div>
               )}
 
-              <div className="space-y-3 md:space-y-4 mt-auto pt-4 md:pt-6">
-                {/* Order via WhatsApp Button */}
-                <button onClick={handleWhatsAppClick} className="w-full bg-whatsapp-green text-white font-paragraph text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3">
-                  <MessageCircle size={18} className="md:w-6 md:h-6" /> Order via WhatsApp
+              {/* Quantity Selector */}
+              <div className="mb-6 md:mb-8">
+                <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-3">Quantity</p>
+                <div className="flex items-center gap-3 bg-gray-50 w-fit rounded-lg p-2">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="p-2 hover:bg-white rounded transition-colors"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus size={18} className="text-foreground" />
+                  </button>
+                  <span className="font-heading font-bold text-lg w-8 text-center">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="p-2 hover:bg-white rounded transition-colors"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus size={18} className="text-foreground" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 md:space-y-4 mt-auto">
+                {/* Add to Cart Button */}
+                <button
+                  onClick={handleAddToCart}
+                  disabled={addingItemId === toy._id}
+                  className="w-full bg-primary text-white font-heading font-bold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {addingItemId === toy._id ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart size={20} className="md:w-6 md:h-6" />
+                      Add to Cart
+                    </>
+                  )}
+                </button>
+
+                {/* Buy Now Button */}
+                <button
+                  onClick={handleBuyNow}
+                  disabled={isBuyingNow}
+                  className="w-full bg-secondary text-foreground font-heading font-bold text-base md:text-lg px-6 md:px-8 py-3 md:py-4 rounded-lg md:rounded-xl hover:bg-secondary/90 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2 md:gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isBuyingNow ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Zap size={20} className="md:w-6 md:h-6" />
+                      Buy Now
+                    </>
+                  )}
                 </button>
               </div>
 
@@ -312,7 +289,8 @@ export default function ProductDetailsPage() {
                   <p className="font-paragraph text-xs md:text-sm text-foreground">
                     ✓ Quality Assured<br />
                     ✓ Safe & Non-Toxic<br />
-                    ✓ In-Store Pickup Available
+                    ✓ Fast Delivery<br />
+                    ✓ Secure Checkout
                   </p>
                 </div>
               </div>
@@ -321,14 +299,14 @@ export default function ProductDetailsPage() {
         </div>
       </section>
 
-      {/* Related/Help Section */}
+      {/* Related Products Section */}
       <section className="py-8 md:py-16 bg-gradient-to-br from-light-pink to-white">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
           <div className="bg-white rounded-lg md:rounded-2xl p-6 md:p-8 shadow-md text-center">
-            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-3 md:mb-4">Can't find what you need?</h2>
-            <p className="font-paragraph text-base md:text-lg text-foreground mb-4 md:mb-6">Our team is here to help you find the perfect toy.</p>
-            <button onClick={handleWhatsAppClick} className="inline-flex items-center gap-2 bg-whatsapp-green text-white font-paragraph text-sm md:text-base px-6 md:px-8 py-2 md:py-4 rounded-lg md:rounded-xl hover:bg-whatsapp-green/90 transition-all shadow-md">
-              <MessageCircle size={16} className="md:w-5 md:h-5" /> Chat with Us
+            <h2 className="font-heading text-2xl md:text-3xl text-foreground mb-3 md:mb-4">Explore More Toys</h2>
+            <p className="font-paragraph text-base md:text-lg text-foreground mb-4 md:mb-6">Browse our complete collection of premium toys for all ages.</p>
+            <button onClick={() => navigate('/toys')} className="inline-flex items-center gap-2 bg-primary text-white font-paragraph text-sm md:text-base px-6 md:px-8 py-2 md:py-4 rounded-lg md:rounded-xl hover:bg-primary/90 transition-all shadow-md">
+              View All Toys
             </button>
           </div>
         </div>

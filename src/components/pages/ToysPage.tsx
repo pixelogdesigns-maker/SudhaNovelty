@@ -1,21 +1,20 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BaseCrudService } from '@/integrations';
-import { Toys, ToyCategories, StoreInformation } from '@/entities';
+import { BaseCrudService, useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
-import { MessageCircle, Filter, ChevronDown, Check, Loader2 } from 'lucide-react';
+import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
-import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
 export default function ToysPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
-  const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
+  const { addingItemId, actions: cartActions } = useCart();
+  const { currency } = useCurrency();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
@@ -48,7 +47,6 @@ export default function ToysPage() {
       try {
         const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
         const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
 
         if (toyItems) {
           setToys(toyItems);
@@ -60,10 +58,6 @@ export default function ToysPage() {
             .filter(cat => cat.isActive)
             .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
           setCategories(activeCategories);
-        }
-
-        if (storeItems && storeItems.length > 0) {
-          setStoreInfo(storeItems[0]);
         }
       } catch {
         // Error loading toys - show empty state
@@ -133,17 +127,24 @@ export default function ToysPage() {
     setFilteredToys(filtered);
   }, [selectedCategory, selectedAgeGroup, toys, matchesAgeGroup]);
 
+  const handleAddToCart = useCallback(async (toy: Toys) => {
+    await cartActions.addToCart({
+      collectionId: 'toys',
+      itemId: toy._id,
+      quantity: 1
+    });
+  }, [cartActions]);
+
   const handleWhatsAppClick = useCallback((toy?: Toys) => {
     let message = '';
     if (toy) {
       const productPageUrl = new URL(`${window.location.origin}/toys/${toy._id}`);
-      message = `Hello! I am interested in this product: ${toy.name}\\n\\n${productPageUrl.toString()}`;
+      message = `Hello! I am interested in this product: ${toy.name}\n\n${productPageUrl.toString()}`;
     } else {
       message = "Hello! I would like to inquire about your toys.";
     }
-    const whatsAppUrl = generateWhatsAppUrl(storeInfo?.whatsAppNumber, message);
-    window.open(whatsAppUrl, '_blank');
-  }, [storeInfo?.whatsAppNumber]);
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
@@ -154,7 +155,6 @@ export default function ToysPage() {
         canonical="https://sudha-novelties.com/toys"
       />
       <Header />
-      <WhatsAppFloatingButton />
       
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-8 md:py-16">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6">
@@ -325,7 +325,7 @@ export default function ToysPage() {
                     <div className="mt-auto mb-2 md:mb-4">
                       {toy.price && (
                         <div className="text-primary font-bold text-base md:text-xl mb-1">
-                          Rs. {toy.price}
+                          {formatPrice(toy.price, currency ?? DEFAULT_CURRENCY)}
                         </div>
                       )}
                       {toy.ageGroup && (
@@ -335,20 +335,29 @@ export default function ToysPage() {
                       )}
                     </div>
                     <div className="space-y-2 md:space-y-3">
+                      <button
+                        onClick={() => handleAddToCart(toy)}
+                        disabled={addingItemId === toy._id}
+                        className="w-full bg-primary text-white font-bold text-xs md:text-sm py-2 md:py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1"
+                      >
+                        {addingItemId === toy._id ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Adding...
+                          </>
+                        ) : (
+                          <>
+                            <ShoppingCart size={14} className="md:w-4 md:h-4" />
+                            Add to Cart
+                          </>
+                        )}
+                      </button>
                       <Link
                         to={`/toys/${toy._id}`}
-                        className="w-full bg-primary text-white font-bold text-xs md:text-sm py-2 md:py-2.5 rounded-full hover:bg-primary/90 transition-all shadow-md opacity-90 hover:opacity-100 text-center block"
+                        className="w-full bg-secondary text-foreground font-bold text-xs md:text-sm py-2 md:py-2.5 rounded-full hover:bg-secondary/90 transition-all shadow-md text-center block"
                       >
                         View Details
                       </Link>
-                      <div className="text-center">
-                        <button
-                          onClick={() => handleWhatsAppClick(toy)}
-                          className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-whatsapp-green transition-colors"
-                        >
-                          Need help? <span className="text-whatsapp-green font-semibold flex items-center gap-1"><MessageCircle size={12} className="md:w-4 md:h-4" /> Chat on WhatsApp</span>
-                        </button>
-                      </div>
                     </div>
                   </div>
                 </motion.div>
