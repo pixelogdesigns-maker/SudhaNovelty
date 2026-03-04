@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { Store, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { SEOHelmet } from '@/components/SEOHelmet';
@@ -17,7 +16,6 @@ export default function AboutPage() {
         keywords="about us, toy store, quality toys, children's toys, toy shop"
         canonical="https://sudha-novelties.com/about"
       />
-      <Header />
       <WhatsAppFloatingButton />
       {/* Hero Section */}
       <section className="relative w-full bg-gradient-to-br from-light-pink to-white py-12 md:py-24">

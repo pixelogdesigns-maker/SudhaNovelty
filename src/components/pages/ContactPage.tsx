@@ -6,7 +6,6 @@ import { MessageCircle, Send, MapPin, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
@@ -93,7 +92,6 @@ export default function ContactPage() {
         keywords="contact us, customer service, toy store contact, get in touch"
         canonical="https://sudha-novelties.com/contact"
       />
-      <Header />
       <WhatsAppFloatingButton />
 
       {/* Hero Section */}

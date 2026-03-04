@@ -5,7 +5,6 @@ import { BaseCrudService, useCart, buyNow } from '@/integrations';
 import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SEOHelmet } from '@/components/SEOHelmet';
 
@@ -102,7 +101,6 @@ export default function ProductDetailsPage() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <div className="w-10 h-10 md:w-12 md:h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
@@ -117,7 +115,6 @@ export default function ProductDetailsPage() {
   if (!toy) {
     return (
       <div className="min-h-screen bg-white">
-        <Header />
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <p className="font-paragraph text-lg md:text-xl text-foreground mb-6">Product not found</p>
@@ -140,7 +137,6 @@ export default function ProductDetailsPage() {
         canonical={`https://sudha-novelties.com/toys/${toyId}`}
         ogImage={images[0] || toy?.image}
       />
-      <Header />
 
       {/* Breadcrumb */}
       <section className="bg-light-pink/30 py-3 md:py-4">

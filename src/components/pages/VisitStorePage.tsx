@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Clock, MessageCircle, Navigation, ExternalLink } from 'lucide-react';
-import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
@@ -144,7 +143,6 @@ export default function VisitStorePage() {
         keywords="store location, visit store, toy store thoothukudi, sudha novelties address, wgc road"
         canonical="https://sudha-novelties.com/visit"
       />
-      <Header />
       <WhatsAppFloatingButton />
 
       {/* Hero */}
