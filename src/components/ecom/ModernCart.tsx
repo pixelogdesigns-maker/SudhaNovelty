@@ -9,7 +9,7 @@ export default function ModernCart() {
   const totalPrice = 0;
   const isOpen = false;
   const isCheckingOut = false;
-  const actions = { checkout: async () => {}, removeFromCart: () => {}, updateQuantity: () => {}, toggleCart: () => {} };
+  const actions = { checkout: async () => {}, removeFromCart: () => {}, updateQuantity: () => {}, toggleCart: () => {}, closeCart: () => {} };
   const currency = null;
   const [isProcessing, setIsProcessing] = useState(false);
 
