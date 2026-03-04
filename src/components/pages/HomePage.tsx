@@ -1,6 +1,5 @@
 // HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
 import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
 import { SEOHelmet } from '@/components/SEOHelmet';
 import { Image } from '@/components/ui/image';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
@@ -633,7 +632,6 @@ export default function HomePage() {
         canonical="https://sudha-novelties.com"
         ogImage="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
       />
-      <Header />
       <WhatsAppFloatingButton />
 
       {/* 1. Hero Carousel */}
