@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BaseCrudService, useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService, useCart } from '@/integrations';
 import { Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';
@@ -14,7 +14,6 @@ export default function ToysPage() {
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
   const { addingItemId, actions: cartActions } = useCart();
-  const { currency } = useCurrency();
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');
@@ -325,7 +324,7 @@ export default function ToysPage() {
                     <div className="mt-auto mb-2 md:mb-4">
                       {toy.price && (
                         <div className="text-primary font-bold text-base md:text-xl mb-1">
-                          {formatPrice(toy.price, currency ?? DEFAULT_CURRENCY)}
+                          ${toy.price.toFixed(2)}
                         </div>
                       )}
                       {toy.ageGroup && (
