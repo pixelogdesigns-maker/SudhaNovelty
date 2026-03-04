@@ -209,7 +209,7 @@ export default function ProductDetailsPage() {
               {toy.price && (
                 <div className="mb-4 md:mb-6">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Price</p>
-                  <p className="text-3xl md:text-4xl font-bold text-primary">₹{toy.price?.toFixed(2) || '0.00'}</p>
+                  <p className="text-3xl md:text-4xl font-bold text-primary">{formatPrice(toy.price, displayCurrency)}</p>
                 </div>
               )}
 

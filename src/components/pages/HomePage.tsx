@@ -388,7 +388,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
         <div className="flex justify-between items-end mb-12">
           <div>
             <div className="flex items-center gap-2 text-secondary font-bold mb-2">
-              <Sparkles size={18} />
+              <span className="text-2xl">⭐</span>
               <span className="uppercase tracking-wider text-sm">Customer Favorites</span>
             </div>
             <h2 className="font-heading text-4xl md:text-5xl text-foreground">Best Sellers</h2>

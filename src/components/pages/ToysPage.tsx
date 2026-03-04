@@ -325,7 +325,7 @@ export default function ToysPage() {
                     <div className="mt-auto mb-2 md:mb-4">
                       {toy.price && (
                         <div className="text-primary font-bold text-base md:text-xl mb-1">
-                          ₹{toy.price.toFixed(2)}
+                          {formatPrice(toy.price, displayCurrency)}
                         </div>
                       )}
                       {toy.ageGroup && (
