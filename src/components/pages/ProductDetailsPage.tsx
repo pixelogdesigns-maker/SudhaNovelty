@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService, useCart, buyNow } from '@/integrations';
+import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
@@ -12,6 +12,7 @@ export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
   const navigate = useNavigate();
   const { addingItemId, actions: cartActions } = useCart();
+  const { currency } = useCurrency();
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);

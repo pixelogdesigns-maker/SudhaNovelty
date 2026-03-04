@@ -4,7 +4,7 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 import { Image } from '@/components/ui/image';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { StoreInformation, ToyCategories, Toys } from '@/entities';
-import { BaseCrudService } from '@/integrations';
+import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import {
   ChevronLeft, ChevronRight,
   Instagram,
@@ -340,6 +340,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [canScrollNext, setCanScrollNext] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const { currency } = useCurrency();
 
   useEffect(() => {
     const node = scrollContainerRef.current;

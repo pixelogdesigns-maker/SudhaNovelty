@@ -2,15 +2,11 @@ import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useState } from 'react';
+import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 
 export default function ModernCart() {
-  // Cart functionality not available
-  const items = [];
-  const totalPrice = 0;
-  const isOpen = false;
-  const isCheckingOut = false;
-  const actions = { checkout: async () => {}, removeFromCart: () => {}, updateQuantity: () => {}, toggleCart: () => {}, closeCart: () => {} };
-  const currency = null;
+  const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
+  const { currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
 
   const handleCheckout = async () => {
@@ -91,7 +87,7 @@ export default function ModernCart() {
                         {item.name}
                       </h3>
                       <p className="font-paragraph text-sm text-primary font-bold mt-1">
-                        ${item.price?.toFixed(2) || '0.00'}
+                        {formatPrice(item.price, currency ?? DEFAULT_CURRENCY)}
                       </p>
 
                       {/* Quantity Controls */}
@@ -136,7 +132,7 @@ export default function ModernCart() {
                 <div className="flex justify-between items-center">
                   <span className="font-paragraph text-gray-600">Subtotal</span>
                   <span className="font-heading font-bold text-foreground">
-                    ${totalPrice?.toFixed(2) || '0.00'}
+                    {formatPrice(totalPrice, currency ?? DEFAULT_CURRENCY)}
                   </span>
                 </div>
 

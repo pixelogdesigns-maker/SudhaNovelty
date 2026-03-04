@@ -3,11 +3,12 @@ import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ModernCart from '@/components/ecom/ModernCart';
+import { useCart } from '@/integrations';
 
 function Header() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const itemCount = 0;
+  const { itemCount, actions } = useCart();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -83,6 +84,7 @@ function Header() {
           <div className="flex items-center gap-4">
             {/* Cart Icon */}
             <button
+              onClick={actions.toggleCart}
               className="relative p-2 text-foreground hover:text-primary transition-colors"
               aria-label="Shopping cart"
             >
