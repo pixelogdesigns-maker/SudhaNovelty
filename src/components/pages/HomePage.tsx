@@ -428,7 +428,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="px-2 pb-2">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
                     <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
-                    <span className="text-lg font-bold text-primary">Rs. {product.price?.toFixed(2)}</span>
+                    <span className="text-lg font-bold text-primary">{formatPrice(product.price || 0, currency ?? DEFAULT_CURRENCY)}</span>
                   </div>
                 </Link>
               </div>
