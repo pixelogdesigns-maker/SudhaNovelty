@@ -606,15 +606,17 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { items: storeItems } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-        if (storeItems && storeItems.length > 0) setStoreInfo(storeItems[0]);
+        // Fetch all data in parallel instead of sequentially
+        const [storeRes, toysRes, categoriesRes] = await Promise.all([
+          BaseCrudService.getAll<StoreInformation>('storeinformation'),
+          BaseCrudService.getAll<Toys>('toys'),
+          BaseCrudService.getAll<ToyCategories>('toycategories')
+        ]);
 
-        const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-        if (toyItems) setToys(toyItems);
-
-        const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
-        if (categoryItems) {
-          setCategories(categoryItems.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
+        if (storeRes.items && storeRes.items.length > 0) setStoreInfo(storeRes.items[0]);
+        if (toysRes.items) setToys(toysRes.items);
+        if (categoriesRes.items) {
+          setCategories(categoriesRes.items.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
         }
       } catch {
         // Error fetching data - silently fail with defaults
