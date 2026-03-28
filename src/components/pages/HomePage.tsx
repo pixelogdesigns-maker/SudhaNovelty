@@ -7,8 +7,7 @@ import { StoreInformation, ToyCategories, Toys } from '@/entities';
 import { BaseCrudService } from '@/integrations';
 import {
   ChevronLeft, ChevronRight,
-  Instagram,
-  Sparkles
+  Instagram
 } from 'lucide-react';
 import React, { useEffect, useRef, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
