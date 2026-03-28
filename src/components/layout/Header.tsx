@@ -36,13 +36,12 @@ function Header() {
               src="https://static.wixstatic.com/media/b9ec8c_8a4424cbc7cf48ea8968507b4cdb3d88~mv2.png"
               width={60}
               height={60}
-              className="md:hidden object-contain border-black border border-none"
+              className="md:hidden object-contain"
               originWidth={533}
               originHeight={533}
               alt="Sudha Novelties"
             />
 
-            {/* --- MOBILE BRAND TEXT --- */}
             {/* --- DESKTOP LOGO --- */}
             <Image
               src="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
@@ -53,13 +52,6 @@ function Header() {
               originHeight={196}
               alt="Sudha Novelties"
             />
-          <div className="md:hidden flex flex-col justify-center">
-              <span className="font-bold text-primary tracking-wider font-poppins-semibold text-3xl">
-              </span>
-              <span className="font-bold text-primary tracking-wider font-poppins-semibold text-xl">
-                SUDHA NOVELTIES
-              </span>
-            </div>
 
             </Link>
 
