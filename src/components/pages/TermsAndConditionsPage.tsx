@@ -1,7 +1,17 @@
+import Footer from '@/components/layout/Footer';
+import { SEOHelmet } from '@/components/SEOHelmet';
+
 export default function TermsAndConditionsPage() {
   return (
-    <main className="flex-1">
-      <div className="max-w-[100rem] mx-auto px-4 md:px-6 py-16">
+    <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="Terms & Conditions - Sudha Novelties"
+        description="Read our terms and conditions for using Sudha Novelties website and purchasing products."
+        keywords="terms, conditions, legal, terms of service"
+        canonical="https://sudha-novelties.com/terms-and-conditions"
+      />
+      <main className="flex-1">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 py-16">
         <h1 className="font-heading text-5xl text-primary mb-8">Terms & Conditions</h1>
         
         <div className="prose prose-lg max-w-none space-y-6">
@@ -68,7 +78,9 @@ export default function TermsAndConditionsPage() {
             </p>
           </section>
         </div>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 }

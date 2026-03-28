@@ -1,7 +1,17 @@
+import Footer from '@/components/layout/Footer';
+import { SEOHelmet } from '@/components/SEOHelmet';
+
 export default function PrivacyPolicyPage() {
   return (
-    <main className="flex-1">
-      <div className="max-w-[100rem] mx-auto px-4 md:px-6 py-16">
+    <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="Privacy Policy - Sudha Novelties"
+        description="Read our privacy policy to understand how we collect, use, and protect your personal information."
+        keywords="privacy, privacy policy, data protection, personal information"
+        canonical="https://sudha-novelties.com/privacy-policy"
+      />
+      <main className="flex-1">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 py-16">
         <h1 className="font-heading text-5xl text-primary mb-8">Privacy Policy</h1>
         
         <div className="prose prose-lg max-w-none space-y-6">
@@ -66,7 +76,9 @@ export default function PrivacyPolicyPage() {
             </p>
           </section>
         </div>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 }

@@ -1,7 +1,17 @@
+import Footer from '@/components/layout/Footer';
+import { SEOHelmet } from '@/components/SEOHelmet';
+
 export default function ShippingPolicyPage() {
   return (
-    <main className="flex-1">
-      <div className="max-w-[100rem] mx-auto px-4 md:px-6 py-16">
+    <div className="min-h-screen bg-white">
+      <SEOHelmet 
+        title="Shipping Policy - Sudha Novelties"
+        description="Learn about our shipping policy, delivery times, and shipping costs for toys ordered from Sudha Novelties."
+        keywords="shipping, delivery, shipping policy, delivery times"
+        canonical="https://sudha-novelties.com/shipping-policy"
+      />
+      <main className="flex-1">
+        <div className="max-w-[120rem] mx-auto px-4 md:px-6 py-16">
         <h1 className="font-heading text-5xl text-primary mb-8">Shipping Policy</h1>
         
         <div className="prose prose-lg max-w-none space-y-6">
@@ -56,7 +66,9 @@ export default function ShippingPolicyPage() {
             </p>
           </section>
         </div>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 }
