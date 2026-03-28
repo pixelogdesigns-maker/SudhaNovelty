@@ -4,7 +4,7 @@ import { SEOHelmet } from '@/components/SEOHelmet';
 import { Image } from '@/components/ui/image';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { StoreInformation, ToyCategories, Toys } from '@/entities';
-import { BaseCrudService, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService } from '@/integrations';
 import {
   ChevronLeft, ChevronRight,
   Instagram,
@@ -340,7 +340,6 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
   const [canScrollNext, setCanScrollNext] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const { currency } = useCurrency();
 
   useEffect(() => {
     const node = scrollContainerRef.current;
@@ -428,7 +427,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                   <div className="px-2 pb-2">
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wide mb-1">{product.category}</p>
                     <h3 className="font-heading text-xl text-foreground mb-2 truncate">{product.name}</h3>
-                    <span className="text-lg font-bold text-primary">{formatPrice(product.price || 0, currency ?? DEFAULT_CURRENCY)}</span>
+                    <span className="text-lg font-bold text-primary">{product.price ? `₹${product.price.toFixed(0)}` : 'N/A'}</span>
                   </div>
                 </Link>
               </div>
