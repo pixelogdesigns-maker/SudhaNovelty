@@ -72,9 +72,10 @@ export default function AboutPage() {
             >
               <div className="rounded-2xl md:rounded-[3rem] overflow-hidden shadow-2xl border border-gray-100 transform hover:scale-[1.02] transition-transform duration-500">
                 <Image
-                  src="https://static.wixstatic.com/media/b9ec8c_b70ec8dab8f04ffea9bbdb554fe188de~mv2.png"
+                  src="https://static.wixstatic.com/media/8cf705_29d4d4ec03b14033bc7b31caaa3edc9b~mv2.png"
                   alt="Sudha Novelties Store"
-                  width={800}
+                  width={400}
+                  height={400}
                   className="w-full h-auto object-cover"
                 />
               </div>
