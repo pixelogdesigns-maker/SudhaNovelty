@@ -97,7 +97,8 @@ export default function ProductDetailsPage() {
         itemId: toy._id,
         quantity
       }]);
-    } finally {
+    } catch (error) {
+      console.error('Buy now error:', error);
       setIsBuyingNow(false);
     }
   };
