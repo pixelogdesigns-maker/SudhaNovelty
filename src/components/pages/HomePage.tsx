@@ -678,30 +678,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Brand Showcase Section */}
-      <section className="py-24 bg-gradient-to-r from-primary/5 to-secondary/5">
-        <div className="max-w-[120rem] mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="font-heading text-4xl md:text-5xl text-foreground mb-6">About Sudha Novelties</h2>
-              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                We bring joy and entertainment to families across the region with our carefully curated collection of premium toys and novelties. From battery-operated vehicles to educational toys, we have something special for every age group.
-              </p>
-              <Link to="/about" className="inline-block px-8 py-4 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-all">Learn More About Us</Link>
-            </div>
-            <div className="flex justify-center">
-              <Image
-                src="https://static.wixstatic.com/media/8cf705_b9feedf91fcb4342b10b1bf47aa235ca~mv2.png"
-                alt="Sudha Novelties Brand"
-                width={400}
-                height={400}
-                className="w-full max-w-md object-contain drop-shadow-lg"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Keep Location Section */}
       <section className="py-24 bg-light-pink/20">
         <div className="max-w-[120rem] mx-auto px-4 md:px-6 text-center">
