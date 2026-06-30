@@ -27,7 +27,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
     <div className={`space-y-2 ${className}`}>
       {/* Main Price Display */}
       <div className="flex items-baseline gap-3">
-        <span className="text-3xl md:text-4xl font-bold text-foreground font-heading">
+        <span className="text-lg md:text-xl font-bold text-foreground font-heading">
           {formatPrice(price, displayCurrency)}
         </span>
         
