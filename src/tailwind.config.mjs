@@ -35,7 +35,8 @@ export default {
                 foreground: '#212121',
                 'secondary-foreground': '#212121',
                 'primary-foreground': '#FFFFFF',
-                primary: '#F48FB1'
+                primary: '#F48FB1',
+                'gray-350': '#9CA3AF'
             },
         },
     },
