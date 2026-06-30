@@ -7,6 +7,7 @@ import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { PricingSection } from '@/components/store/PricingSection';
 
 export default function ProductDetailsPage() {
   const { toyId } = useParams<{ toyId: string }>();
@@ -208,10 +209,12 @@ export default function ProductDetailsPage() {
               </div>
 
               {toy.price && (
-                <div className="mb-4 md:mb-6">
-                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Price</p>
-                  <p className="text-3xl md:text-4xl font-bold text-primary">{formatPrice(toy.price, displayCurrency)}</p>
-                </div>
+                <PricingSection 
+                  price={toy.price} 
+                  mrp={toy.price * 1.5}
+                  showBadge={true}
+                  className="mb-4 md:mb-6"
+                />
               )}
 
               {toy.shortDescription && (

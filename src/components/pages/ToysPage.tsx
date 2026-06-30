@@ -7,6 +7,7 @@ import { Image } from '@/components/ui/image';
 import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';
 import Footer from '@/components/layout/Footer';
 import { SEOHelmet } from '@/components/SEOHelmet';
+import { PricingSection } from '@/components/store/PricingSection';
 
 export default function ToysPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -324,9 +325,12 @@ export default function ToysPage() {
                     )}
                     <div className="mt-auto mb-2 md:mb-4">
                       {toy.price && (
-                        <div className="text-primary font-bold text-base md:text-xl mb-1">
-                          {formatPrice(toy.price, displayCurrency)}
-                        </div>
+                        <PricingSection 
+                          price={toy.price} 
+                          mrp={toy.price * 1.5}
+                          showBadge={true}
+                          className="mb-3"
+                        />
                       )}
                       {toy.ageGroup && (
                         <div className="text-gray-800 text-xs md:text-sm font-medium">

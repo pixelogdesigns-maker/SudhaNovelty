@@ -113,4 +113,6 @@ export interface Toys {
   isBestSellingNow?: string;
   /** @wixFieldType number */
   number?: number;
+  /** @wixFieldType video */
+  video?: string;
 }

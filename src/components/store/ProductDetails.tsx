@@ -1,5 +1,6 @@
 import { ProductActionButtons } from './ProductActionButtons';
 import { CartSummary } from '@/components/ui/ecom/Cart';
+import { PricingSection } from './PricingSection';
 import {
   Product,
   ProductName,
@@ -84,10 +85,16 @@ export default function ProductDetails({
               <h2 />
             </ProductName>
             <div className="space-y-1">
-              <ProductPrice />
-              <ProductCompareAtPrice asChild>
-                <div></div>
-              </ProductCompareAtPrice>
+              <ProductPrice asChild>
+                {({ price, compareAtPrice }) => (
+                  <PricingSection 
+                    price={price} 
+                    mrp={compareAtPrice || price * 1.5}
+                    showBadge={true}
+                    className="mt-4"
+                  />
+                )}
+              </ProductPrice>
             </div>
           </div>
 

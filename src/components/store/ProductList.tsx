@@ -42,6 +42,7 @@ import {
   OptionName,
 } from '@/components/ui/store/Option';
 import { ChoiceColor, ChoiceText } from '@/components/ui/store/Choice';
+import { PricingSection } from './PricingSection';
 
 interface ProductListProps {
   productsListConfig: ProductsListServiceConfig;
