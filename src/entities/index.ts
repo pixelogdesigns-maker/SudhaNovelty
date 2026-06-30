@@ -85,6 +85,8 @@ export interface Toys {
   _updatedDate?: Date;
   /** @wixFieldType text */
   name?: string;
+  /** @wixFieldType number */
+  mrp?: number;
   /** @wixFieldType text */
   isBestSellerText?: string;
   /** @wixFieldType boolean */

@@ -327,7 +327,7 @@ export default function ToysPage() {
                       {toy.price && (
                         <PricingSection 
                           price={toy.price} 
-                          mrp={toy.price * 1.5}
+                          mrp={toy.mrp || toy.price * 1.5}
                           showBadge={true}
                           className="mb-3"
                         />
