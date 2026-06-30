@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BaseCrudService, useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService, useCart, useCurrency, formatPrice } from '@/integrations';
 import { Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';

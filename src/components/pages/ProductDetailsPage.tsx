@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice } from '@/integrations';
 import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';

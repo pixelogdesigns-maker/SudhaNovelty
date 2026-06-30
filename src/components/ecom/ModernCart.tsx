@@ -2,7 +2,7 @@ import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useState } from 'react';
-import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { useCart, useCurrency, formatPrice } from '@/integrations';
 
 export default function ModernCart() {
   const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
