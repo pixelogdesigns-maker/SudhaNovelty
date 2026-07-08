@@ -167,7 +167,7 @@ function Footer() {
             © {new Date().getFullYear()} {storeInfo?.storeName || 'Sudha Novelties'}. All rights reserved.
           </p>
           <p className="font-paragraph text-sm text-center text-foreground/70 mt-2">
-            Powered by <a href="https://www.pixelog.in" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors font-medium font-bitter-black">Pixelog</a>
+            Designed & Developed by <a href="https://www.pixelog.in" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors font-medium font-bitter-black">PIXELOG DIGITAL & IT SOLUTIONS</a>
           </p>
         </div>
       </div>
