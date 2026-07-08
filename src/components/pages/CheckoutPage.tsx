@@ -134,11 +134,6 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-light-pink/20 to-white py-12 px-4">
-        <style>{`
-          .rupee-symbol {
-            font-weight: 400 !important;
-          }
-        `}</style>
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => navigate('/toys')}
@@ -171,11 +166,6 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-light-pink/20 to-white py-12 px-4">
-      <style>{`
-        .rupee-symbol {
-          font-weight: 400 !important;
-        }
-      `}</style>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <button

@@ -3,3 +3,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Rupee symbol fix - ensure it displays with normal weight */
+.rupee-symbol {
+  font-weight: 400 !important;
+  font-family: 'nunito sans', sans-serif !important;
+}
+
+/* Additional price display fixes */
+.price-display {
+  font-weight: 500 !important;
+  font-family: 'nunito sans', sans-serif !important;
+}
+
+/* Ensure all formatted prices use consistent styling */
+[class*="price"] {
+  font-weight: 400 !important;
+}

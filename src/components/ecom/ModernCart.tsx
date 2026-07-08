@@ -28,11 +28,6 @@ export default function ModernCart() {
     <AnimatePresence>
       {isOpen && (
         <>
-          <style>{`
-            .rupee-symbol {
-              font-weight: 400 !important;
-            }
-          `}</style>
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -99,7 +94,7 @@ export default function ModernCart() {
                       <h3 className="font-heading text-sm font-bold text-foreground truncate">
                         {item.name}
                       </h3>
-                      <p className="font-paragraph text-sm text-primary font-bold mt-1">
+                      <p className="font-paragraph text-sm text-primary font-bold mt-1 rupee-symbol">
                         {formatPrice(item.price, displayCurrency)}
                       </p>
 

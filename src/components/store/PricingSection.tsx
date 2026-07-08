@@ -25,14 +25,9 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
 
   return (
     <div className={`space-y-2 ${className}`}>
-      <style>{`
-        .rupee-symbol {
-          font-weight: 400 !important;
-        }
-      `}</style>
       {/* Main Price Display */}
       <div className="flex items-baseline gap-3">
-        <span className="text-lg md:text-xl font-bold text-foreground font-heading rupee-symbol">
+        <span className="text-lg md:text-xl font-bold text-foreground font-paragraph rupee-symbol">
           {formatPrice(price, displayCurrency)}
         </span>
         
