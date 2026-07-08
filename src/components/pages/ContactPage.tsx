@@ -26,12 +26,13 @@ export default function ContactPage() {
   useEffect(() => {
     const fetchStoreInfo = async () => {
       try {
-        const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-        if (items && items.length > 0) {
-          setStoreInfo(items[0]);
+        const storeRes = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (storeRes?.items && Array.isArray(storeRes.items) && storeRes.items.length > 0) {
+          setStoreInfo(storeRes.items[0]);
         }
-      } catch {
+      } catch (error) {
         // Silently fail - use defaults
+        console.error('Error fetching store info:', error);
       } finally {
         setIsLoading(false);
       }

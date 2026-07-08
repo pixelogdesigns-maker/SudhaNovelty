@@ -632,13 +632,21 @@ export default function HomePage() {
           BaseCrudService.getAll<ToyCategories>('toycategories')
         ]);
 
-        if (storeRes.items && storeRes.items.length > 0) setStoreInfo(storeRes.items[0]);
-        if (toysRes.items) setToys(toysRes.items);
-        if (categoriesRes.items) {
-          setCategories(categoriesRes.items.filter(cat => cat.isActive).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0)));
+        if (storeRes?.items && storeRes.items.length > 0) {
+          setStoreInfo(storeRes.items[0]);
         }
-      } catch {
+        if (toysRes?.items && Array.isArray(toysRes.items)) {
+          setToys(toysRes.items);
+        }
+        if (categoriesRes?.items && Array.isArray(categoriesRes.items)) {
+          const activeCategories = categoriesRes.items
+            .filter((cat: ToyCategories) => cat.isActive !== false)
+            .sort((a: ToyCategories, b: ToyCategories) => (a.displayOrder || 0) - (b.displayOrder || 0));
+          setCategories(activeCategories);
+        }
+      } catch (error) {
         // Error fetching data - silently fail with defaults
+        console.error('Error fetching homepage data:', error);
       }
     };
     fetchData();

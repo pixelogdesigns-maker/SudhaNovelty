@@ -32,9 +32,12 @@ export default function ProductDetailsPage() {
       if (!toyId) return;
       try {
         const toyData = await BaseCrudService.getById<Toys>('toys', toyId);
-        setToy(toyData);
-      } catch {
+        if (toyData) {
+          setToy(toyData);
+        }
+      } catch (error) {
         // Error fetching product
+        console.error('Error fetching product:', error);
       } finally {
         setIsLoading(false);
       }

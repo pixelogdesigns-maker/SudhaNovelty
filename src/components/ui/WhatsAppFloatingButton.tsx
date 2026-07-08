@@ -9,9 +9,14 @@ export default function WhatsAppFloatingButton() {
 
   useEffect(() => {
     const fetchStoreInfo = async () => {
-      const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
-      if (items && items.length > 0 && items[0].whatsAppNumber) {
-        setWhatsAppNumber(items[0].whatsAppNumber);
+      try {
+        const storeRes = await BaseCrudService.getAll<StoreInformation>('storeinformation');
+        if (storeRes?.items && Array.isArray(storeRes.items) && storeRes.items.length > 0 && storeRes.items[0].whatsAppNumber) {
+          setWhatsAppNumber(storeRes.items[0].whatsAppNumber);
+        }
+      } catch (error) {
+        // Silently fail
+        console.error('Error fetching WhatsApp number:', error);
       }
     };
     fetchStoreInfo();

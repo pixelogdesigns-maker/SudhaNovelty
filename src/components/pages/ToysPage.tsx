@@ -48,22 +48,23 @@ export default function ToysPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { items: toyItems } = await BaseCrudService.getAll<Toys>('toys');
-        const { items: categoryItems } = await BaseCrudService.getAll<ToyCategories>('toycategories');
+        const toysRes = await BaseCrudService.getAll<Toys>('toys');
+        const categoriesRes = await BaseCrudService.getAll<ToyCategories>('toycategories');
 
-        if (toyItems) {
-          setToys(toyItems);
-          setFilteredToys(toyItems);
+        if (toysRes?.items && Array.isArray(toysRes.items)) {
+          setToys(toysRes.items);
+          setFilteredToys(toysRes.items);
         }
 
-        if (categoryItems) {
-          const activeCategories = categoryItems
-            .filter(cat => cat.isActive)
-            .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+        if (categoriesRes?.items && Array.isArray(categoriesRes.items)) {
+          const activeCategories = categoriesRes.items
+            .filter((cat: ToyCategories) => cat.isActive !== false)
+            .sort((a: ToyCategories, b: ToyCategories) => (a.displayOrder || 0) - (b.displayOrder || 0));
           setCategories(activeCategories);
         }
-      } catch {
+      } catch (error) {
         // Error loading toys - show empty state
+        console.error('Error fetching toys:', error);
       } finally {
         setIsLoading(false);
       }
