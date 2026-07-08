@@ -96,21 +96,19 @@ export default function ProductDetailsPage() {
     setQuantity(1);
   }, [toy, cartActions, quantity]);
 
-  const handleBuyNow = useCallback(async () => {
+  const handleBuyNow = useCallback(() => {
     if (!toy) return;
     setIsBuyingNow(true);
-    try {
-      await buyNow([{
-        collectionId: 'toys',
-        itemId: toy._id,
-        quantity
-      }]);
-      // Note: buyNow redirects to checkout, so this won't execute
-      // but we keep it for safety in case of redirect delays
-    } catch (error) {
+    // Fire and forget - don't await. buyNow handles redirect internally.
+    // This makes the UI respond instantly while checkout loads in background.
+    buyNow([{
+      collectionId: 'toys',
+      itemId: toy._id,
+      quantity
+    }]).catch((error) => {
       console.error('Buy now error:', error);
       setIsBuyingNow(false);
-    }
+    });
   }, [toy, quantity]);
 
   if (isLoading) {
