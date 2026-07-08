@@ -101,14 +101,12 @@ export default function ProductDetailsPage() {
     setIsBuyingNow(true);
     // Fire and forget - don't await. buyNow handles redirect internally.
     // This makes the UI respond instantly while checkout loads in background.
+    // No catch needed - buyNow redirects the page, so errors won't be caught anyway
     buyNow([{
       collectionId: 'toys',
       itemId: toy._id,
       quantity
-    }]).catch((error) => {
-      console.error('Buy now error:', error);
-      setIsBuyingNow(false);
-    });
+    }]);
   }, [toy, quantity]);
 
   if (isLoading) {

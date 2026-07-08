@@ -1,6 +1,6 @@
 import { Image } from '@/components/ui/image';
 import { Menu, X, ShoppingCart } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ModernCart from '@/components/ecom/ModernCart';
 import { useCart } from '@/integrations';
@@ -10,33 +10,38 @@ function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { itemCount, actions } = useCart();
 
-  // Initialize Meta Pixel
+  // Initialize Meta Pixel - optimized to not block rendering
   useEffect(() => {
-    // Load Meta Pixel script
-    const script = document.createElement('script');
-    script.innerHTML = `
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '5242827002609560');
-      fbq('track', 'PageView');
-    `;
-    document.head.appendChild(script);
+    // Defer Meta Pixel loading to avoid blocking page render
+    const timer = setTimeout(() => {
+      // Load Meta Pixel script
+      const script = document.createElement('script');
+      script.innerHTML = `
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '5242827002609560');
+        fbq('track', 'PageView');
+      `;
+      document.head.appendChild(script);
 
-    // Add noscript image
-    const noscript = document.createElement('noscript');
-    const img = document.createElement('img');
-    img.height = 1;
-    img.width = 1;
-    img.style.display = 'none';
-    img.src = 'https://www.facebook.com/tr?id=5242827002609560&ev=PageView&noscript=1';
-    noscript.appendChild(img);
-    document.head.appendChild(noscript);
+      // Add noscript image
+      const noscript = document.createElement('noscript');
+      const img = document.createElement('img');
+      img.height = 1;
+      img.width = 1;
+      img.style.display = 'none';
+      img.src = 'https://www.facebook.com/tr?id=5242827002609560&ev=PageView&noscript=1';
+      noscript.appendChild(img);
+      document.head.appendChild(noscript);
+    }, 2000); // Defer by 2 seconds to not block initial render
+
+    return () => clearTimeout(timer);
   }, []);
 
   const navLinks = [
@@ -49,6 +54,11 @@ function Header() {
   ];
 
   const isActive = (path: string) => location.pathname === path;
+
+  // Memoize cart toggle to prevent unnecessary re-renders
+  const handleCartToggle = useCallback(() => {
+    actions.toggleCart();
+  }, [actions]);
 
   return (
     <header className="sticky top-0 z-50 bg-[#FDF6F0] shadow-md border-b-2 border-primary">
@@ -105,7 +115,7 @@ function Header() {
           <div className="flex items-center gap-4">
             {/* Cart Icon */}
             <button
-              onClick={actions.toggleCart}
+              onClick={handleCartToggle}
               className="relative p-2 text-foreground hover:text-primary transition-colors"
               aria-label="Shopping cart"
             >

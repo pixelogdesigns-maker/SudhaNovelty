@@ -1,25 +1,31 @@
 import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { useNavigate } from 'react-router-dom';
 
 export default function ModernCart() {
   const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
   const { currency } = useCurrency();
+  const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   
   // Use DEFAULT_CURRENCY as fallback
   const displayCurrency = currency ?? DEFAULT_CURRENCY;
 
-  const handleCheckout = async () => {
+  // Optimized checkout handler - navigate immediately for better UX
+  const handleCheckout = useCallback(async () => {
+    if (items.length === 0) return;
+    
     setIsProcessing(true);
-    try {
-      await actions.checkout();
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+    // Close cart immediately for responsive UI
+    actions.closeCart();
+    
+    // Navigate to checkout page - this will trigger the actual checkout
+    // The checkout page will handle the Wix checkout redirect
+    navigate('/checkout', { replace: true });
+  }, [items.length, actions, navigate]);
 
   return (
     <AnimatePresence>

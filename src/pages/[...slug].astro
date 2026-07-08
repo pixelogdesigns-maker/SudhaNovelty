@@ -18,6 +18,17 @@ const seoTagsServiceConfig = await loadSEOTagsServiceConfig({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    {/* Performance: Resource hints for external domains */}
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="preconnect" href="https://www.facebook.com" crossorigin />
+    <link rel="preconnect" href="https://checkout.wix.com" crossorigin />
+    <link rel="preconnect" href="https://api.wix.com" crossorigin />
+    <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+    
+    {/* Performance: Prefetch checkout page for faster navigation */}
+    <link rel="prefetch" href="/checkout" as="document" />
+    
     <SEO.Tags seoTagsServiceConfig={seoTagsServiceConfig} slot="seo-tags" />
   </head>
   <body class="w-full h-full">
