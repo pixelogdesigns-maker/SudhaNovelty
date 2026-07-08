@@ -2,7 +2,7 @@ import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useState } from 'react';
-import { useCart, useCurrency, formatPrice } from '@/integrations';
+import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { useNavigate } from 'react-router-dom';
 
 export default function ModernCart() {
@@ -11,8 +11,8 @@ export default function ModernCart() {
   const { currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
   
-  // Use INR as the currency for India
-  const displayCurrency = currency || 'INR';
+  // Use DEFAULT_CURRENCY as fallback
+  const displayCurrency = currency ?? DEFAULT_CURRENCY;
 
   const handleCheckout = async () => {
     setIsProcessing(true);

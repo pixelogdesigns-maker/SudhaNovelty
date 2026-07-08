@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useCart, useCurrency, formatPrice } from '@/integrations';
+import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { Image } from '@/components/ui/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -28,7 +28,7 @@ export default function CheckoutPage() {
   const navigate = useNavigate();
   const { items, totalPrice, isCheckingOut } = useCart();
   const { currency } = useCurrency();
-  const displayCurrency = currency || 'INR';
+  const displayCurrency = currency ?? DEFAULT_CURRENCY;
 
   const [sameAsShipping, setSameAsShipping] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);

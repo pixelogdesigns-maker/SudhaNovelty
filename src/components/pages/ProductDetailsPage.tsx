@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice } from '@/integrations';
+import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
@@ -15,8 +15,8 @@ export default function ProductDetailsPage() {
   const { addingItemId, actions: cartActions } = useCart();
   const { currency } = useCurrency();
   
-  // Use INR as the currency for India
-  const displayCurrency = currency || 'INR';
+  // Use DEFAULT_CURRENCY as fallback
+  const displayCurrency = currency ?? DEFAULT_CURRENCY;
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCurrency, formatPrice } from '@/integrations';
+import { useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
 
 interface PricingSectionProps {
   price: number;
@@ -15,8 +15,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   showBadge = true,
 }) => {
   const { currency } = useCurrency();
-  // Use INR as the currency for India
-  const displayCurrency = currency || 'INR';
+  // Use DEFAULT_CURRENCY as fallback
+  const displayCurrency = currency ?? DEFAULT_CURRENCY;
 
   // Calculate discount only if MRP is provided and greater than price
   const hasDiscount = mrp && mrp > price;
