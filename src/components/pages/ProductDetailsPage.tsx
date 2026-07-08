@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
@@ -45,31 +45,35 @@ export default function ProductDetailsPage() {
     fetchData();
   }, [toyId]);
 
-  // Get all images
-  let images: string[] = [];
-  if (toy) {
+  // Get all images - memoized to prevent recalculation
+  const images = useMemo(() => {
+    if (!toy) return [];
     if (toy.productGallery && Array.isArray(toy.productGallery) && toy.productGallery.length > 0) {
-      images = toy.productGallery.map((item: any) => item.src || item.url || item);
+      return toy.productGallery.map((item: any) => item.src || item.url || item);
     } else if (toy.productImages1 && Array.isArray(toy.productImages1) && toy.productImages1.length > 0) {
-      images = toy.productImages1.map((item: any) => item.src || item.url || item);
+      return toy.productImages1.map((item: any) => item.src || item.url || item);
     } else if (toy.productImages && typeof toy.productImages === 'string') {
-      images = [toy.productImages];
+      return [toy.productImages];
     } else if (toy.image && typeof toy.image === 'string') {
-      images = [toy.image];
+      return [toy.image];
     }
-  }
+    return [];
+  }, [toy]);
 
-  const mainImage = images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png';
+  const mainImage = useMemo(() => 
+    images[selectedImageIndex] || images[0] || 'https://static.wixstatic.com/media/b9ec8c_2c7c3392b6544f1093b680407e664a6a~mv2.png',
+    [images, selectedImageIndex]
+  );
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
     setSlideDirection('right');
     setSelectedImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  };
+  }, [images.length]);
 
-  const handleNextImage = () => {
+  const handleNextImage = useCallback(() => {
     setSlideDirection('left');
     setSelectedImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
+  }, [images.length]);
 
   const handleTouchStart = (e: React.TouchEvent) => setTouchStart(e.targetTouches[0].clientX);
   const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
@@ -82,7 +86,7 @@ export default function ProductDetailsPage() {
     setTouchEnd(0);
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = useCallback(async () => {
     if (!toy) return;
     await cartActions.addToCart({
       collectionId: 'toys',
@@ -90,9 +94,9 @@ export default function ProductDetailsPage() {
       quantity
     });
     setQuantity(1);
-  };
+  }, [toy, cartActions, quantity]);
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = useCallback(async () => {
     if (!toy) return;
     setIsBuyingNow(true);
     try {
@@ -101,11 +105,13 @@ export default function ProductDetailsPage() {
         itemId: toy._id,
         quantity
       }]);
+      // Note: buyNow redirects to checkout, so this won't execute
+      // but we keep it for safety in case of redirect delays
     } catch (error) {
       console.error('Buy now error:', error);
       setIsBuyingNow(false);
     }
-  };
+  }, [toy, quantity]);
 
   if (isLoading) {
     return (
