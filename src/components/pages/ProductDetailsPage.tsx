@@ -172,7 +172,7 @@ export default function ProductDetailsPage() {
                         transition={{ duration: 0.4, ease: 'easeInOut' }} 
                         className="w-full h-full absolute inset-0"
                       >
-                        <Image src={mainImage} alt={toy.name || 'Product'} width={600} className="w-full h-full object-cover" />
+                        <Image src={mainImage} alt={toy.name || 'Product'} width={500} height={500} className="w-full h-full object-cover" loading="eager" />
                       </motion.div>
                     </AnimatePresence>
                   </div>

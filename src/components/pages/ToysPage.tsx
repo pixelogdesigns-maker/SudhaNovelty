@@ -307,8 +307,10 @@ export default function ToysPage() {
                         <Image
                           src={imageUrl}
                           alt={toy.name || 'Toy product'}
-                          width={400}
+                          width={300}
+                          height={300}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          loading="lazy"
                         />
                       );
                     })()}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { BaseCrudService } from '@/integrations';
 import { StoreInformation } from '@/entities';
 import { MapPin, Phone, Clock, MessageCircle } from 'lucide-react';
@@ -6,8 +6,33 @@ import { generateWhatsAppUrl } from '@/lib/whatsapp-utils';
 
 function Footer() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
+  const [isInView, setIsInView] = useState(false);
+  const footerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !storeInfo) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => {
+      if (footerRef.current) {
+        observer.unobserve(footerRef.current);
+      }
+    };
+  }, [storeInfo]);
+
+  useEffect(() => {
+    if (!isInView) return;
+
     const fetchStoreInfo = async () => {
       try {
         const { items } = await BaseCrudService.getAll<StoreInformation>('storeinformation');
@@ -19,7 +44,7 @@ function Footer() {
       }
     };
     fetchStoreInfo();
-  }, []);
+  }, [isInView]);
 
   const handleWhatsAppClick = () => {
     const message = 'Hi, I am interested in this toy. Please share more details.';
@@ -28,7 +53,7 @@ function Footer() {
   };
 
   return (
-    <footer className="bg-light-pink mt-0">
+    <footer className="bg-light-pink mt-0" ref={footerRef}>
       <div className="max-w-[120rem] mx-auto px-4 md:px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Store Info */}

@@ -9,7 +9,7 @@ import {
   ChevronLeft, ChevronRight,
   Instagram
 } from 'lucide-react';
-import React, { useEffect, useRef, useState, memo } from 'react';
+import React, { useEffect, useRef, useState, memo, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 
 // --- Types ---
@@ -31,11 +31,11 @@ interface VideoReel {
 }
 
 const VIDEO_REELS: VideoReel[] = [
-  { id: 'video-1', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/720p/mp4/file.mp4#t=0.001' },
-  { id: 'video-2', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/720p/mp4/file.mp4#t=0.001' },
-  { id: 'video-3', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/720p/mp4/file.mp4#t=0.001' },
-  { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/720p/mp4/file.mp4#t=0.001' },
-  { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/720p/mp4/file.mp4#t=0.001' },
+  { id: 'video-1', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_450e40f9c7af4d8abffc2922377f3bdb/360p/mp4/file.mp4#t=0.001' },
+  { id: 'video-2', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_17915084739d420ea920a6e400088999/360p/mp4/file.mp4#t=0.001' },
+  { id: 'video-3', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_2ff14245efe44cfb9aa9c6ab341012e0/360p/mp4/file.mp4#t=0.001' },
+  { id: 'video-4', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_ad478e8adee9487ca1f530a14053e8b2/360p/mp4/file.mp4#t=0.001' },
+  { id: 'video-5', title: '', videoUrl: 'https://video.wixstatic.com/video/b9ec8c_51ab037a44484917b9c05761fca6f25d/360p/mp4/file.mp4#t=0.001' },
 ];
 
 const CATEGORY_COLORS = ["bg-purple-100", "bg-blue-100", "bg-orange-100", "bg-green-100", "bg-yellow-100", "bg-red-100", "bg-pink-100", "bg-indigo-100"];
@@ -419,7 +419,7 @@ const BestSellers = ({ toys }: { toys: Toys[] }) => {
                       else if (typeof product.productImages === 'string') imageUrl = product.productImages;
                       else if (typeof product.image === 'string') imageUrl = product.image;
                       return (
-                        <Image src={imageUrl} alt={product.name || 'Product'} width={400} height={400} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image src={imageUrl} alt={product.name || 'Product'} width={300} height={300} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                       );
                     })()}
                   </div>
@@ -532,7 +532,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
               `}>
                 {cat.categoryImage ? (
                   <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
-                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} height={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" />
+                    <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} height={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" loading="lazy" />
                   </div>
                 ) : (
                   <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center text-4xl font-bold text-gray-300">{cat.categoryName?.charAt(0) || '?'}</div>
@@ -567,29 +567,49 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 // 6. Video Marquee Component
 const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        if (entry.isIntersecting && videoRef.current) {
+          videoRef.current.defaultMuted = true;
+          videoRef.current.muted = true;
+          videoRef.current.play().catch(() => {
+            // Autoplay prevented - silent fail is acceptable
+          });
+        } else if (!entry.isIntersecting && videoRef.current) {
+          videoRef.current.pause();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
     if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {
-        // Autoplay prevented - silent fail is acceptable
-      });
+      observer.observe(videoRef.current);
     }
+
+    return () => {
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    };
   }, []);
 
   return (
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-      <video
-        ref={videoRef}
-        src={video.videoUrl}
-        poster={video.thumbnailUrl}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="w-full h-full object-cover pointer-events-none"
-      />
+      {isInView && (
+        <video
+          ref={videoRef}
+          src={video.videoUrl}
+          poster={video.thumbnailUrl}
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover pointer-events-none"
+        />
+      )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
     </div>
   );
