@@ -16,6 +16,8 @@ interface AddressForm {
   email: string;
   phone: string;
   address: string;
+  streetNumber: string;
+  area: string;
   city: string;
   state: string;
   zipCode: string;
@@ -37,6 +39,8 @@ export default function CheckoutPage() {
     email: '',
     phone: '',
     address: '',
+    streetNumber: '',
+    area: '',
     city: '',
     state: '',
     zipCode: '',
@@ -49,6 +53,8 @@ export default function CheckoutPage() {
     email: '',
     phone: '',
     address: '',
+    streetNumber: '',
+    area: '',
     city: '',
     state: '',
     zipCode: '',
@@ -80,6 +86,8 @@ export default function CheckoutPage() {
       'email',
       'phone',
       'address',
+      'streetNumber',
+      'area',
       'city',
       'state',
       'zipCode',
@@ -269,7 +277,39 @@ export default function CheckoutPage() {
                     onChange={(e) =>
                       handleShippingChange('address', e.target.value)
                     }
-                    placeholder="123 Main Street, Apt 4B"
+                    placeholder="Main Street"
+                    className="font-paragraph"
+                  />
+                </div>
+
+                {/* Street Number */}
+                <div>
+                  <Label className="font-paragraph text-sm font-semibold text-foreground mb-2 block">
+                    Street Number *
+                  </Label>
+                  <Input
+                    type="text"
+                    value={shippingAddress.streetNumber}
+                    onChange={(e) =>
+                      handleShippingChange('streetNumber', e.target.value)
+                    }
+                    placeholder="123"
+                    className="font-paragraph"
+                  />
+                </div>
+
+                {/* Area */}
+                <div>
+                  <Label className="font-paragraph text-sm font-semibold text-foreground mb-2 block">
+                    Area *
+                  </Label>
+                  <Input
+                    type="text"
+                    value={shippingAddress.area}
+                    onChange={(e) =>
+                      handleShippingChange('area', e.target.value)
+                    }
+                    placeholder="Downtown"
                     className="font-paragraph"
                   />
                 </div>
@@ -439,7 +479,39 @@ export default function CheckoutPage() {
                       onChange={(e) =>
                         handleBillingChange('address', e.target.value)
                       }
-                      placeholder="123 Main Street, Apt 4B"
+                      placeholder="Main Street"
+                      className="font-paragraph"
+                    />
+                  </div>
+
+                  {/* Street Number */}
+                  <div>
+                    <Label className="font-paragraph text-sm font-semibold text-foreground mb-2 block">
+                      Street Number *
+                    </Label>
+                    <Input
+                      type="text"
+                      value={billingAddress.streetNumber}
+                      onChange={(e) =>
+                        handleBillingChange('streetNumber', e.target.value)
+                      }
+                      placeholder="123"
+                      className="font-paragraph"
+                    />
+                  </div>
+
+                  {/* Area */}
+                  <div>
+                    <Label className="font-paragraph text-sm font-semibold text-foreground mb-2 block">
+                      Area *
+                    </Label>
+                    <Input
+                      type="text"
+                      value={billingAddress.area}
+                      onChange={(e) =>
+                        handleBillingChange('area', e.target.value)
+                      }
+                      placeholder="Downtown"
                       className="font-paragraph"
                     />
                   </div>
