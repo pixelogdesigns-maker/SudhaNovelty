@@ -7,6 +7,7 @@ import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-rou
 // Import pages
 import AboutPage from '@/components/pages/AboutPage';
 import AdminPage from '@/components/pages/AdminPage';
+import CheckoutPage from '@/components/pages/CheckoutPage';
 import ContactPage from '@/components/pages/ContactPage';
 import HomePage from '@/components/pages/HomePage';
 import PrivacyPolicyPage from '@/components/pages/PrivacyPolicyPage';
@@ -123,6 +124,13 @@ const router = createBrowserRouter([
         element: <PrivacyPolicyPage />,
         routeMetadata: {
           pageIdentifier: 'privacy-policy',
+        },
+      },
+      {
+        path: "checkout",
+        element: <CheckoutPage />,
+        routeMetadata: {
+          pageIdentifier: 'checkout',
         },
       },
       {
