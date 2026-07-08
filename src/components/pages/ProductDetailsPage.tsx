@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService, useCart, buyNow, useCurrency, formatPrice } from '@/integrations';
+import { SITE_CURRENCY } from '@/config/currency';
 import { Toys } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingCart, Zap, Plus, Minus } from 'lucide-react';
@@ -15,8 +16,8 @@ export default function ProductDetailsPage() {
   const { addingItemId, actions: cartActions } = useCart();
   const { currency } = useCurrency();
   
-  // Use DEFAULT_CURRENCY as fallback
-  const displayCurrency = currency ?? DEFAULT_CURRENCY;
+  // Use SITE_CURRENCY as fallback
+  const displayCurrency = currency ?? SITE_CURRENCY;
   
   const [toy, setToy] = useState<Toys | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
