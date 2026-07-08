@@ -3,10 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useState } from 'react';
 import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
-import { useNavigate } from 'react-router-dom';
 
 export default function ModernCart() {
-  const navigate = useNavigate();
   const { items, totalPrice, isOpen, isCheckingOut, actions } = useCart();
   const { currency } = useCurrency();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -17,8 +15,7 @@ export default function ModernCart() {
   const handleCheckout = async () => {
     setIsProcessing(true);
     try {
-      actions.closeCart();
-      navigate('/checkout');
+      await actions.checkout();
     } finally {
       setIsProcessing(false);
     }
