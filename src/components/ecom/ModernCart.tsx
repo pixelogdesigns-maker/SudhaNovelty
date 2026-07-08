@@ -2,7 +2,8 @@ import { X, Trash2, Plus, Minus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Image } from '@/components/ui/image';
 import { useState, useCallback } from 'react';
-import { useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { useCart, useCurrency, formatPrice } from '@/integrations';
+import { SITE_CURRENCY } from '@/config/currency';
 import { useNavigate } from 'react-router-dom';
 
 export default function ModernCart() {
@@ -11,8 +12,8 @@ export default function ModernCart() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   
-  // Use DEFAULT_CURRENCY as fallback
-  const displayCurrency = currency ?? DEFAULT_CURRENCY;
+  // Use SITE_CURRENCY as fallback
+  const displayCurrency = currency ?? SITE_CURRENCY;
 
   // Optimized checkout handler - navigate immediately for better UX
   const handleCheckout = useCallback(async () => {

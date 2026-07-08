@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BaseCrudService, useCart, useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { BaseCrudService, useCart, useCurrency, formatPrice } from '@/integrations';
+import { SITE_CURRENCY } from '@/config/currency';
 import { Toys, ToyCategories } from '@/entities';
 import { Image } from '@/components/ui/image';
 import { Filter, ChevronDown, Check, Loader2, ShoppingCart, MessageCircle } from 'lucide-react';
@@ -16,8 +17,8 @@ export default function ToysPage() {
   const { addingItemId, actions: cartActions } = useCart();
   const { currency } = useCurrency();
   
-  // Use DEFAULT_CURRENCY as fallback
-  const displayCurrency = currency ?? DEFAULT_CURRENCY;
+  // Use SITE_CURRENCY as fallback
+  const displayCurrency = currency ?? SITE_CURRENCY;
   
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedAgeGroup, setSelectedAgeGroup] = useState<string>('all');

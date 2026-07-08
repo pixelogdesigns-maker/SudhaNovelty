@@ -1,5 +1,6 @@
 import React from 'react';
-import { useCurrency, formatPrice, DEFAULT_CURRENCY } from '@/integrations';
+import { useCurrency, formatPrice } from '@/integrations';
+import { SITE_CURRENCY } from '@/config/currency';
 
 interface PricingSectionProps {
   price: number;
@@ -15,8 +16,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
   showBadge = true,
 }) => {
   const { currency } = useCurrency();
-  // Use DEFAULT_CURRENCY as fallback
-  const displayCurrency = currency ?? DEFAULT_CURRENCY;
+  // Use SITE_CURRENCY as fallback
+  const displayCurrency = currency ?? SITE_CURRENCY;
 
   // Calculate discount only if MRP is provided and greater than price
   const hasDiscount = mrp && mrp > price;
