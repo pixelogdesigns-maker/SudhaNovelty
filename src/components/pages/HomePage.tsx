@@ -1,15 +1,11 @@
-// HPI 4.4-V (Mobile Optimized: Shop By Age Compact Layout)
 import Footer from '@/components/layout/Footer';
 import { SEOHelmet } from '@/components/SEOHelmet';
 import { Image } from '@/components/ui/image';
 import WhatsAppFloatingButton from '@/components/ui/WhatsAppFloatingButton';
 import { StoreInformation, ToyCategories, Toys } from '@/entities';
 import { BaseCrudService } from '@/integrations';
-import {
-  ChevronLeft, ChevronRight,
-  Instagram
-} from 'lucide-react';
-import React, { useEffect, useRef, useState, memo, lazy, Suspense } from 'react';
+import { ChevronLeft, ChevronRight, Instagram } from 'lucide-react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 // --- Types ---
@@ -566,10 +562,12 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 
 // 6. Video Marquee Component
 const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
-  const videoRef = React.useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
 
   useEffect(() => {
+    if (!videoRef.current) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
@@ -586,9 +584,7 @@ const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
       { threshold: 0.25 }
     );
 
-    if (videoRef.current) {
-      observer.observe(videoRef.current);
-    }
+    observer.observe(videoRef.current);
 
     return () => {
       if (videoRef.current) {
@@ -621,35 +617,54 @@ export default function HomePage() {
   const [storeInfo, setStoreInfo] = useState<StoreInformation | null>(null);
   const [toys, setToys] = useState<Toys[]>([]);
   const [categories, setCategories] = useState<ToyCategories[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchData = async () => {
       try {
-        // Fetch all data in parallel instead of sequentially
-        const [storeRes, toysRes, categoriesRes] = await Promise.all([
+        setError(null);
+        
+        // Fetch all data in parallel
+        const results = await Promise.allSettled([
           BaseCrudService.getAll<StoreInformation>('storeinformation'),
           BaseCrudService.getAll<Toys>('toys'),
           BaseCrudService.getAll<ToyCategories>('toycategories')
         ]);
 
-        if (storeRes?.items && storeRes.items.length > 0) {
-          setStoreInfo(storeRes.items[0]);
+        if (!isMounted) return;
+
+        // Handle store info
+        if (results[0].status === 'fulfilled' && results[0].value?.items?.length > 0) {
+          setStoreInfo(results[0].value.items[0]);
         }
-        if (toysRes?.items && Array.isArray(toysRes.items)) {
-          setToys(toysRes.items);
+
+        // Handle toys
+        if (results[1].status === 'fulfilled' && Array.isArray(results[1].value?.items)) {
+          setToys(results[1].value.items);
         }
-        if (categoriesRes?.items && Array.isArray(categoriesRes.items)) {
-          const activeCategories = categoriesRes.items
+
+        // Handle categories
+        if (results[2].status === 'fulfilled' && Array.isArray(results[2].value?.items)) {
+          const activeCategories = results[2].value.items
             .filter((cat: ToyCategories) => cat.isActive !== false)
             .sort((a: ToyCategories, b: ToyCategories) => (a.displayOrder || 0) - (b.displayOrder || 0));
           setCategories(activeCategories);
         }
-      } catch (error) {
-        // Error fetching data - silently fail with defaults
-        console.error('Error fetching homepage data:', error);
+      } catch (err) {
+        if (isMounted) {
+          console.error('Error fetching homepage data:', err);
+          setError('Failed to load some content. Please refresh the page.');
+        }
       }
     };
+
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -661,6 +676,11 @@ export default function HomePage() {
         canonical="https://sudha-novelties.com"
         ogImage="https://static.wixstatic.com/media/b9ec8c_2c707b58db4c403ea854846b7dc81a3a~mv2.png"
       />
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
       <WhatsAppFloatingButton />
 
       {/* 1. Hero Carousel */}
