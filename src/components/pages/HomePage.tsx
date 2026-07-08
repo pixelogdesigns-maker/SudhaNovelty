@@ -564,6 +564,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
 const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -593,19 +594,32 @@ const MarqueeVideo = memo(({ video }: { video: VideoReel }) => {
     };
   }, []);
 
+  const handleCanPlay = () => {
+    setIsLoading(false);
+  };
+
+  const handleError = () => {
+    setIsLoading(false);
+  };
+
   return (
     <div className="relative h-[350px] md:h-[500px] aspect-[9/16] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-200 flex-shrink-0 mx-3 md:mx-4 transform transition-transform hover:scale-[1.02]">
-      {isInView && (
-        <video
-          ref={videoRef}
-          src={video.videoUrl}
-          poster={video.thumbnailUrl}
-          loop
-          muted
-          playsInline
-          className="w-full h-full object-cover pointer-events-none"
-        />
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-300 z-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+        </div>
       )}
+      <video
+        ref={videoRef}
+        src={video.videoUrl}
+        poster={video.thumbnailUrl}
+        loop
+        muted
+        playsInline
+        onCanPlay={handleCanPlay}
+        onError={handleError}
+        className="w-full h-full object-cover pointer-events-none"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
     </div>
   );
