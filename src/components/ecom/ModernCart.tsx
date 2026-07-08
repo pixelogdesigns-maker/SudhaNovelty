@@ -28,6 +28,11 @@ export default function ModernCart() {
     <AnimatePresence>
       {isOpen && (
         <>
+          <style>{`
+            .rupee-symbol {
+              font-weight: 400 !important;
+            }
+          `}</style>
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -139,7 +144,7 @@ export default function ModernCart() {
                 {/* Subtotal */}
                 <div className="flex justify-between items-center">
                   <span className="font-paragraph text-gray-600">Subtotal</span>
-                  <span className="font-heading font-bold text-foreground">
+                  <span className="font-heading font-bold text-foreground rupee-symbol">
                     {formatPrice(totalPrice, displayCurrency)}
                   </span>
                 </div>

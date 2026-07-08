@@ -25,15 +25,20 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
 
   return (
     <div className={`space-y-2 ${className}`}>
+      <style>{`
+        .rupee-symbol {
+          font-weight: 400 !important;
+        }
+      `}</style>
       {/* Main Price Display */}
       <div className="flex items-baseline gap-3">
-        <span className="text-lg md:text-xl font-bold text-foreground font-heading">
+        <span className="text-lg md:text-xl font-bold text-foreground font-heading rupee-symbol">
           {formatPrice(price, displayCurrency)}
         </span>
         
         {/* MRP with Strikethrough - if discount exists */}
         {hasDiscount && (
-          <span className="text-sm md:text-base text-gray-350 line-through font-paragraph">
+          <span className="text-sm md:text-base text-gray-350 line-through font-paragraph rupee-symbol">
             {formatPrice(mrp, displayCurrency)}
           </span>
         )}
@@ -45,7 +50,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({
           <span className="inline-block bg-secondary text-foreground px-2.5 py-1 rounded-md text-xs font-bold font-heading">
             {discountPercentage}% off
           </span>
-          <span className="text-xs text-gray-600 font-paragraph">
+          <span className="text-xs text-gray-600 font-paragraph rupee-symbol">
             Save {formatPrice(discountAmount, displayCurrency)}
           </span>
         </div>

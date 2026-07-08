@@ -134,6 +134,11 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-light-pink/20 to-white py-12 px-4">
+        <style>{`
+          .rupee-symbol {
+            font-weight: 400 !important;
+          }
+        `}</style>
         <div className="max-w-6xl mx-auto">
           <button
             onClick={() => navigate('/toys')}
@@ -166,6 +171,11 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-light-pink/20 to-white py-12 px-4">
+      <style>{`
+        .rupee-symbol {
+          font-weight: 400 !important;
+        }
+      `}</style>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <button
@@ -549,7 +559,7 @@ export default function CheckoutPage() {
                       <p className="font-paragraph text-xs text-gray-600 mt-1">
                         Qty: {item.quantity}
                       </p>
-                      <p className="font-heading text-sm font-bold text-primary mt-1">
+                      <p className="font-heading text-sm font-bold text-primary mt-1 rupee-symbol">
                         {formatPrice(item.price * item.quantity, displayCurrency)}
                       </p>
                     </div>
@@ -561,19 +571,19 @@ export default function CheckoutPage() {
               <div className="space-y-3 border-t border-gray-100 pt-6">
                 <div className="flex justify-between font-paragraph text-sm">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold text-foreground">
+                  <span className="font-semibold text-foreground rupee-symbol">
                     {formatPrice(totalPrice, displayCurrency)}
                   </span>
                 </div>
                 <div className="flex justify-between font-paragraph text-sm">
                   <span className="text-gray-600">Shipping</span>
-                  <span className="font-semibold text-foreground">
+                  <span className="font-semibold text-foreground rupee-symbol">
                     {formatPrice(0, displayCurrency)}
                   </span>
                 </div>
                 <div className="flex justify-between font-paragraph text-sm">
                   <span className="text-gray-600">Tax</span>
-                  <span className="font-semibold text-foreground">
+                  <span className="font-semibold text-foreground rupee-symbol">
                     {formatPrice(0, displayCurrency)}
                   </span>
                 </div>
@@ -582,7 +592,7 @@ export default function CheckoutPage() {
                   <span className="font-heading font-bold text-foreground">
                     Total
                   </span>
-                  <span className="font-heading text-xl font-bold text-primary">
+                  <span className="font-heading text-xl font-bold text-primary rupee-symbol">
                     {formatPrice(totalPrice, displayCurrency)}
                   </span>
                 </div>
