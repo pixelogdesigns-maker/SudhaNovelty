@@ -35,7 +35,7 @@ export default function CheckoutPage() {
       <div className="text-center">
         <LoadingSpinner size="lg" />
         <p className="font-paragraph text-foreground text-lg mt-4">
-          Redirecting to checkout...
+          Initializing secure checkout...
         </p>
       </div>
     </div>
