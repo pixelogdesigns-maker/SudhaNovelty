@@ -520,14 +520,14 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
           {categories.map((cat, index) => (
-            <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center gap-5">
+            <Link key={cat._id} to={`/toys?category=${encodeURIComponent(cat.categoryName || '')}`} className="group flex flex-col items-center h-full">
               <div className={`
                 relative w-40 h-40 md:w-48 md:h-48 rounded-full ${CATEGORY_COLORS[index % CATEGORY_COLORS.length]}
                 flex items-center justify-center shadow-sm transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl
-                border-[3px] md:border-[4px] border-white
+                border-[3px] md:border-[4px] border-white flex-shrink-0
               `}>
                 {cat.categoryImage ? (
-                  <div className="w-32 h-32 md:w-40 md:h-40 relative z-10">
+                  <div className="w-32 h-32 md:w-40 md:h-40 relative z-10 flex items-center justify-center">
                     <Image src={cat.categoryImage} alt={cat.categoryName || 'Category'} width={200} height={200} className="w-full h-full object-contain drop-shadow-md transform transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110" loading="lazy" />
                   </div>
                 ) : (
@@ -535,7 +535,7 @@ const ShopByCategory = ({ categories }: { categories: ToyCategories[] }) => {
                 )}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-white/40 to-transparent pointer-events-none" />
               </div>
-              <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight">
+              <h3 className="font-heading font-bold text-center text-lg md:text-xl text-foreground group-hover:text-primary transition-colors max-w-[180px] leading-tight mt-4 pt-0">
                 {cat.categoryName}
               </h3>
             </Link>
