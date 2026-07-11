@@ -223,7 +223,19 @@ export default function ProductDetailsPage() {
                 />
               )}
 
-              {toy.shortDescription && (
+              {/* Rich Text Description */}
+              {toy.productDescription && (
+                <div className="mb-6 md:mb-8">
+                  <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-3 md:mb-4">Description</p>
+                  <div 
+                    className="font-paragraph text-base md:text-lg text-foreground leading-relaxed space-y-3 prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: toy.productDescription }}
+                  />
+                </div>
+              )}
+
+              {/* Fallback to Short Description if Rich Text is not available */}
+              {!toy.productDescription && toy.shortDescription && (
                 <div className="mb-6 md:mb-8">
                   <p className="text-gray-500 font-paragraph text-xs md:text-sm mb-1 md:mb-2">Description</p>
                   <p className="font-paragraph text-base md:text-lg text-foreground leading-relaxed">{toy.shortDescription}</p>

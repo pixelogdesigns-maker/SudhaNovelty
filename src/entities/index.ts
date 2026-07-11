@@ -117,4 +117,6 @@ export interface Toys {
   number?: number;
   /** @wixFieldType video */
   video?: string;
+  /** @wixFieldType rich_content */
+  productDescription?: any;
 }
