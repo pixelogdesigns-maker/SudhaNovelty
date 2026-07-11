@@ -4,7 +4,77 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Rupee symbol fix - ensure it displays with normal weight */
+/* ===== CORE WEB VITALS OPTIMIZATIONS ===== */
+
+/* 1. LAYOUT SHIFT PREVENTION - Reserve space for dynamic content */
+img, video, iframe {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent layout shift for images with unknown dimensions */
+img[width], img[height] {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 2. FONT OPTIMIZATION - Prevent FOUT/FOIT */
+@font-face {
+  font-family: 'poppins-v2';
+  font-display: swap; /* Show fallback immediately, swap when ready */
+}
+
+@font-face {
+  font-family: 'nunito sans';
+  font-display: swap;
+}
+
+/* 3. ANIMATION OPTIMIZATION - Use transform/opacity only */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimize marquee animation for performance */
+.animate-marquee-fast {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 4. BUTTON OPTIMIZATION - Prevent layout shift on hover */
+button, a {
+  transition: background-color 0.2s ease, color 0.2s ease;
+  /* Avoid padding/margin changes on hover */
+}
+
+button:hover, button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* 5. CONTAINER OPTIMIZATION - Reduce nesting */
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* 6. SCROLL PERFORMANCE - Enable GPU acceleration */
+.overflow-hidden, .overflow-auto, .overflow-y-auto, .overflow-x-auto {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 7. PREVENT CLS - Fixed dimensions for common elements */
+header, nav, footer {
+  contain: layout style paint;
+}
+
+/* 8. RUPEE SYMBOL FIX - Ensure consistent display */
 .rupee-symbol {
   font-weight: 400 !important;
   font-family: 'nunito sans', sans-serif !important;

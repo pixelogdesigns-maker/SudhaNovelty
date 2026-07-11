@@ -3,6 +3,7 @@ import { MemberProvider } from '@/integrations';
 import ErrorPage from '@/integrations/errorHandlers/ErrorPage';
 import { ScrollToTop } from '@/lib/scroll-to-top';
 import { initCheckoutOptimizations } from '@/lib/checkout-prefetch';
+import { preloadHeroImage, setupResourceHints, deferThirdPartyScripts } from '@/lib/performance-optimizations';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 import { lazy, Suspense, useEffect } from 'react';
 
@@ -27,8 +28,18 @@ const CheckoutPage = lazy(() => import('@/components/pages/CheckoutPage'));
 
 // Layout component that includes ScrollToTop and HeaderWithCart
 function Layout() {
-  // Initialize checkout optimizations on app load
+  // Initialize performance optimizations on app load
   useEffect(() => {
+    // Preload primary hero image for LCP optimization
+    preloadHeroImage('https://static.wixstatic.com/media/b9ec8c_5d24c2456de3486f861939b42aafb3e5~mv2.png');
+    
+    // Setup resource hints for critical domains
+    setupResourceHints();
+    
+    // Defer third-party scripts to not block main thread
+    deferThirdPartyScripts();
+    
+    // Initialize checkout optimizations
     initCheckoutOptimizations();
   }, []);
 
